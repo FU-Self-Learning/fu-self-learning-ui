@@ -15,6 +15,7 @@ export const validatePassword: Rule[] = [
     message: "Password must be at least 6 characters long!",
   },
 ];
+
 export const validateConfirmPassword: Rule[] = [
   { required: true, message: "Please confirm your password!" },
   ({ getFieldValue }) => ({

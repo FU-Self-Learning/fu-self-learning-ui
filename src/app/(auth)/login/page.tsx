@@ -37,7 +37,7 @@ export default function LoginPage() {
           </Button>
 
           <Divider>OR</Divider>
-          {!isLoginFormVisible ? <LoginForm /> : <RegisterForm />}
+          {!isLoginFormVisible ? <RegisterForm /> : <LoginForm />}
           <div className="text-center text-sm mt-4">
             Don’t have an account?{" "}
             <a className="text-blue-500 hover:underline" href="#">

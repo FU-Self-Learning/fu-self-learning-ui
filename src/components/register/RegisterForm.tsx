@@ -33,7 +33,7 @@ export const RegisterForm = () => {
     <Form form={form} layout="vertical" onFinish={handleSubmit}>
       <Space className="justify-between w-full">
         <Form.Item label="Email" name="email" rules={validateEmail}>
-          <Input placeholder="you@example.com" />
+          <Input placeholder="you@gmail.com" />
         </Form.Item>
 
         <Form.Item
