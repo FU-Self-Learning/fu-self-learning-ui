@@ -1,0 +1,39 @@
+name: CI/CD Deploy to EC2 (Next.js + Nginx)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout source code
+        uses: actions/checkout@v3
+
+      - name: 🔐 Setup SSH access to EC2
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: 🧪 Run Lint & Build Test (local)
+        run: |
+          npm install
+          npm run lint
+          npm run build
+
+      - name: 🚚 Upload source to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} "rm -rf ~/music_ui && mkdir ~/music_ui"
+          scp -r ./* ec2-user@${{ secrets.EC2_HOST }}:~/music_ui/
+
+      - name: 🚀 Rebuild Docker on EC2
+        run: |
+          ssh ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
+            cd ~/music_ui
+            docker compose down
+            docker compose up --build -d
+          EOF
