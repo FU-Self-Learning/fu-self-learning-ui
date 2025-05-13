@@ -73,7 +73,7 @@ export const RegisterForm = () => {
           htmlType="submit"
           block
           loading={isPending}
-          className="!bg-blue-600 hover:!bg-blue-700 !text-white !font-bold !text-lg  !rounded-xl !transition !duration-200 !ease-in-out !shadow-md hover:!shadow-lg "
+          className="!bg-blue-600 hover:!bg-blue-700 !text-white !font-bold !text-lg  !rounded-xl !transition !duration-200 !ease-in-out !shadow-md hover:!shadow-lg !py-6"
         >
           Register
         </Button>
