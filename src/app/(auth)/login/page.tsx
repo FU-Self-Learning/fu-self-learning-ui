@@ -1,17 +1,17 @@
 "use client";
 
 import { LoginForm } from "@/components/login/LoginForm";
-import { RegisterForm } from "@/components/register/RegisterForm";
 import { Typography, Button, Divider } from "antd";
-import { useState } from "react";
 import { GoogleOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import LoginBanner from "@p/images/Login.png"
+import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const [isLoginFormVisible, setIsLoginFormVisible] = useState(true);
+  const router = useRouter();
   return (
-    <div className="min-h-[88vh] flex bg-cover bg-center">
+    <div className="min-h-[85vh] bg-[url('/login-bg.jpg')] flex bg-cover bg-center" >
       <div className="relative w-1/2 h-screen ">
         <Image
           src={LoginBanner}
@@ -32,17 +32,13 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-      <div style={{
-        background: "rgba(255, 255, 255, 0.3)",
-        backdropFilter: "blur(10px)",
-        WebkitBackdropFilter: "blur(10px)",
-      }} className="w-full bg-white lg:w-1/2 flex items-center justify-center p-6 ">
-        <div className="w-full max-w-md rounded-2xl shadow-md p-8 bg-white z-50" >
-          <Typography.Title level={3} className="text-center mb-1">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
+        <div className="w-full max-w-md bg-white rounded-2xl shadow-md px-8 py-4">
+          <Typography.Title level={3} className="text-center">
             Welcome Back
           </Typography.Title>
           <Typography.Text className="block text-center mb-6 text-gray-500">
-            Let’s explore this exciting platform together!
+            Let's explore this exciting platform together!
           </Typography.Text>
 
           <Button icon={<GoogleOutlined />} block>
@@ -50,12 +46,26 @@ export default function LoginPage() {
           </Button>
 
           <Divider>OR</Divider>
-          {!isLoginFormVisible ? <RegisterForm /> : <LoginForm />}
-          <div className="text-center text-sm mt-4">
-            Don’t have an account?{" "}
-            <a className="text-blue-500 hover:underline" href="#">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key="login"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <LoginForm />
+            </motion.div>
+          </AnimatePresence>
+          <div className="text-center text-sm">
+            Don't have an account?{" "}
+            <Button
+              type="link"
+              className="!text-blue-500"
+              onClick={() => router.push("/register")}
+            >
               Sign Up
-            </a>
+            </Button>
           </div>
           <div className="text-center text-xs text-gray-400 mt-2">
             By signing in, you agree to our{" "}
@@ -65,6 +75,6 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

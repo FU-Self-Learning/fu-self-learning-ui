@@ -19,8 +19,6 @@ export const useLogin = () => {
       message.success("Login Successfully");
     },
     onError: (error) => {
-      console.log(error);
-
       const msg = extractErrorMessage(error);
       message.error(msg);
     },
