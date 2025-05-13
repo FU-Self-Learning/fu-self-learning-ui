@@ -1,21 +1,15 @@
 "use client";
-// react
+
 import { useState } from "react";
-// form_components
 import { LoginForm } from "@/components/login/LoginForm";
-// public
 import GoogleIcon from "@p/svgs/google.svg"
 import LogoIcon from "@p/svgs/logo.svg"
 import Image from "next/image";
 import LoginBanner from "@p/images/Login.png"
-// motion
 import { motion, AnimatePresence } from "framer-motion";
-// router
 import { useRouter } from "next/navigation";
-// antd
 import { Typography, Button, Divider } from "antd";
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
-// data constant
 import { slogans } from "@/shared/constants/dataConstants";
 
 

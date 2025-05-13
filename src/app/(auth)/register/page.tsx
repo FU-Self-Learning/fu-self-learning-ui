@@ -4,15 +4,12 @@ import { LoginForm } from "@/components/login/LoginForm";
 import { RegisterForm } from "@/components/register/RegisterForm";
 import { Typography, Button, Divider } from "antd";
 import { useState } from "react";
-// import { GoogleOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import LoginBanner from "@p/images/Login.png"
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
-// data constant
 import { slogans } from "@/shared/constants/dataConstants";
 import GoogleIcon from "@p/svgs/google.svg"
 import LogoIcon from "@p/svgs/logo.svg"
-//router
 import { useRouter } from "next/navigation";
 
 

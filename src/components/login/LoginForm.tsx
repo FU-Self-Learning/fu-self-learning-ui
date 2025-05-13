@@ -1,14 +1,12 @@
 "use client";
-// antd
+
 import { Button, Form, Input, Checkbox } from "antd";
 import { useLogin } from "@/hooks/auth/useLogin";
 import {
   validateEmail,
   validatePassword,
 } from "@/utils/validation/validationUtils";
-// next
 import { useRouter } from "next/navigation";
-// api
 import { LoginPayload } from "@/shared/api/auth.api";
 
 export const LoginForm = () => {

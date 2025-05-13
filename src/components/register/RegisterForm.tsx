@@ -1,24 +1,18 @@
 "use client";
 
-// antd
 import {
   Button,
   Form,
   Input,
   Space,
 } from "antd";
-
-// router
 import { useRouter } from "next/navigation";
-// validation
 import {
   validateEmail,
   validatePassword,
   validateConfirmPassword,
 } from "@/utils/validation/validationUtils";
-// auth
 import { RegisterPayload } from "@/shared/api/auth.api";
-// hook
 import { useRegister } from "@/hooks/auth/useRegister";
 
 export const RegisterForm = () => {
@@ -81,10 +75,10 @@ export const RegisterForm = () => {
           loading={isPending}
           className="!bg-blue-600 hover:!bg-blue-700 !text-white !font-bold !text-lg  !rounded-xl !transition !duration-200 !ease-in-out !shadow-md hover:!shadow-lg "
         >
-             Register
+          Register
         </Button>
       </Form.Item>
-  
+
     </Form>
   );
 };
