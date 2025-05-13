@@ -5,6 +5,7 @@ import Footer from "@/components/layouts/Footer";
 import Navbar from "@/components/layouts/Navbar";
 import QueryClientProvider from "@/context/QueryClientProvider";
 import ReduxProvider from "@/context/ReduxProvider";
+import AuthHydration from "@/context/AuthHydration";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
       >
         <ReduxProvider>
           <QueryClientProvider>
+            <AuthHydration />
             <div className="min-h-screen flex flex-col">
               <Navbar />
               <main className="flex-1">{children}</main>

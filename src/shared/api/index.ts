@@ -36,12 +36,12 @@ export class Api {
     try {
       const response = await axios.get(`${APP_URL}/refresh-token`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("themeCode")}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
 
       const newToken = response.data.data.accessToken;
-      localStorage.setItem("csrfToken", newToken);
+      localStorage.setItem("accessToken", newToken);
 
       return newToken;
     } catch (error) {
