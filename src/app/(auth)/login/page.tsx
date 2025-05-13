@@ -1,7 +1,7 @@
 "use client";
 
-import { LoginForm } from "@/components/login/LoginForm";
 import { Typography, Button, Divider } from "antd";
+import { LoginForm } from "@/components/login/LoginForm";
 import { GoogleOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import LoginBanner from "@p/images/Login.png"
