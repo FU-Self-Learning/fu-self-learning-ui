@@ -11,6 +11,7 @@ import { slogansConstants } from "@/shared/constants/slogansConstants";
 import GoogleIcon from "@p/svgs/google.svg"
 import LogoIcon from "@p/svgs/logo.svg"
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 
 export default function LoginPage() {
@@ -34,7 +35,7 @@ export default function LoginPage() {
                 <h1 className="text-[22px] lg:text-[45px] font-bold tracking-wide leading-tight">
                   Dive into Knowledge, Emerge into Success.
                 </h1>
-                <h1 className="text-[23px] font-extrabold max-w-[180px] text-gradient bg-gradient-to-r bg-blue-600 p-2 rounded-lg shadow-md">
+                <h1 className="text-[23px] font-extrabold max-w-[180px] text-gradient bg-gradient-to-r bg-blue-600 p-2 rounded-lg shadow-md text-center">
                   Self-Learning
                 </h1>
                 <div className="mt-4 w-[420px] h-[220px] p-6 rounded-2xl shadow-xl backdrop-blur-md bg-white/20 border border-white/30 text-white text-lg flex items-center justify-between transition-all duration-300">
@@ -45,7 +46,15 @@ export default function LoginPage() {
                     <LeftOutlined className="text-xl" />
                   </button>
                   <div className="flex-1 text-center px-6 font-semibold text-xl leading-relaxed">
-                    {slogansConstants[index]}
+                    <motion.div
+                      key="login"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 20 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {slogansConstants[index]}
+                    </motion.div>
                   </div>
 
                   <button
@@ -60,7 +69,7 @@ export default function LoginPage() {
             </div>
           </div>
         </div>
-        <div className="w-full lg:w-1/2 flex items-center flex-col justify-center p-6">
+        <div className="w-full lg:w-1/2 flex items-center flex-col  justify-center p-6">
           <div className="w-full flex justify-end mr-10 mb-2">
             <div className="flex items-center gap-1 px-3 py-2 rounded-xl bg-white shadow-[0_8px_16px_rgba(163,163,163,0.6)]">
               <Image src={LogoIcon} alt="Google Icon" width={30} height={50} />
@@ -69,9 +78,9 @@ export default function LoginPage() {
               </h2>
             </div>
           </div>
-          <div className="w-full max-w-md bg-white p-8">
+          <div className="w-full max-w-md bg-white p-8 rounded-3xl">
             <Typography.Title level={3} className="text-center mb-1">
-              Sign Up
+              Connect to Platform
             </Typography.Title>
             <Button
               icon={<Image src={GoogleIcon} alt="Google Icon" width={20} height={20} />}
@@ -84,14 +93,23 @@ export default function LoginPage() {
             >
               Using Google account
             </Button>
-            <Divider>hoặc email</Divider>
-            {!isLoginFormVisible ? <LoginForm /> : <RegisterForm />}
+            <Divider>OR</Divider>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key="login"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {!isLoginFormVisible ? <LoginForm /> : <RegisterForm />}
+              </motion.div>
+            </AnimatePresence>
             <div className="text-center text-sm text-gray-400">
               Already have an account?
-
               <Button
                 type="link"
-                className="!text-blue-500"
+                className="!text-blue-500 hover:underline hover:decoration-blue-500 !p-1"
                 onClick={() => router.push("/login")}
               >
                 Sign In
