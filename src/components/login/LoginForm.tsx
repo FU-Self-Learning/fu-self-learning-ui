@@ -1,12 +1,14 @@
 "use client";
-
+// antd
 import { Button, Form, Input, Checkbox } from "antd";
 import { useLogin } from "@/hooks/auth/useLogin";
 import {
   validateEmail,
   validatePassword,
 } from "@/utils/validation/validationUtils";
+// next
 import { useRouter } from "next/navigation";
+// api
 import { LoginPayload } from "@/shared/api/auth.api";
 
 export const LoginForm = () => {
@@ -23,33 +25,33 @@ export const LoginForm = () => {
   };
 
   return (
-        <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          <Form.Item label="Email" name="email" rules={validateEmail}>
-            <Input placeholder="tripconnect@trip.vn" />
-          </Form.Item>
+    <Form form={form} layout="vertical" onFinish={handleSubmit}>
+      <Form.Item label="Email" name="email" rules={validateEmail}>
+        <Input placeholder="tripconnect@trip.vn" />
+      </Form.Item>
 
-          <Form.Item label="Password" name="password" rules={validatePassword}>
-            <Input.Password/>
-          </Form.Item>
+      <Form.Item label="Password" name="password" rules={validatePassword}>
+        <Input.Password />
+      </Form.Item>
 
-          <div className="flex justify-between items-center mb-4">
-            <Checkbox>Remember me</Checkbox>
-            <a className="text-sm text-blue-500 hover:underline" href="#">
-              Forgot password?
-            </a>
-          </div>
+      <div className="flex justify-between items-center mb-4">
+        <Checkbox>Remember me</Checkbox>
+        <a className="text-sm text-blue-500 hover:underline" href="#">
+          Forgot password?
+        </a>
+      </div>
 
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              block
-              className="bg-blue-600 hover:bg-blue-700"
-              loading={isPending}
-            >
-              Login
-            </Button>
-          </Form.Item>
-        </Form>
+      <Form.Item>
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
+          className="bg-blue-600 hover:bg-blue-700"
+          loading={isPending}
+        >
+          Login
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };

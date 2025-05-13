@@ -13,7 +13,7 @@ export default function Navbar() {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
-  
+
   const renderHeaderLogin = () => {
     return (
       <>

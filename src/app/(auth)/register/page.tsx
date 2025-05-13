@@ -1,69 +1,63 @@
 "use client";
 
+import { LoginForm } from "@/components/login/LoginForm";
 import { RegisterForm } from "@/components/register/RegisterForm";
 import { Typography, Button, Divider } from "antd";
+import { useState } from "react";
 import { GoogleOutlined } from "@ant-design/icons";
-import { motion, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import LoginBanner from "@p/images/Login.png"
 
-export default function RegisterPage() {
-  const router = useRouter();
+export default function LoginPage() {
+  const [isLoginFormVisible, setIsLoginFormVisible] = useState(true);
   return (
-    <div className="min-h-[85vh] flex bg-[url('/login-bg.jpg')] bg-cover bg-center">
+    <div className="min-h-[88vh] flex bg-[url('/login-bg.jpg')] bg-cover bg-center">
+      <div className="relative w-1/2 h-screen ">
+        <Image
+          src={LoginBanner}
+          alt="amt"
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 w-1/2 hidden lg:flex items-center ">
+          <div className="z-10 p-12 text-white h-full">
+            <div className="flex flex-col justify-between h-full">
+              <h1 className="text-[50px]">
+                Học hiệu quả mà thật thoải mái.
+              </h1>
+              <h1 className="text-4xl font-bold">
+                SoundClient
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-md px-8 py-4">
-          <Typography.Title level={3} className="text-center">
-            Create Account
+        <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-8">
+          <Typography.Title level={3} className="text-center mb-1">
+            Welcome Back
           </Typography.Title>
           <Typography.Text className="block text-center mb-6 text-gray-500">
-            Join us and start your musical journey!
+            Let’s explore this exciting platform together!
           </Typography.Text>
 
           <Button icon={<GoogleOutlined />} block>
             Using Google account
           </Button>
-
           <Divider>OR</Divider>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key="register"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <RegisterForm />
-            </motion.div>
-          </AnimatePresence>
-          <div className="text-center text-sm">
-            Already have an account?{" "}
-            <Button 
-              type="link" 
-              className="!text-blue-500" 
-              onClick={() => router.push("/login")}
-            >
-              Sign In
-            </Button>
+          {!isLoginFormVisible ? <LoginForm /> : <RegisterForm />}
+          <div className="text-center text-sm mt-4">
+            Don’t have an account?{" "}
+            <a className="text-blue-500 hover:underline" href="#">
+              Sign Up
+            </a>
           </div>
           <div className="text-center text-xs text-gray-400 mt-2">
-            By signing up, you agree to our{" "}
+            By signing in, you agree to our{" "}
             <a className="underline" href="#">
               Terms & Privacy
             </a>
           </div>
-        </div>
-      </div>
-      <div className="w-1/2 relative hidden lg:flex">
-        <div className="absolute inset-0 bg-black opacity-30" />
-        <div className="z-10 p-12 text-white self-center">
-          <h1 className="text-4xl font-bold mb-4">SoundClient</h1>
-          <p className="text-lg mb-1">
-            Comprehensive music management solution
-          </p>
-          <p className="italic text-sm mt-4">
-            "Stream music seamlessly – Discover new tracks – Manage your
-            playlists from start to finish."
-          </p>
         </div>
       </div>
     </div>

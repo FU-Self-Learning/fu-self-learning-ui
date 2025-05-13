@@ -19,7 +19,7 @@ export default function LoginPage() {
           </div>
           <div className="mt-auto">
             <p className="mt-24 text-xl font-medium leading-relaxed">
-            &quot;Optimize processes – Increase sales – Manage effectively from warehouse to customer.&quot;
+              &quot;Optimize processes – Increase sales – Manage effectively from warehouse to customer.&quot;
             </p>
           </div>
         </div>
