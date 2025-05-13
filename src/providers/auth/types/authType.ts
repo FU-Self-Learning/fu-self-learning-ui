@@ -8,4 +8,5 @@ export interface AuthState {
   user: UserInfo | null;
   isAuthenticated: boolean;
   error: string | null;
+  loading: boolean;
 }
