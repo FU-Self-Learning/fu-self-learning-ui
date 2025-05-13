@@ -1,7 +1,5 @@
-import { Input, Checkbox, Button } from "antd"
 import Image from "next/image"
-import Link from "next/link"
-import Banner from "@p/banner.svg"
+import Banner from "@p/svgs/banner.svg"
 
 export default function HomePage() {
     return (

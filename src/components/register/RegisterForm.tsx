@@ -4,7 +4,6 @@ import {
   Button,
   Form,
   Input,
-  Checkbox,
   Space,
 } from "antd";
 import { useRouter } from "next/navigation";
@@ -32,49 +31,54 @@ export const RegisterForm = () => {
   return (
     <Form form={form} layout="vertical" onFinish={handleSubmit}>
       <Space className="justify-between w-full">
-        <Form.Item label="Email" name="email" rules={validateEmail}>
-          <Input placeholder="you@gmail.com" />
-        </Form.Item>
+        <div>
+          <label className="flex text-[14px] m-2 font-bold">Email</label>
+          <Form.Item name="email" rules={validateEmail}>
+            <Input placeholder="you@gmail.com" />
+          </Form.Item>
+        </div>
 
-        <Form.Item
-          label="Full Name"
-          name="fullName"
-          rules={[{ required: true, message: "Please enter your full name" }]}
-        >
-          <Input placeholder="Nguyen Van A" />
-        </Form.Item>
+        <div>
+          <label className="flex text-[14px] m-2 font-bold">Full Name</label>
+          <Form.Item
+            name="fullName"
+            rules={[{ required: true, message: "Please enter your full name" }]}
+          >
+            <Input placeholder="Nguyen Van A" />
+          </Form.Item>
+        </div>
       </Space>
 
-      <Form.Item label="Password" name="password" rules={validatePassword}>
-        <Input.Password />
-      </Form.Item>
 
-      <Form.Item
-        label="Confirm Password"
-        name="confirmPassword"
-        dependencies={["password"]}
-        rules={validateConfirmPassword}
-      >
-        <Input.Password />
-      </Form.Item>
-
-      <Form.Item>
-        <Checkbox>
-          I agree to the <a href="#">Terms & Conditions</a>
-        </Checkbox>
-      </Form.Item>
+      <div>
+        <label className="flex text-[14px] m-2 font-bold">Password</label>
+        <Form.Item name="password" rules={validatePassword}>
+          <Input.Password />
+        </Form.Item>
+      </div>
+      <div>
+        <label className="flex text-[14px] m-2 font-bold">Confirm Password</label>
+        <Form.Item
+          name="confirmPassword"
+          dependencies={["password"]}
+          rules={validateConfirmPassword}
+        >
+          <Input.Password />
+        </Form.Item>
+      </div>
 
       <Form.Item>
         <Button
           type="primary"
           htmlType="submit"
           block
-          className="bg-blue-600 hover:bg-blue-700"
           loading={isPending}
+          className="!bg-blue-600 hover:!bg-blue-700 !text-white !font-bold !text-lg  !rounded-xl !transition !duration-200 !ease-in-out !shadow-md hover:!shadow-lg "
         >
           Register
         </Button>
       </Form.Item>
+
     </Form>
   );
 };

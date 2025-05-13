@@ -9,7 +9,7 @@ import { isObjectEmpty } from "@/utils/isObjectEmpty";
 export default function AuthHydration() {
   const dispatch = useDispatch();
   useEffect(() => {
-    
+
     dispatch(setLoading(true));
     const raw = getStorageData("user");
     try {
