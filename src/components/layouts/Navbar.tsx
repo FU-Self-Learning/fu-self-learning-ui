@@ -14,7 +14,7 @@ import { isObjectEmpty } from "@/utils/isObjectEmpty";
 export default function Navbar() {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useProfileLocal();
-
+ 
   useEffect(() => {
     if (!isObjectEmpty(user)) {
       console.log(user, "user from profile");

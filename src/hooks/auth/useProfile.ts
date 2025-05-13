@@ -5,7 +5,11 @@ import { getStorageData } from "@/shared/store";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchUserProfile = async (): Promise<UserInfo> => {
-  const response = await api.get(`${APP_URL}/users/me`);
+  const response = await api.get(`${APP_URL}/users/me`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
+  });
   return response.data;
 };
 
@@ -15,9 +19,4 @@ export const useProfile = () => {
     queryFn: fetchUserProfile,
     enabled: !!getStorageData("accessToken"),
   });
-};
-
-export const useProfileLocal = () => {
-  const user: UserInfo = getStorageData("user");
-  return { user };
 };
