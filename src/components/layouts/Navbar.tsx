@@ -4,23 +4,15 @@ import Link from "next/link";
 import DarkModeToggle from "../common/DarkModeToggle";
 import { Button, Dropdown, MenuProps } from "antd";
 import { motion } from "framer-motion";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { UserOutlined } from "@ant-design/icons";
-import { useEffect } from "react";
-import { useProfileLocal } from "@/hooks/auth/useProfile";
-import { AppDispatch } from "@/providers/store";
-import { setUser } from "@/providers/auth/reducer/authSlice";
-import { isObjectEmpty } from "@/utils/isObjectEmpty";
+import { RootState } from "@/providers/store";
+
 export default function Navbar() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { user } = useProfileLocal();
- 
-  useEffect(() => {
-    if (!isObjectEmpty(user)) {
-      console.log(user, "user from profile");
-      dispatch(setUser(user));
-    }
-  }, [user, dispatch]);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
 
   const renderHeaderLogin = () => {
     return (
@@ -48,7 +40,6 @@ export default function Navbar() {
       </>
     );
   };
-  //
   const renderHeader = () => {
     const items: MenuProps["items"] = [
       {
@@ -138,9 +129,8 @@ export default function Navbar() {
         </motion.div>
 
         {/* Login and Register Links */}
-        {user ? renderHeader() : renderHeaderLogin()}
+        {isAuthenticated ? renderHeader() : renderHeaderLogin()}
       </nav>
     </header>
   );
 }
-//
