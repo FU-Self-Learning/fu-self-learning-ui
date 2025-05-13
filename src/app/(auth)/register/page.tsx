@@ -7,7 +7,7 @@ import { useState } from "react";
 import Image from "next/image";
 import LoginBanner from "@p/images/Login.png"
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
-import { slogans } from "@/shared/constants/dataConstants";
+import { slogansConstants } from "@/shared/constants/slogansConstants";
 import GoogleIcon from "@p/svgs/google.svg"
 import LogoIcon from "@p/svgs/logo.svg"
 import { useRouter } from "next/navigation";
@@ -39,17 +39,17 @@ export default function LoginPage() {
                 </h1>
                 <div className="mt-4 w-[420px] h-[220px] p-6 rounded-2xl shadow-xl backdrop-blur-md bg-white/20 border border-white/30 text-white text-lg flex items-center justify-between transition-all duration-300">
                   <button
-                    onClick={() => setIndex((prevIndex) => (prevIndex === 0 ? slogans.length - 1 : prevIndex - 1))}
+                    onClick={() => setIndex((prevIndex) => (prevIndex === 0 ? slogansConstants.length - 1 : prevIndex - 1))}
                     className="w-12 h-12 flex items-center justify-center rounded-full backdrop-blur-sm bg-white/25 border border-white/40 hover:bg-white/40 hover:scale-110 cursor-pointer transition-all duration-300"
                   >
                     <LeftOutlined className="text-xl" />
                   </button>
                   <div className="flex-1 text-center px-6 font-semibold text-xl leading-relaxed">
-                    {slogans[index]}
+                    {slogansConstants[index]}
                   </div>
 
                   <button
-                    onClick={() => setIndex((prevIndex) => (prevIndex === slogans.length - 1 ? 0 : prevIndex + 1))}
+                    onClick={() => setIndex((prevIndex) => (prevIndex === slogansConstants.length - 1 ? 0 : prevIndex + 1))}
                     className="w-12 h-12 flex items-center justify-center rounded-full backdrop-blur-sm bg-white/25 border border-white/40 hover:bg-white/40 hover:scale-110 cursor-pointer transition-all duration-300"
                   >
                     <RightOutlined className="text-xl" />
