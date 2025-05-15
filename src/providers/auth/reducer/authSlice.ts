@@ -8,7 +8,7 @@ const initialState: AuthState = {
   loading: false, // Thêm loading vào state
 };
 
-const authSlice = createSlice({
+const authSlice = createSlice({ 
   name: "auth",
   initialState,
   reducers: {

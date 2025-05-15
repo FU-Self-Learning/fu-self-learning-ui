@@ -7,6 +7,8 @@ import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { UserOutlined } from "@ant-design/icons";
 import { RootState } from "@/providers/store";
+import Image from "next/image";
+import Login from "@p/svgs/logo.svg"
 
 export default function Navbar() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -82,14 +84,14 @@ export default function Navbar() {
     );
   };
   return (
-    <header className="bg-gradient-to-l from-blue-800 to-black text-white px-8 py-6 flex justify-between items-center shadow-lg">
+    <header className="bg-gradient-to-l bg-[#0A092D] text-white px-8 py-6 flex justify-between items-center shadow-lg">
       <div className="flex items-center space-x-3">
         <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.95 }}>
           <span role="img" aria-label="music">
-            🎧
+            <Image src={Login} alt="logo" className="!w-10 !h-10" />
           </span>
         </motion.div>
-        <h1 className="font-semibold text-2xl">SoundClient</h1>
+        <h1 className="font-semibold text-2xl">Self-Learning</h1>
       </div>
 
       <nav className="flex space-x-6">
