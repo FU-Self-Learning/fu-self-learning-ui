@@ -77,7 +77,7 @@ const PopularQuestion: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
         >
-            <h2 className="text-2xl font-bold text-center mb-6 text-black">Frequently Asked Questions</h2>
+            <motion.div className="text-[50px] font-bold text-center mb-6 text-black">Frequently Asked Questions</motion.div>
             <div className="bg-white shadow-xl rounded-2xl p-6 grid md:grid-cols-2 gap-8 items-start border-t-[2px] border-l-[2px] border-r-[4px] border-b-[4px] border-solid  border-black">
                 <div>
                     <Collapse

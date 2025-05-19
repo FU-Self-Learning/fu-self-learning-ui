@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { LoginForm } from "@/components/login/LoginForm";
 import GoogleIcon from "@p/svgs/google.svg"
-import LogoIcon from "@p/svgs/logo.svg"
+// import LogoIcon from "@p/svgs/logo.svg"
 import Image from "next/image";
 import LoginBanner from "@p/images/Login.png"
 import { motion, AnimatePresence } from "framer-motion";
@@ -72,14 +72,14 @@ export default function LoginPage() {
           </div>
         </div>
         <div className="h-full mb-24 lg:w-1/2 flex flex-col items-center justify-center">
-          <div className="w-full flex justify-end mr-20 mb-2">
+          {/* <div className="w-full flex justify-end mr-20 mb-2">
             <div className="flex items-center gap-1 px-3 py-2 rounded-xl bg-white shadow-[0_8px_16px_rgba(163,163,163,0.6)]">
               <Image src={LogoIcon} alt="Google Icon" width={30} height={50} />
               <h2 className="text-[20px] font-semibold text-sky-600 tracking-wide">
                 SL
               </h2>
             </div>
-          </div>
+          </div> */}
           <div className="w-full max-w-md bg-white px-8 py-4 rounded-2xl">
             <Typography.Title level={3} className="block text-center mb-6 text-gray-500">
               Connect to Platform

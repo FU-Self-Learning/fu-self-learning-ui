@@ -33,28 +33,28 @@ function Card({ data, ref }: CardProps) {
 
     const translateX = useTransform(
         scrollYProgress,
-        [-1, -0.3, 0],
+        [0, -0.3, 1],
         data.animate.translateX,
     );
     const translateY = useTransform(
         scrollYProgress,
-        [-1, -0.1, 0],
+        [0, -0.1, 1],
         data.animate.translateY,
     );
     // const opacity = useTransform(
     //     scrollYProgress,
-    //     [0, 0.1, 0.2, 1],
-    //     [-0.2, 0.1, 0.2, 1],
+    //     [0, 0.25, 0.251, 1],
+    //     [0, 0, 1, 1],
     // );
     return (
         <>
             <motion.button
                 style={{
                     translateX: hidden ? 0 : translateX,
-                    translateY: hidden ? -1 : translateY,
-                    // opacity: hidden ? 1 : opacity,
+                    translateY: hidden ? 0 : translateY,
+                    // opacity: hidden ? 0 : opacity,
                 }}
-                className="group z-0 flex flex-row items-center gap-1 rounded-3xl border-2 hover:bg-[#0A092D]  border-black bg-white p-4 shadow-3d transition-all duration-500 ease-in-out hover:bg-primary hover:shadow-3d-hover sm:flex-col sm:gap-0 sm:p-4 md:flex-col md:gap-2 md:p-8 lg:flex-col lg:gap-2 lg:p-8"
+                className="group z-0 flex flex-row items-center gap-1 rounded-3xl border-2 hover:bg-[#0A092D]  border-black bg-white p-4 shadow-3d transition-all duration-500 ease-in-out hover:bg-primary hover:shadow-3d-hover sm:flex-col sm:gap-0 sm:p-4 md:flex-col md:gap-2 md:p-8 lg:flex-col lg:gap-2 lg:p-8 border-r-[3px] border-b-[3px]"
             >
                 <div className="relative flex h-16 w-16 items-center justify-center">
                     {data.icon && <data.icon />}

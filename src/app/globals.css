@@ -33,3 +33,26 @@ body {
   color: var(--foreground);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+.custom-menu .ant-menu-item {
+  @apply text-white;
+}
+
+.custom-menu .ant-menu-item-selected {
+  @apply bg-indigo-700 text-white;
+}
+
+.ant-menu-item:hover {
+  color: white !important;
+}
+
+.ant-menu-item-selected {
+  display: flex !important;
+  margin: auto !important;
+  /* align-items: center !important; */
+  /* justify-content: center !important; */
+  /* align-self: center !important; */
+  /* text-align: center !important; */
+  height: 100% !important;
+  /* margin-top: 2px; */
+}

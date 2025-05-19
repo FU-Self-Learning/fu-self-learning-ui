@@ -1,7 +1,7 @@
 'use client';
 
 import { Carousel } from 'antd';
-import Card from './Card';
+import Card from './Card/index';
 import linhtran from "@p/svgs/linhtran.svg"
 import fort from "@p/svgs/Fort.svg"
 import Ethan from "@p/svgs/Ethan.svg"
@@ -9,8 +9,6 @@ import ThuyT from "@p/svgs/ThuyT.svg"
 import Ellip from "@p/svgs/Ellip.svg"
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useRef, useState } from 'react';
-
-
 
 
 
@@ -65,52 +63,56 @@ export default function CommunicationSection() {
     const next = () => carouselRef.current?.next();
 
     return (
-        <div className="max-w-7xl mx-auto my-[200px] relative">
-            <button
-                onClick={prev}
-                className="absolute top-1/2 left-[-40px] -translate-y-1/2 z-10 bg-[#0A092D] cursor-pointer text-white p-3 rounded-full shadow-lg transition-transform transition-colors duration-300 ease-in-out hover:bg-[#070624] hover:scale-110 active:scale-95"
-                aria-label="Previous"
-            >
-                <LeftOutlined />
-            </button>
+        <div className="max-w-7xl mx-auto my-[200px] relative flex flex-col gap-[100px] ">
+            <div className='text-4xl font-bold text-black flex justify-center'>
+                Feedback about Studee
+            </div>
+            <div>
+                <button
+                    onClick={prev}
+                    className="absolute top-1/2 left-[-40px] -translate-y-1/2 z-10 bg-[#0A092D] cursor-pointer text-white p-3 rounded-full shadow-lg transition-transform transition-colors duration-300 ease-in-out hover:bg-[#070624] hover:scale-110 active:scale-95"
+                    aria-label="Previous"
+                >
+                    <LeftOutlined />
+                </button>
+                <button
+                    onClick={next}
+                    className="absolute top-1/2 right-[-40px] -translate-y-1/2 z-10 bg-[#0A092D] cursor-pointer text-white p-3 rounded-full shadow-lg transition-transform transition-colors duration-300 ease-in-out hover:bg-[#070624] hover:scale-110 active:scale-95"
+                    aria-label="Next"
+                >
+                    <RightOutlined />
+                </button>
 
-            <button
-                onClick={next}
-                className="absolute top-1/2 right-[-40px] -translate-y-1/2 z-10 bg-[#0A092D] cursor-pointer text-white p-3 rounded-full shadow-lg transition-transform transition-colors duration-300 ease-in-out hover:bg-[#070624] hover:scale-110 active:scale-95"
-                aria-label="Next"
-            >
-                <RightOutlined />
-            </button>
 
-
-            <Carousel
-                ref={carouselRef}
-                dots={true}
-                slidesToShow={3}
-                slidesToScroll={3}
-                afterChange={setCurrent}
-                responsive={[
-                    {
-                        breakpoint: 1024,
-                        settings: { slidesToShow: 2, slidesToScroll: 2 },
-                    },
-                    {
-                        breakpoint: 640,
-                        settings: { slidesToShow: 1, slidesToScroll: 1 },
-                    },
-                ]}
-            >
-                {dataCommunicationFBack.map((item, index) => (
-                    <div key={index} className="px-3">
-                        <Card
-                            name={item.name}
-                            email={item.email}
-                            content={item.content}
-                            avt={item.avt}
-                        />
-                    </div>
-                ))}
-            </Carousel>
+                <Carousel
+                    ref={carouselRef}
+                    dots={true}
+                    slidesToShow={3}
+                    slidesToScroll={3}
+                    afterChange={(currentSlide) => setCurrent(currentSlide)}
+                    responsive={[
+                        {
+                            breakpoint: 1024,
+                            settings: { slidesToShow: 2, slidesToScroll: 2 },
+                        },
+                        {
+                            breakpoint: 640,
+                            settings: { slidesToShow: 1, slidesToScroll: 1 },
+                        },
+                    ]}
+                >
+                    {dataCommunicationFBack.map((item, index) => (
+                        <div key={index} className="px-3">
+                            <Card
+                                name={item.name}
+                                email={item.email}
+                                content={item.content}
+                                avt={item.avt}
+                            />
+                        </div>
+                    ))}
+                </Carousel>
+            </div>
         </div>
     );
 }

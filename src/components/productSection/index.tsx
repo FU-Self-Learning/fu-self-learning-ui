@@ -1,35 +1,21 @@
+// app/leaderboard/page.tsx
+import TopThree from './Card/index';
+import LeaderboardTable from './Table';
 
-
-import Card from "./Card";
-
-
-export const keys = [
-    {
-        value: "1",
-        lable: "FlashCard",
-    },
-    {
-        value: "2",
-        lable: "Social Media",
-    },
-    {
-        value: "3",
-        lable: "Study Area",
-    },
-];
-export default function ProductSection() {
+export default function ProductSelectionPage() {
     return (
-        <div className="flex flex-col items-center bg-[#0A092D] w-full h-auto font-bold ">
-            <h1 className="">Provide support tools</h1>
-            <div className="flex gap-4">
-                {keys.map((item, index: number) => (
-                    <div className="px-2 py-1 border-2 border-solid border-black rounded-sm cursor-pointer" key={index}>{item.lable}</div>
-                ))}
+        <div className=" bg-[#0A092D] text-white p-6">
+            <h1 className="text-3xl font-bold text-center mb-4">🏆 Leaderboard</h1>
+            <div className="flex justify-center mb-4">
+                <div className="bg-[#232338] rounded-full p-1 inline-flex space-x-2">
+                    <button className="px-4 py-1 bg-white text-black rounded-full">Daily</button>
+                    <button className="px-4 py-1 text-white">Monthly</button>
+                </div>
             </div>
-            <Card />
+            <TopThree />
+            <LeaderboardTable />
         </div>
     );
 }
 
 
-//D4D6D9

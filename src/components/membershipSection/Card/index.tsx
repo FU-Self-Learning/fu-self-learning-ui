@@ -71,6 +71,7 @@ function Card({ data, ref, hidden }: CardProps) {
             viewport={{ once: true }}
         >
             <div
+                style={{ backgroundColor: "#FFFFFF", opacity: 1 }}
                 className={cn(
                     "relative min-h-32 flex-1 rounded-3xl border-2 border-black p-4 transition-all duration-500 sm:p-6 md:p-8 lg:p-10",
                     data?.id === 2 && "lg:hover:-translate-y-3 lg:hover:scale-[1.025]",
@@ -78,7 +79,7 @@ function Card({ data, ref, hidden }: CardProps) {
                     "lg:-rotate-3 lg:hover:rotate-0 lg:hover:scale-[1.05]",
                     data?.id === 3 &&
                     "lg:rotate-3 lg:hover:rotate-0 lg:hover:scale-[1.05]",
-                    "shadow-3d hover:shadow-3d-hover bg-[#A9A9A9] ",
+                    "shadow-3d hover:shadow-3d-hover bg-[#FFFFFF] text-black border-solid border-b-[4px] border-r-[4px] ",
                 )}
             >
                 {data?.isBestSeller && (
@@ -104,7 +105,7 @@ function Card({ data, ref, hidden }: CardProps) {
                     <span className="text-xs md:text-sm lg:text-base">/Month</span>
                 </div>
                 <Button
-                    className="mb-6 w-full !py-5 !text-xl sm:mb-8 sm:py-4 sm:text-base md:mb-10 md:py-5 md:text-xl lg:mb-12 lg:py-6 lg:text-xl !border-r-[4px]  !border-b-[4px] !border-[2px] !border-solid !border-black !font-bold"
+                    className="mb-6 w-full !py-5 !text-xl sm:mb-8 sm:py-4 sm:text-base md:mb-10 md:py-5 md:text-xl lg:mb-12 lg:py-6 lg:text-xl !border-r-[4px] !border-b-[4px] !border-[2px] !border-solid !border-black !font-bold !bg-blue-500"
                 >
                     Start
                 </Button>
