@@ -3,3 +3,5 @@ export const slogansConstants = [
   "Learn with purpose, grow with passion, and achieve more than you ever imagined.",
   "The more you learn today, the more powerful your tomorrow becomes.",
 ];
+
+

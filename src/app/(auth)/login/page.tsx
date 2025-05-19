@@ -15,7 +15,7 @@ import { slogansConstants } from "@/shared/constants/slogansConstants";
 
 export default function LoginPage() {
 
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState<number>(0);
 
   const router = useRouter();
   return (
@@ -34,9 +34,11 @@ export default function LoginPage() {
                 <h1 className="text-[22px] lg:text-[45px] font-bold tracking-wide leading-tight">
                   Dive into Knowledge, Emerge into Success.
                 </h1>
-                <h1 className="text-[23px] font-extrabold max-w-[180px] text-gradient bg-gradient-to-r bg-blue-600 p-2 rounded-lg shadow-md text-center">
-                  Self-Learning
-                </h1>
+                <Button
+                  className="text-[23px] font-extrabold max-w-[180px] text-gradient bg-gradient-to-r !bg-blue-600 px-2 !py-5 rounded-lg shadow-md text-center cursor-pointer" type="primary"
+                  onClick={() => router.push("/")} >
+                  Get Started
+                </Button>
                 <div className="mt-4 w-[420px] h-[220px] p-6 rounded-2xl shadow-xl backdrop-blur-md bg-white/20 border border-white/30 text-white text-lg flex items-center justify-between transition-all duration-300">
                   <button
                     onClick={() => setIndex((prevIndex) => (prevIndex === 0 ? slogansConstants.length - 1 : prevIndex - 1))}
