@@ -81,7 +81,7 @@ export default function MembershipSection() {
     }, []);
 
     return (
-        <div className="flex justify-center items-center w-[1540px] h-[800px] m-auto  ">
+        <div className="flex justify-center items-center h-[800px] m-auto  ">
             <Section
                 title="Account Packages"
                 subTitle="Start learning completely free of charge. <br/> Upgrade your account to unlock more amazing features!"
