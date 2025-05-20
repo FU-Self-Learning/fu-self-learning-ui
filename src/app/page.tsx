@@ -1,12 +1,12 @@
 "use client"
 import Image from "next/image"
 import Banner from "@p/svgs/banner.svg"
-import ProductSelection from "@/components/productSection/index"
-import BenefitSection from "@/components/benefitSection/index."
-import PopularQuestion from "@/components/popularQuestion/index"
-import MembershipSection from "@/components/membershipSection/index"
-import CommunicationSection from "@/components/communicationSection/index"
 import { useRouter } from "next/navigation";
+// import ProductSelection from "@/components/HomePage/productSection/index"
+import BenefitSection from "@/components/HomePage/benefitSection/index"
+import PopularQuestion from "@/components/HomePage/popularQuestion/index"
+import MembershipSection from "@/components/HomePage/membershipSection/index"
+import CommunicationSection from "@/components/HomePage/communicationSection/index"
 
 export default function HomePage() {
     const router = useRouter()

@@ -1,8 +1,8 @@
 import Image from "next/image"
 import Banner from "@p/svgs/banner.svg"
-import ProductSection from "@/components/ProductSection"
-import BenefitSection from "@/components/BenefitSection/index."
-import PopularQuestion from "@/components/PopularQuestion"
+// import ProductSection from "@/components/HomePage/productSection/index"
+import BenefitSection from "@/components/HomePage/benefitSection/index"
+import PopularQuestion from "@/components/HomePage/popularQuestion/index"
 
 export default function HomePage() {
     return (
@@ -27,9 +27,9 @@ export default function HomePage() {
                 </div>
             </div>
             <div className="bg-gray-200">
-                <ProductSection />
+                {/* <ProductSection /> */}
                 <BenefitSection />
-                <ProductSection />
+                {/* <ProductSection /> */}
                 <PopularQuestion />
             </div>
 

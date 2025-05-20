@@ -8,14 +8,14 @@ import fast_easy from "@p/svgs/fast_easy.svg";
 import lovely from "@p/svgs/lovely.svg";
 import effective from "@p/svgs/effective.svg";
 
-import Card from "./Card/index";
+import CardBenefit from "./cardBenefit/cardBenefit";
 
 import managements from "@p/svgs/management.svg";
 import infinity from "@p/svgs/infinity.svg";
 import security from "@p/svgs/security.svg";
 import touch_real_time from "@p/svgs/touch_real_time.svg";
 import setting from "@p/svgs/setting.svg";
-import Section from "../productSection/Section";
+import Section from "@/components/common/Section";
 
 
 const benefitMore = [
@@ -155,10 +155,10 @@ export default function BenefitSection() {
     const ref = useRef(null);
     return (
         <>
-            <div className="flex flex-col items-center bg-[#4682B4] w-full h-auto font-bold overflow-hidden">
+            <div className="flex flex-col items-center bg-[#F5F3EA] w-full h-auto font-bold overflow-hidden">
                 <div ref={ref}>
                     <div className="container px-5 pb-0 pt-10 sm:px-8 sm:pb-0 sm:pt-12 md:px-10 md:pb-0 md:pt-14 lg:px-[60px] lg:pb-0 lg:pt-28">
-                        <ul className="flex flex-col justify-between gap-10 sm:flex-col md:flex-row lg:flex-row">
+                        <ul className="flex flex-col justify-between gap-10 sm:flex-col text-black font-bold md:flex-row lg:flex-row">
                             {benefits.map((benefit, index) => (
                                 <li
                                     key={index}
@@ -208,7 +208,7 @@ export default function BenefitSection() {
                                                 },
                                             }}
                                             viewport={{ once: true }}
-                                            className="text-left font-title text-xl sm:text-2xl md:text-center md:text-3xl lg:text-center lg:text-3xl"
+                                            className="text-left font-title text-xl sm:text-2xl md:text-center md:text-3xl lg:text-center lg:text-3xl font-semibold"
                                         >
                                             {benefit.title}
                                         </motion.h3>
@@ -240,77 +240,18 @@ export default function BenefitSection() {
                         </ul>
                     </div>
                 </div>
-                <div className="">
+                <div className="bg-[#F5F3EA]">
                     <Section title="And so much more"
                         subTitle="Use it effectively to make a difference.">
                         <div className="grid grid-rows-2 gap-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                             {benefitMore.map((item, index) => (
-                                <Card key={index} data={item} ref={ref} />
+                                <CardBenefit key={index} data={item} ref={ref} />
                             ))}
                         </div>
                     </Section>
                 </div>
             </div>
-            <div className="w-full h-[6px]">
-                <div className="">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 800 80"
-                        className="w-full mb3"
-                        style={{
-                            filter: "drop-shadow( 0px 3px rgba(0, 0, 0, 0.4))",
-                        }}
-                    >
-                        <path
-                            fill="#4682B4"
-                            fillOpacity="1"
-                            transform="scale(1, -1) translate(0, -47)"
-                            d="M0,40 
-     Q10,42 20,41 
-     Q30,39 40,40 
-     Q50,42 60,41 
-     Q70,39 80,40 
-     Q90,41 100,40 
-     Q110,42 120,40 
-     Q130,39 140,41 
-     Q150,42 160,40 
-     Q170,41 180,40 
-     Q190,39 200,40 
-     Q210,42 220,40 
-     Q230,41 240,39 
-     Q250,40 260,41 
-     Q270,42 280,40 
-     Q290,39 300,41 
-     Q310,42 320,40 
-     Q330,41 340,39 
-     Q350,40 360,41 
-     Q370,42 380,40 
-     Q390,39 400,41 
-     Q410,42 420,40 
-     Q430,41 440,39 
-     Q450,40 460,41 
-     Q470,42 480,40 
-     Q490,39 500,41 
-     Q510,42 520,40 
-     Q530,41 540,39 
-     Q550,40 560,41 
-     Q570,42 580,40 
-     Q590,39 600,41 
-     Q610,42 620,40 
-     Q630,41 640,39 
-     Q650,40 660,41 
-     Q670,42 680,40 
-     Q690,39 700,41 
-     Q710,42 720,40 
-     Q730,41 740,39 
-     Q750,40 760,41 
-     Q770,42 780,40 
-     Q790,39 800,41 
-     V80 H0 Z"
-                        />
-                    </svg>
-                </div>
-            </div>
+
         </>
 
     );

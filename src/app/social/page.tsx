@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
-import Menu from "@/components/menu";
-import ListFollowingPage from '@/components/menu/listFollowing';
+import Menu from "@/components/socialPage/menu";
+import ListFollowingPage from '@/components/socialPage/menu/listFollowing';
 
 
 type TProps = {

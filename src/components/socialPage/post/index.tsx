@@ -36,10 +36,14 @@ const PostPage: React.FC<PostProps> = ({
                 </div>
                 <div>
                     <Badge
-                        count={`${solutionCount.toLocaleString()} `}
+                        count={
+                            <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                <CheckCircleFilled style={{ color: "white" }} />
+                                {solutionCount.toLocaleString()}
+                            </span>
+                        }
                         showZero
                         style={{ backgroundColor: "#1e40af" }}
-                        icon={<CheckCircleFilled style={{ color: "white" }} />}
                     />
                 </div>
             </div>

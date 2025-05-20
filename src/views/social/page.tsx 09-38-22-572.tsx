@@ -1,6 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
-import MenuPage from "@/components/menu";
+import MenuPage from "@/components/socialPage/menu";
 
 
 type TProps = {}

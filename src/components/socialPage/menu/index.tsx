@@ -11,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { useRouter } from "next/navigation";
-import CreatePostModal from "@/components/menu/postSocial";
+import CreatePostModal from "@/components/socialPage/menu/postSocial";
 import SearchSocialPage from "./searchSocial";
 
 type MenuItem = Required<MenuProps>["items"][number];

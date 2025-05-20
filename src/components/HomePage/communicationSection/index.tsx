@@ -1,7 +1,7 @@
 'use client';
 
 import { Carousel } from 'antd';
-import Card from './Card/index';
+import CardCommuniti from './cardCommunication/cardCommunication';
 import linhtran from "@p/svgs/linhtran.svg"
 import fort from "@p/svgs/Fort.svg"
 import Ethan from "@p/svgs/Ethan.svg"
@@ -83,7 +83,6 @@ export default function CommunicationSection() {
                     <RightOutlined />
                 </button>
 
-
                 <Carousel
                     ref={carouselRef}
                     dots={true}
@@ -103,7 +102,7 @@ export default function CommunicationSection() {
                 >
                     {dataCommunicationFBack.map((item, index) => (
                         <div key={index} className="px-3">
-                            <Card
+                            <CardCommuniti
                                 name={item.name}
                                 email={item.email}
                                 content={item.content}
