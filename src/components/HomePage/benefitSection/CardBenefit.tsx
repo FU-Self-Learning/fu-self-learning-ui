@@ -16,7 +16,7 @@ interface CardProps {
     ref: MutableRefObject<HTMLElement | null>;
 }
 
-function CardBenefit({ data, ref }: CardProps) {
+export default function CardBenefit({ data, ref }: CardProps) {
     const [hidden, setHidden] = useState(true);
 
     useEffect(() => {
@@ -36,7 +36,7 @@ function CardBenefit({ data, ref }: CardProps) {
 
     return (
         <motion.button
-            ref={ref as MutableRefObject<HTMLButtonElement>} 
+            ref={ref as MutableRefObject<HTMLButtonElement>}
             style={{
                 translateX: hidden ? 0 : translateX,
                 translateY: hidden ? 0 : translateY,
@@ -60,4 +60,3 @@ function CardBenefit({ data, ref }: CardProps) {
     );
 }
 
-export default CardBenefit;

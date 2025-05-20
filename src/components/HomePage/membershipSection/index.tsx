@@ -3,7 +3,7 @@
 
 import Section from "@/components/common/Section";
 // import { animate } from "framer-motion";
-import CardMemberShip from "./CardCommunication";
+import CardMemberShip from "./CardMembership";
 import { useEffect, useRef, useState } from "react";
 
 

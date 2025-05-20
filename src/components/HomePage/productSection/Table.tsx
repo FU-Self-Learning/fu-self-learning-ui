@@ -10,7 +10,7 @@ const columns = [
         title: 'User name',
         dataIndex: 'username',
         key: 'username',
-        render: (text: any, record: any) => (
+        render: (text: string, record: { avatar: string }) => (
             <div className="flex items-center gap-2">
                 <img src={record.avatar} className="w-8 h-8 rounded-full" />
                 <span>{text}</span>
@@ -31,7 +31,7 @@ const columns = [
         title: 'Reward',
         dataIndex: 'reward',
         key: 'reward',
-        render: (value: any) => <span className="text-cyan-300 font-semibold">{value} 💎</span>,
+        render: (value: number) => <span className="text-cyan-300 font-semibold">{value} 💎</span>,
     },
 ];
 
