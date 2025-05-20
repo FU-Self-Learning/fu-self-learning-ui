@@ -86,7 +86,7 @@ export default function Navbar() {
     );
   };
   return (
-    <div className="!z-10 ">
+    <div className="!z-10">
       <header className="bg-gradient-to-l bg-[#0A092D] text-white px-8 py-6 flex justify-between items-center shadow-lg">
         <div className="flex items-center space-x-3 mt-4">
           <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.95 }} className="flex">
