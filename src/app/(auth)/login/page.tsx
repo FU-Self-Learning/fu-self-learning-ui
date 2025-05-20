@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { LoginForm } from "@/components/login/LoginForm";
 import GoogleIcon from "@p/svgs/google.svg"
-import LogoIcon from "@p/svgs/logo.svg"
+// import LogoIcon from "@p/svgs/logo.svg"
 import Image from "next/image";
 import LoginBanner from "@p/images/Login.png"
 import { motion, AnimatePresence } from "framer-motion";

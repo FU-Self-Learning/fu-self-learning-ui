@@ -1,15 +1,10 @@
-"use client"
 import Image from "next/image"
 import Banner from "@p/svgs/banner.svg"
-import { useRouter } from "next/navigation";
-// import ProductSelection from "@/components/HomePage/productSection/index"
+// import ProductSection from "@/components/HomePage/productSection/index"
 import BenefitSection from "@/components/HomePage/benefitSection/index"
 import PopularQuestion from "@/components/HomePage/popularQuestion/index"
-import MembershipSection from "@/components/HomePage/membershipSection/index"
-import CommunicationSection from "@/components/HomePage/communicationSection/index"
 
 export default function HomePage() {
-    const router = useRouter()
     return (
         <>
             <div className="relative w-full h-screen">
@@ -26,19 +21,16 @@ export default function HomePage() {
                     <p className="text-white text-xl leading-relaxed">
                         Search millions of study sets or create your own. Improve your grades and productivity with studying tools like flashcards, notes, note-taking templates, practice tests, and study planners.
                     </p>
-                    <div
-                        onClick={() => router.push("/login")}
-                        className="px-8 py-2 bg-[#4255ff] rounded-sm font-medium cursor-pointer">
+                    <div className="px-8 py-2 bg-[#4255ff] rounded-sm font-medium cursor-pointer">
                         Get Started
                     </div>
                 </div>
-            </div >
-            <div className="bg-[#F5F3EA]  flex w-full flex-col justify-center  items-center">
-                {/* <CourseListPage /> */}
+            </div>
+            <div className="bg-gray-200">
+                {/* <ProductSection /> */}
                 <BenefitSection />
-                <MembershipSection />
+                {/* <ProductSection /> */}
                 <PopularQuestion />
-                <CommunicationSection />
             </div>
 
         </>

@@ -78,7 +78,6 @@ export const RegisterForm = () => {
           Register
         </Button>
       </Form.Item>
-
     </Form>
   );
 };

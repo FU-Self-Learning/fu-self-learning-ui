@@ -10,7 +10,7 @@ type CardProps = {
     avt: string;
 };
 
-export default function Card({ name, email, content, avt }: CardProps) {
+export default function CardCommunication({ name, email, content, avt }: CardProps) {
     return (
         <div className="flex flex-col bg-white rounded-xl p-4 h-full border-solid border-black border-l-[2px] border-t-[2px] border-b-[4px] border-r-[4px]">
             <div className="flex flex-row gap-3 items-center mb-4">

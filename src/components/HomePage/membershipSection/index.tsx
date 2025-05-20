@@ -1,8 +1,9 @@
 
 "use client";
-import Section from "@/components/productSection/Section";
+
+import Section from "@/components/common/Section";
 // import { animate } from "framer-motion";
-import Card from "./Card";
+import CardMemberShip from "./CardMembership";
 import { useEffect, useRef, useState } from "react";
 
 
@@ -81,7 +82,7 @@ export default function MembershipSection() {
     }, []);
 
     return (
-        <div className="flex justify-center items-center h-[800px] m-auto  ">
+        <div className="flex justify-center items-center h-[800px] mt-5">
             <Section
                 title="Account Packages"
                 subTitle="Start learning completely free of charge. <br/> Upgrade your account to unlock more amazing features!"
@@ -91,7 +92,7 @@ export default function MembershipSection() {
                     className="flex w-full flex-col items-stretch gap-8 lg:flex-row lg:items-center h-full"
                 >
                     {data.map((item, index) => (
-                        <Card key={index} data={item} ref={ref} hidden={hidden} />
+                        <CardMemberShip key={index} data={item} ref={ref} hidden={hidden} />
                     ))}
                 </div>
                 <div id="developers"></div>

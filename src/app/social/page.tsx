@@ -1,14 +1,21 @@
+import { NextPage } from 'next';
+import Menu from "@/components/socialPage/menu";
+import ListFollowingPage from '@/components/socialPage/menu/listFollowing';
 
-export default function SocialPage() {
+
+type TProps = {
+    children: React.ReactNode;
+}
+const SocialPage: NextPage<TProps> = ({ children }) => {
     return (
-        <>
-            <div className="relative w-full h-screen">
-                <div className="absolute top-10 left-14 text-white flex flex-col items-start gap-4 max-w-xl">
-                    <h1 className="text-[80px] font-bold w-[600px]">
-                        Social
-                    </h1>
-                </div>
-            </div>
-        </>
+        <div className='flex justify-between mt-4'>
+            <Menu></Menu>
+            {children}
+            <ListFollowingPage />
+        </div>
     )
 }
+
+//F5F4EA
+
+export default SocialPage;
