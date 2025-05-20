@@ -8,7 +8,7 @@ import fast_easy from "@p/svgs/fast_easy.svg";
 import lovely from "@p/svgs/lovely.svg";
 import effective from "@p/svgs/effective.svg";
 
-import CardBenefit from "./cardBenefit/cardBenefit";
+import CardBenefit from "./CardBenefit";
 
 import managements from "@p/svgs/management.svg";
 import infinity from "@p/svgs/infinity.svg";

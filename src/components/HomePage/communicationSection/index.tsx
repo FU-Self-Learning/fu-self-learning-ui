@@ -1,7 +1,7 @@
 'use client';
 
 import { Carousel } from 'antd';
-import CardCommuniti from './cardCommunication/cardCommunication';
+import CardCommuniti from './CardCommunication';
 import linhtran from "@p/svgs/linhtran.svg"
 import fort from "@p/svgs/Fort.svg"
 import Ethan from "@p/svgs/Ethan.svg"
