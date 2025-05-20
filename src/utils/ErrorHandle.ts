@@ -13,6 +13,9 @@ export const extractErrorMessage = (error: unknown): string => {
     if (Array.isArray(res?.errors) && res.errors.length > 0)
       return res.errors[0];
 
+    if (Array.isArray(res?.data) && res.data.length > 0)
+      return res.data[0];
+
     // fallback nếu response có status
     return `Request failed with status ${error.response?.status}`;
   }
