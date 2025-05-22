@@ -132,7 +132,7 @@ export default function Navbar() {
                 type="link"
                 className="hover:text-yellow-300 transition-colors !font-bold !text-white"
               >
-                Playlist
+                Do exam
               </Button>
             </Link>
           </motion.div>

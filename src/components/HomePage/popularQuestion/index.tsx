@@ -72,8 +72,8 @@ export default function PopularQuestion() {
 
     return (
         // bg-[#4682B4]
-        <div className="w-full bg-[#4682B4]">
-            <div className="w-full -scale-y-100  h-[6px]">
+        <div className="w-full bg-[#4682B4] mt-[100px]">
+            <div className="w-full -scale-y-100 h-[6px]">
                 <div className="">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -180,7 +180,7 @@ export default function PopularQuestion() {
                     </div>
                 </div>
             </motion.div>
-            <div className="w-full h-[6px]">
+            <div className="w-full h-[6px]" >
                 <div className="">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
