@@ -1,4 +1,3 @@
-// import Card from "@/components/membershipSection/Card/index"
 import SocialPage from "./page"
 
 
@@ -12,5 +11,3 @@ const ContentSocial = () => {
 
 export default ContentSocial
 
-
-// SocialPage
