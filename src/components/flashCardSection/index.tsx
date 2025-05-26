@@ -13,52 +13,27 @@ interface CardData {
 interface SectionProps { mode: string; }
 
 const cards: CardData[] = [
-  {
-    front: "バスてい",
-    back: "Bus stop",
-    options: ["Bus stop", "Train station", "Airport", "Taxi stand"],
-    correctAnswer: "Bus stop"
-  },
-  {
-    front: "ありがとうございます",
-    back: "Thank you very much",
-    options: ["Thank you very much", "You're welcome", "Good morning", "Goodbye"],
-    correctAnswer: "Thank you very much"
-  },
-  {
-    front: "おはようございます",
-    back: "Good morning",
-    options: ["Good morning", "Good evening", "Good night", "Good afternoon"],
-    correctAnswer: "Good morning"
-  },
-  {
-    front: "さようなら",
-    back: "Goodbye",
-    options: ["Goodbye", "Hello", "See you later", "Welcome"],
-    correctAnswer: "Goodbye"
-  },
-  {
-    front: "すみません",
-    back: "Excuse me / I'm sorry",
-    options: ["Excuse me / I'm sorry", "Thank you", "Good morning", "Goodbye"],
-    correctAnswer: "Excuse me / I'm sorry"
-  }
+  { front: "バスてい", back: "Bus stop" },
+  { front: "ありがとうございます", back: "Thank you very much" },
+  { front: "おはようございます", back: "Good morning" },
+  { front: "さようなら", back: "Goodbye" },
+  { front: "すみません", back: "Excuse me / I'm sorry" },
 ];
 
 export default function FlashCardSection({ mode }: SectionProps) {
-  const [idx, setIdx] = useState(0);
+  const [questionIdx, setQuestionIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [shuffledCards, setShuffledCards] = useState<CardData[]>(cards);
   const total = cards.length;
-  const card = shuffledCards[idx];
+  const card = shuffledCards[questionIdx];
 
   const next = useCallback(() => {
-    setIdx(i => (i + 1) % total);
+    setQuestionIdx(i => (i + 1) % total);
     setFlipped(false);
   }, [total]);
 
   const prev = useCallback(() => {
-    setIdx(i => (i - 1 + total) % total);
+    setQuestionIdx(i => (i - 1 + total) % total);
     setFlipped(false);
   }, [total]);
 
@@ -71,7 +46,7 @@ export default function FlashCardSection({ mode }: SectionProps) {
       [newShuffled[i], newShuffled[j]] = [newShuffled[j], newShuffled[i]];
     }
     setShuffledCards(newShuffled);
-    setIdx(0);
+    setQuestionIdx(0);
     setFlipped(false);
   }, [shuffledCards]);
 
@@ -88,7 +63,7 @@ export default function FlashCardSection({ mode }: SectionProps) {
       {/* Flashcard mode */}
       {mode === "Flashcards" && (
         <>
-          <FlashCard data={card} flipped={flipped} />
+          <FlashCard data={card} flipped={flipped} onFlip={flip} index={questionIdx + 1} total={cards.length} />
 
           <FlashCardControls
             onPrev={prev}
@@ -106,28 +81,27 @@ export default function FlashCardSection({ mode }: SectionProps) {
 
       {/* Learn mode */}
       {mode === "Learn" && (
-        <div className="grid gap-4">
+        <div className="grid gap-6">
           {shuffledCards.map((c, i) => (
-            <div key={i} className="grid grid-cols-2 gap-4 p-4 border rounded-xl bg-white shadow-sm">
-              <div className="text-center space-y-1">
-                <div className="text-xs text-gray-400">Front</div>
-                <div className="text-xl font-semibold">{c.front}</div>
-              </div>
-              <div className="text-center space-y-1">
-                <div className="text-xs text-gray-400">Back</div>
-                <div className="text-xl font-semibold">{c.back}</div>
+            <div
+              key={i}
+              className="rounded-2xl border border-gray-200 bg-white p-6 shadow transition hover:shadow-md"
+            >
+              <div className="flex justify-between items-start gap-6">
+                {/* Front */}
+                <div className="flex-1 text-center space-y-2">
+                  <div className="text-2xl font-semibold text-gray-800">{c.front}</div>
+                </div>
+
+                {/* Back */}
+                <div className="flex-1 text-center space-y-2">
+                  <div className="text-2xl font-semibold text-blue-600">{c.back}</div>
+                </div>
               </div>
             </div>
           ))}
         </div>
-      )}
 
-      {/* Test mode */}
-      {mode === "Test" && (
-        <div className="p-4 bg-white border rounded shadow text-center">
-          <h3 className="text-sm font-medium">Test Mode Coming Soon!</h3>
-          <p className="text-gray-600">Content for the test mode will be added here.</p>
-        </div>
       )}
 
     </section>

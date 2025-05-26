@@ -3,7 +3,7 @@ import { useState } from "react";
 import FlashCardSection from "@/components/flashCardSection";
 import FlashCardList from '@/components/flashCardSection/FlashCardList';
 
-const tabs = ["Flashcards", "Learn", "Test"];
+const tabs = ["Flashcards", "Learn"];
 
 const mockFlashCards = [
   {
