@@ -1,9 +1,8 @@
-import OceanWave from "../common/SvgsComponents/OceanWave";
+// import OceanWaveNavbar from "@p/SvgsComponents/OceanWaveNavbar";
 
 export default function Footer() {
   return (
     <>
-      <OceanWave color="#000000" flipY={true} />
       <footer className="bg-black text-white px-6 py-10 ">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="col-span-2">

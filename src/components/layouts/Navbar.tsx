@@ -10,7 +10,6 @@ import { RootState } from "@/providers/store";
 import Image from "next/image";
 import Login from "@p/svgs/logo.svg"
 import { useRouter } from "next/navigation";
-import OceanWave from "@/components/common/SvgsComponents/OceanWave";
 
 export default function Navbar() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -87,7 +86,7 @@ export default function Navbar() {
     );
   };
   return (
-    <div className="!z-10">
+    <div >
       <header className="bg-gradient-to-l bg-[#0A092D] text-white px-8 py-6 flex justify-between items-center shadow-lg">
         <div className="flex items-center space-x-3 mt-4">
           <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.95 }} className="flex">
@@ -143,7 +142,6 @@ export default function Navbar() {
           {isAuthenticated ? renderHeader() : renderHeaderLogin()}
         </nav>
       </header>
-      <OceanWave flipY={false} color="#0A092D"></OceanWave>
     </div >
   );
 }

@@ -87,7 +87,7 @@ export default function SidebarDoExam(props: TSidebarDoExam) {
 
                 </div>
             </div>
-            <Button className='z-10 text-2xl font-bold text-white' type="primary" onClick={handleSummit}>Summit</Button>
+            <Button className='text-2xl font-bold text-white' type="primary" onClick={handleSummit}>Summit</Button>
         </div>
     )
 }

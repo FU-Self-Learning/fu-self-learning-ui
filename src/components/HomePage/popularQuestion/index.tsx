@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Collapse, Input, Button } from "antd";
 import type { CollapseProps } from "antd";
 import { motion } from "framer-motion";
-import OceanWave from "@/components/common/SvgsComponents/OceanWave";
+import OceanWave from "@p/SvgsComponents/OceanWave";
 
 const items: CollapseProps['items'] = [
     {

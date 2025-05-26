@@ -310,8 +310,3 @@ const DoExam = () => {
 };
 
 export default DoExam;
-
-
-
-// `text-xl text-white transition duration-300 cursor-pointer ${remindQuestions ? 'text-yellow-400' : 'text-white hover:text-yellow-400'
-//                       }`
