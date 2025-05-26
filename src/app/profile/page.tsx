@@ -1,6 +1,6 @@
 "use client";
 
-import { Form, Input, DatePicker, Button, Divider } from "antd";
+import { Form, Input, DatePicker, Button, Divider, notification, message } from "antd";
 import { useEffect, useState } from "react";
 import { useProfile } from "@/hooks/auth/useProfile";
 import CustomAvartar from "@/components/profile/CustomAvatar";
@@ -31,6 +31,7 @@ const Profile = () => {
   const handleSubmitUpdateProfile = async (values: any) => {
     // updateProfile(values);
     setIsEdit(false);
+    message.success("Profile updated successfully");
   };
 
   const handleSubmitUploadAvatar = async (values: FormData) => {

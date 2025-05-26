@@ -19,27 +19,18 @@ const CustomAvartar = ({ avatar, isEdit, onAvatarChange }: Props) => {
   const handleChangeImage = (info: UploadChangeParam) => {
     const file = info.fileList[0]?.originFileObj;
     if (!file) return;
-    const paramValid = {
+    // const paramValid = {
     //   file,
     //   acceptedTypes: ACCEPTED_IMAGE_TYPES,
     //   maxSizeKB: MAX_IMAGE_FILE_SIZE_KB,
     //   type: FILE_TYPE.IMAGE,
     // };
     // const { isValid, errorMessageKey, errorMessageParams } = validateFile(paramValid);
-    // if (!isValid) {
-    //   const msgKey = errorMessageKey ?? 'PROFILE.AVATAR_UPLOAD_ERROR';
-
-    //   openNotificationWithIcon(
-    //     NotificationTypeEnum.WARNING,
-    //     t(msgKey, {
-    //       field: t('PROFILE.AVATAR'),
-    //       ...errorMessageParams,
-    //     }),
-    //   );
-    //   return;
-    }
+      // if (!isValid) {
+      //   const msgKey = errorMessageKey ?? 'PROFILE.AVATAR_UPLOAD_ERROR';
+      return;
     const formdata = new FormData();
-    formdata.append('avatar', file);
+    // formdata.append('avatar', file);
     onAvatarChange(formdata);
   };
   return (
