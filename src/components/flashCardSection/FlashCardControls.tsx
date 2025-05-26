@@ -33,6 +33,11 @@ export default function FlashCardControls({
   return (
     <div className="flex flex-col gap-4 items-center">
       <div className="flex gap-4">
+        <Tooltip title="Shuffle">
+            <Button icon={<SwapOutlined />} onClick={onShuffle}>
+              Shuffle
+            </Button>
+          </Tooltip>
         <Tooltip title="Previous (←)">
           <Button shape="circle" icon={<LeftOutlined />} onClick={onPrev} />
         </Tooltip>
@@ -42,27 +47,12 @@ export default function FlashCardControls({
         <Tooltip title="Next (→)">
           <Button shape="circle" icon={<RightOutlined />} onClick={onNext} />
         </Tooltip>
-      </div>
-
-      {showExtras && (
-        <div className="flex gap-3">
-          <Tooltip title="Shuffle">
-            <Button icon={<SwapOutlined />} onClick={onShuffle}>
-              Shuffle
-            </Button>
-          </Tooltip>
-          <Tooltip title="Settings">
-            <Button icon={<SettingOutlined />} onClick={onSettings}>
-              Settings
-            </Button>
-          </Tooltip>
-          <Tooltip title="Fullscreen">
+        <Tooltip title="Fullscreen">
             <Button icon={<FullscreenOutlined />} onClick={onFullscreen}>
               Fullscreen
             </Button>
           </Tooltip>
-        </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,5 @@
-/* File: src/components/flashCardSection/index.tsx */
 "use client";
 import { useState, useCallback } from "react";
-import { Switch, Avatar, message } from "antd";
 import FlashCard from "./FlashCard";
 import FlashCardControls from "./FlashCardControls";
 
@@ -77,11 +75,6 @@ export default function FlashCardSection({ mode }: SectionProps) {
     setFlipped(false);
   }, [shuffledCards]);
 
-  const handleSettings = useCallback(() => {
-    // Settings logic
-    message.info("Settings clicked! (This is a placeholder)");
-  }, []);
-
   const handleFullscreen = useCallback(() => {
     if (document.fullscreenElement) {
       document.exitFullscreen();
@@ -102,7 +95,6 @@ export default function FlashCardSection({ mode }: SectionProps) {
             onFlip={flip}
             onNext={next}
             onShuffle={shuffle}
-            onSettings={handleSettings}
             onFullscreen={handleFullscreen}
             showExtras
           />
@@ -112,7 +104,7 @@ export default function FlashCardSection({ mode }: SectionProps) {
         </>
       )}
 
-      {/* Learn mode: show both faces side by side */}
+      {/* Learn mode */}
       {mode === "Learn" && (
         <div className="grid gap-4">
           {shuffledCards.map((c, i) => (
@@ -130,7 +122,7 @@ export default function FlashCardSection({ mode }: SectionProps) {
         </div>
       )}
 
-      {/* Test mode: Add content for the test mode */}
+      {/* Test mode */}
       {mode === "Test" && (
         <div className="p-4 bg-white border rounded shadow text-center">
           <h3 className="text-sm font-medium">Test Mode Coming Soon!</h3>

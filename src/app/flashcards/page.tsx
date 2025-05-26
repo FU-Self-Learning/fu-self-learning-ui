@@ -1,16 +1,26 @@
 "use client";
 import { useState } from "react";
 import FlashCardSection from "@/components/flashCardSection";
-import Link from 'next/link';
+import FlashCardList from '@/components/flashCardSection/FlashCardList';
 
 const tabs = ["Flashcards", "Learn", "Test"];
 
-// Mock data 
-const flashcards = [
-  { id: 1, title: 'Flashcard 1', description: 'Description for flashcard 1' },
-  { id: 2, title: 'Flashcard 2', description: 'Description for flashcard 2' },
-  { id: 3, title: 'Flashcard 3', description: 'Description for flashcard 3' },
-  // Add more flashcards as needed
+const mockFlashCards = [
+  {
+    id: '1',
+    front: 'What is React?',
+    back: 'A JavaScript library for building user interfaces'
+  },
+  {
+    id: '2',
+    front: 'What is Next.js?',
+    back: 'A React framework for production'
+  },
+  {
+    id: '3',
+    front: 'What is TypeScript?',
+    back: 'A typed superset of JavaScript'
+  }
 ];
 
 export default function FlashCardsPage() {
@@ -36,22 +46,7 @@ export default function FlashCardsPage() {
 
       <FlashCardSection mode={activeTab} />
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {flashcards.map((flashcard) => (
-            <Link 
-              href={`/flashcards/${flashcard.id}`} 
-              key={flashcard.id}
-              className="block"
-            >
-              <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                <h2 className="text-xl font-semibold mb-2">{flashcard.title}</h2>
-                <p className="text-gray-600">{flashcard.description}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
+      <FlashCardList cards={mockFlashCards} />
     </main>
   );
 }
