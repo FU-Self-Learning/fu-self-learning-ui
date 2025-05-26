@@ -128,7 +128,7 @@ export default function Navbar() {
             </Link>
           </motion.div>
           <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-            <Link href="/playlist/1">
+            <Link href="/doExam">
               <Button
                 type="link"
                 className="hover:text-yellow-300 transition-colors !font-bold !text-white"

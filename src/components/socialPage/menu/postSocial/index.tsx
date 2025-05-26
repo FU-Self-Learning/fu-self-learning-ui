@@ -4,6 +4,9 @@ import React, { useState, useEffect } from "react";
 import { Modal, Input, Upload, Button, Dropdown, MenuProps, Popconfirm } from "antd";
 import { UploadOutlined, MoreOutlined, FileOutlined } from "@ant-design/icons";
 import Group from "@p/svgs/Group.svg";
+import TextArea from "antd/es/input/TextArea";
+
+
 
 
 type Props = {
@@ -11,7 +14,7 @@ type Props = {
     onClose: () => void;
 };
 
-const { TextArea } = Input;
+
 
 const filters = [
     { name: "None", style: "none" },
@@ -206,6 +209,7 @@ const CreatePostModal = ({ open, onClose }: Props) => {
                 </div>
                 <div>
                     <label className="font-semibold">Description</label>
+                    {/* <TextEditor></TextEditor> */}
                     <TextArea rows={4} placeholder="The start of a wonderful story..." maxLength={360} />
                 </div>
                 <div className="flex justify-end gap-2 mt-2">

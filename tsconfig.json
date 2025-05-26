@@ -21,8 +21,18 @@
     "paths": {
       "@/*": ["./src/*"],
       "@p/*": ["./public/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/page.tsx", "src/views/social/page.stsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/types/react-draft-wysiwyg.d.ts",
+    "src/types/draft-convert.d.ts",
+    "src/app/page.tsx",
+    "src/views/social/page.stsx"
+  ],
   "exclude": ["node_modules"]
 }
