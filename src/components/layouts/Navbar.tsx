@@ -137,6 +137,16 @@ export default function Navbar() {
             </Link>
           </motion.div>
           <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+            <Link href="/flashcards">
+              <Button
+                type="link"
+                className="hover:text-yellow-300 transition-colors !font-bold !text-white"
+              >
+                Flashcards
+              </Button>
+            </Link>
+          </motion.div>
+          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
             <DarkModeToggle />
           </motion.div>
           {isAuthenticated ? renderHeader() : renderHeaderLogin()}
