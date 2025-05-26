@@ -9,13 +9,11 @@ import { isObjectEmpty } from "@/utils/isObjectEmpty";
 export default function AuthHydration() {
   const dispatch = useDispatch();
   useEffect(() => {
-
     dispatch(setLoading(true));
     const raw = getStorageData("user");
     try {
-      const parsed = raw ? JSON.parse(raw) : null;
-      if (parsed && !isObjectEmpty(parsed)) {
-        dispatch(setUser(parsed));
+      if (raw && !isObjectEmpty(raw)) {
+        dispatch(setUser(raw));
       }
     } catch (e) {
       console.error("Failed to hydrate user from localStorage", e);

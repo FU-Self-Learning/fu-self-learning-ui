@@ -1,7 +1,10 @@
 export interface UserInfo {
   id: string;
-  name: string;
+  username: string;
   email: string;
+  phoneNumber: string;
+  age: number;
+  avatar_url: string;
 }
 
 export interface AuthState {
