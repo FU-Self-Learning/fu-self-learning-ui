@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 import { APP_URL, EXPIRED_TOKEN } from "../constants/apiConstants";
+import { getStorageData, setStorageData } from "../store";
 export class Api {
   instance: AxiosInstance;
   private isRefreshing = false;
@@ -36,12 +37,12 @@ export class Api {
     try {
       const response = await axios.get(`${APP_URL}/refresh-token`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${getStorageData("accessToken")}`,
         },
       });
 
       const newToken = response.data.data.accessToken;
-      localStorage.setItem("accessToken", newToken);
+      setStorageData("accessToken", newToken);
 
       return newToken;
     } catch (error) {
@@ -86,7 +87,7 @@ export class Api {
     );
 
     this.instance.interceptors.request.use((config) => {
-      const token = localStorage.getItem("accessToken");
+      const token = getStorageData("accessToken");
       if (token) config.headers!["Authorization"] = `Bearer ${token}`;
       return config;
     });

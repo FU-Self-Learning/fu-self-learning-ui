@@ -15,7 +15,6 @@ export const useLogin = () => {
       data.userInfo ? setStorageData("user", data.userInfo) : null;
       setStorageData("accessToken", data.accessToken);
       setStorageData("refreshToken", data.refreshToken);
-      console.log(data.userInfo);
       dispatch(setUser(data.userInfo));
       message.success("Login Successfully");
     },
