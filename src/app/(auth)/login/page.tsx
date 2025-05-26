@@ -19,9 +19,9 @@ export default function LoginPage() {
 
   const router = useRouter();
   return (
-    <div className="flex justify-center h-[660px] min-h-[85vh] bg-gray-200 bg-cover bg-center">
-      <div className="flex justify-center bg-white items-center py-2 px-2 h-[670px] w-[1100px] my-auto mx-auto rounded-3xl">
-        <div className="relative  lg:w-1/2 h-[640px] w-[500px] m-2 rounded-3xl">
+    <div className="flex justify-center min-h-[90vh]  bg-gray-200 bg-cover bg-center">
+      <div className="flex justify-center bg-white items-center py-2 px-2 h-full w-[1100px] my-auto mx-auto rounded-3xl">
+        <div className="relative lg:w-1/2 h-[640px] w-[500px] m-2 rounded-3xl">
           <Image
             src={LoginBanner}
             alt="Login Banner"
