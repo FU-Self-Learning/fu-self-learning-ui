@@ -1,9 +1,8 @@
 "use client";
 import { useState } from "react";
 import FlashCardSection from "@/components/flashCardSection";
-import FlashCardList from '@/components/flashCardSection/FlashCardList';
-
-const tabs = ["Flashcards", "Learn"];
+import FlashCardList from "@/components/flashCardSection/FlashCardList";
+import { FLASHCARD_TABS, FlashcardTab } from "@/components/common/constants/tab";
 
 const mockFlashCards = [
   {
@@ -24,12 +23,12 @@ const mockFlashCards = [
 ];
 
 export default function FlashCardsPage() {
-  const [activeTab, setActiveTab] = useState<string>(tabs[0]);
+  const [activeTab, setActiveTab] = useState<FlashcardTab>(FLASHCARD_TABS[0]);
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
       <nav className="flex justify-center gap-6 pb-2">
-        {tabs.map((tab) => (
+        {FLASHCARD_TABS.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -45,7 +44,6 @@ export default function FlashCardsPage() {
       </nav>
 
       <FlashCardSection mode={activeTab} />
-
       <FlashCardList cards={mockFlashCards} />
     </main>
   );
