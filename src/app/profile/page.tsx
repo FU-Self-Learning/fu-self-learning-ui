@@ -2,14 +2,15 @@
 
 import { Form, Input, DatePicker, Button, Divider, message } from "antd";
 import { useEffect, useState } from "react";
-import { useProfile } from "@/hooks/auth/useProfile";
+import { useProfile, useUpdateProfile } from "@/hooks/auth/useProfile";
 import CustomAvartar from "@/components/profile/CustomAvatar";
+import dayjs from "dayjs";
 
 const Profile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [form] = Form.useForm();
   const { data } = useProfile();
-  //   const { mutate: updateProfile } = useUpdateProfile();
+  const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
   //   const { mutate: uploadAvatar } = useUploadAvatar();
 
   useEffect(() => {
@@ -18,7 +19,7 @@ const Profile = () => {
         username: data.username || "",
         email: data.email || "",
         phoneNumber: data.phoneNumber || "",
-        age: data.age || "",
+        dob: data.dob ? dayjs(data.dob) : null,
       });
     }
   }, [data, form]);
@@ -29,7 +30,7 @@ const Profile = () => {
   };
 
   const handleSubmitUpdateProfile = async (values: any) => {
-    // updateProfile(values);
+    updateProfile(values);
     setIsEdit(false);
     message.success("Profile updated successfully");
   };
@@ -64,7 +65,7 @@ const Profile = () => {
             username: data?.username ?? "",
             email: data?.email ?? "",
             phoneNumber: data?.phoneNumber ?? "",
-            age: data?.age ?? "",
+            dob: data?.dob ? dayjs(data.dob) : null,
           }}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-w-[900px] w-full">
@@ -105,6 +106,7 @@ const Profile = () => {
                     <Button
                       onClick={handleEdit}
                       className="!flex !justify-center z-5 !items-center !rounded-3xl !px-8 !py-4 !text-md !bg-[#4178a7] !border-[#4178a7] !text-white"
+                      loading={isUpdating}
                     >
                       Edit Profile
                     </Button>

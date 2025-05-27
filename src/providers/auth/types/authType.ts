@@ -3,8 +3,8 @@ export interface UserInfo {
   username: string;
   email: string;
   phoneNumber: string;
-  age: number;
   avatar_url: string;
+  dob: string;
 }
 
 export interface AuthState {
