@@ -1,29 +1,29 @@
 import Link from 'next/link';
+import { useFlashcard } from '@/hooks/useFlashcard';
 
-interface FlashCard {
-  id: string;
-  front: string;
-  back: string;
-}
+export default function FlashCardList() {
+  const { flashcards, loading, error } = useFlashcard();
 
-interface FlashCardListProps {
-  cards: FlashCard[];
-}
+  if (loading) {
+    return <div className="container mx-auto px-4 py-8">Loading...</div>;
+  }
 
-export default function FlashCardList({ cards }: FlashCardListProps) {
+  if (error) {
+    return <div className="container mx-auto px-4 py-8 text-red-500">Error: {error}</div>;
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Flash Cards</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cards.map((card) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {flashcards.map((card) => (
           <Link 
             href={`/flashcards/${card.id}`} 
             key={card.id}
             className="block"
           >
-            <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-              <h2 className="text-xl font-semibold mb-2">{card.front}</h2>
-              <p className="text-gray-600">{card.back}</p>
+            <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow min-h-[150px]">
+              <h2 className="text-2xl font-semibold mb-4">{card.front_text}</h2>
+              <p className="text-lg text-gray-600">{card.back_text}</p>
             </div>
           </Link>
         ))}

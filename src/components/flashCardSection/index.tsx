@@ -1,30 +1,24 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import FlashCard from "./FlashCard";
 import FlashCardControls from "./FlashCardControls";
-
-interface CardData {
-  front: string;
-  back: string;
-  options?: string[];
-  correctAnswer?: string;
-}
+import { useFlashcard } from "@/hooks/useFlashcard";
 
 interface SectionProps { mode: string; }
 
-const cards: CardData[] = [
-  { front: "バスてい", back: "Bus stop" },
-  { front: "ありがとうございます", back: "Thank you very much" },
-  { front: "おはようございます", back: "Good morning" },
-  { front: "さようなら", back: "Goodbye" },
-  { front: "すみません", back: "Excuse me / I'm sorry" },
-];
-
 export default function FlashCardSection({ mode }: SectionProps) {
+  const { flashcards, loading, error } = useFlashcard();
   const [questionIdx, setQuestionIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
-  const [shuffledCards, setShuffledCards] = useState<CardData[]>(cards);
-  const total = cards.length;
+  const [shuffledCards, setShuffledCards] = useState(flashcards);
+
+  useEffect(() => {
+    if (flashcards.length > 0) {
+      setShuffledCards(flashcards);
+    }
+  }, [flashcards]);
+
+  const total = flashcards.length;
   const card = shuffledCards[questionIdx];
 
   const next = useCallback(() => {
@@ -58,12 +52,34 @@ export default function FlashCardSection({ mode }: SectionProps) {
     }
   }, []);
 
+  if (loading) {
+    return <div className="container mx-auto px-4 py-8">Loading flashcards...</div>;
+  }
+
+  if (error) {
+    return <div className="container mx-auto px-4 py-8 text-red-500">Error: {error}</div>;
+  }
+
+  if (!flashcards || flashcards.length === 0) {
+    return <div className="container mx-auto px-4 py-8">No flashcards available.</div>;
+  }
+
+  if (!card) {
+    return <div className="container mx-auto px-4 py-8">Loading card data...</div>;
+  }
+
   return (
     <section className="space-y-6">
       {/* Flashcard mode */}
       {mode === "Flashcards" && (
         <>
-          <FlashCard data={card} flipped={flipped} onFlip={flip} index={questionIdx + 1} total={cards.length} />
+          <FlashCard 
+            data={card} 
+            flipped={flipped} 
+            onFlip={flip} 
+            index={questionIdx + 1} 
+            total={flashcards.length} 
+          />
 
           <FlashCardControls
             onPrev={prev}
@@ -90,20 +106,18 @@ export default function FlashCardSection({ mode }: SectionProps) {
               <div className="flex justify-between items-start gap-6">
                 {/* Front */}
                 <div className="flex-1 text-center space-y-2">
-                  <div className="text-2xl font-semibold text-gray-800">{c.front}</div>
+                  <div className="text-2xl font-semibold text-gray-800">{c.front_text}</div>
                 </div>
 
                 {/* Back */}
                 <div className="flex-1 text-center space-y-2">
-                  <div className="text-2xl font-semibold text-blue-600">{c.back}</div>
+                  <div className="text-2xl font-semibold text-blue-600">{c.back_text}</div>
                 </div>
               </div>
             </div>
           ))}
         </div>
-
       )}
-
     </section>
   );
 }

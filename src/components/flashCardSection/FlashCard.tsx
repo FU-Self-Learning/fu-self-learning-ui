@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
+import { Flashcard } from "@/hooks/useFlashcard";
 
 interface FlashCardProps {
-  data: { front: string; back: string };
+  data: Flashcard;
   flipped: boolean;
   onFlip?: () => void;
   index?: number;
@@ -11,7 +12,7 @@ interface FlashCardProps {
 export default function FlashCard({ data, flipped, onFlip, index, total }: FlashCardProps) {
   return (
     <div
-      className="perspective-1000 w-full max-w-xl h-72 mx-auto cursor-pointer"
+      className="perspective-1000 w-full max-w-4xl h-96 mx-auto cursor-pointer"
       onClick={onFlip}
     >
       <motion.div
@@ -26,8 +27,8 @@ export default function FlashCard({ data, flipped, onFlip, index, total }: Flash
             {index} / {total}
           </div>
 
-          <div className="w-full h-full bg-white border border-gray-200 rounded-2xl shadow-xl flex items-center justify-center text-3xl font-semibold px-6 text-center">
-            {data.front}
+          <div className="w-full h-full bg-white border border-gray-200 rounded-2xl shadow-xl flex items-center justify-center text-4xl font-semibold px-8 text-center">
+            {data.front_text}
           </div>
         </div>
 
@@ -37,8 +38,8 @@ export default function FlashCard({ data, flipped, onFlip, index, total }: Flash
             {index} / {total}
           </div>
 
-          <div className="w-full h-full bg-blue-50 border border-blue-200 rounded-2xl shadow-xl flex items-center justify-center text-3xl font-semibold px-6 text-center">
-            {data.back}
+          <div className="w-full h-full bg-blue-50 border border-blue-200 rounded-2xl shadow-xl flex items-center justify-center text-4xl font-semibold px-8 text-center">
+            {data.back_text}
           </div>
         </div>
       </motion.div>

@@ -4,29 +4,11 @@ import FlashCardSection from "@/components/flashCardSection";
 import FlashCardList from "@/components/flashCardSection/FlashCardList";
 import { FLASHCARD_TABS, FlashcardTab } from "@/components/common/constants/tab";
 
-const mockFlashCards = [
-  {
-    id: '1',
-    front: 'What is React?',
-    back: 'A JavaScript library for building user interfaces'
-  },
-  {
-    id: '2',
-    front: 'What is Next.js?',
-    back: 'A React framework for production'
-  },
-  {
-    id: '3',
-    front: 'What is TypeScript?',
-    back: 'A typed superset of JavaScript'
-  }
-];
-
 export default function FlashCardsPage() {
   const [activeTab, setActiveTab] = useState<FlashcardTab>(FLASHCARD_TABS[0]);
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+    <main className="max-w-7xl mx-auto px-4 py-8 space-y-8">
       <nav className="flex justify-center gap-6 pb-2">
         {FLASHCARD_TABS.map((tab) => (
           <button
@@ -43,8 +25,14 @@ export default function FlashCardsPage() {
         ))}
       </nav>
 
-      <FlashCardSection mode={activeTab} />
-      <FlashCardList cards={mockFlashCards} />
+      <div className="max-w-5xl mx-auto">
+        <FlashCardSection mode={activeTab} />
+      </div>
+      
+      <div className="mt-12">
+        <h2 className="text-2xl font-bold mb-6">All Flashcards</h2>
+        <FlashCardList />
+      </div>
     </main>
   );
 }
