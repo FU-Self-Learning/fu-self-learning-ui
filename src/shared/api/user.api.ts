@@ -1,0 +1,23 @@
+import { UserInfo } from "@/providers/auth/types/authType";
+import api from ".";
+import { APP_URL } from "../constants/apiConstants";
+
+export const fetchUserProfile = async (): Promise<UserInfo> => {
+  const response = await api.get(`${APP_URL}/users/me`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
+  });
+  return response.data;
+};
+
+export const updateUserProfile = async (
+  payload: UserInfo
+): Promise<UserInfo> => {
+  const response = await api.put(`${APP_URL}/users/me`, payload, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
+  });
+  return response.data;
+};

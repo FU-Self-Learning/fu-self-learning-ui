@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Button,
-  Form,
-  Input,
-  Space,
-} from "antd";
+import { Button, Form, Input, message, Space } from "antd";
 import { useRouter } from "next/navigation";
 import {
   validateEmail,
@@ -23,8 +18,8 @@ export const RegisterForm = () => {
   const handleSubmit = (values: RegisterPayload) => {
     mutate(values, {
       onSuccess() {
-        router.replace("/");
-      },
+        router.replace("/login");
+      }
     });
   };
 
@@ -41,14 +36,13 @@ export const RegisterForm = () => {
         <div>
           <label className="flex text-[14px] m-2 font-bold">Full Name</label>
           <Form.Item
-            name="fullName"
+            name="username"
             rules={[{ required: true, message: "Please enter your full name" }]}
           >
             <Input placeholder="Nguyen Van A" />
           </Form.Item>
         </div>
       </Space>
-
 
       <div>
         <label className="flex text-[14px] m-2 font-bold">Password</label>
@@ -57,7 +51,9 @@ export const RegisterForm = () => {
         </Form.Item>
       </div>
       <div>
-        <label className="flex text-[14px] m-2 font-bold">Confirm Password</label>
+        <label className="flex text-[14px] m-2 font-bold">
+          Confirm Password
+        </label>
         <Form.Item
           name="confirmPassword"
           dependencies={["password"]}

@@ -7,11 +7,9 @@ export const useRegister = () => {
   return useMutation({
     mutationFn: register,
     onSuccess: () => {
-      message.success("Login Successfully");
+      message.success("Register Successfully");
     },
     onError: (error) => {
-      console.log(error);
-
       const msg = extractErrorMessage(error);
       message.error(msg);
     },
