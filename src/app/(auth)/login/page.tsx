@@ -7,10 +7,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Typography, Button, Divider } from "antd";
 import { BannerPublic } from "@/components/common/BannerPublic";
+import { useActivateAccount } from "@/hooks/auth/useActiveAccount";
+import { useEffect } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { mutate: activateAccount } = useActivateAccount();
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const activateToken = searchParams.get('activateToken');
+
+    if (activateToken) {
+      activateAccount(activateToken);
+      router.replace('/login');
+    }
+  }, []);
   return (
     <div className="flex justify-center min-h-[90vh]  bg-gray-200 bg-cover bg-center">
       <div className="flex justify-center bg-white items-center py-2 px-2 h-full w-[1100px] my-auto mx-auto rounded-3xl">
