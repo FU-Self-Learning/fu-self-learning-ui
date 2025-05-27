@@ -1,5 +1,6 @@
 import api from "./index";
 import { APP_URL } from "../constants/apiConstants";
+import { UserInfo } from "@/providers/auth/types/authType";
 
 export interface LoginPayload {
   email: string;
@@ -25,5 +26,13 @@ export const logout = async () => {
 
 export const register = async (payload: RegisterPayload) => {
   const response = await api.post(`${APP_URL}/auth/register`, payload);
+  return response.data;
+};
+
+export const changePassword = async (data: {
+  currentPassword: string;
+  newPassword: string;
+}) => {
+  const response = await api.post(`${APP_URL}/auth/change-password`, data);
   return response.data;
 };
