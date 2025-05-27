@@ -13,13 +13,17 @@ export const LoginForm = () => {
   const { mutate, isPending } = useLogin();
   const router = useRouter();
   const [form] = Form.useForm();
-
+  
   const handleSubmit = (values: LoginPayload) => {
     mutate(values, {
       onSuccess() {
         router.replace("/");
       },
     });
+  };
+
+  const handleForgotPassword = () => {
+    router.push("/forgot-password");
   };
 
   return (
@@ -38,7 +42,7 @@ export const LoginForm = () => {
       </div>
       <div className="flex justify-between items-center mb-4">
         <Checkbox>Remember me</Checkbox>
-        <a className="text-sm text-blue-500 hover:underline" href="#">
+        <a className="text-sm text-blue-500 hover:underline" onClick={handleForgotPassword}>
           Forgot password?
         </a>
       </div>

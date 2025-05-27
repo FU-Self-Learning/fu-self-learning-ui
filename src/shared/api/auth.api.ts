@@ -36,3 +36,8 @@ export const changePassword = async (data: {
   const response = await api.post(`${APP_URL}/users/change-password`, data);
   return response.data;
 };
+
+export const forgotPassword = async (data: { email: string }) => {
+  const response = await api.post(`${APP_URL}/users/forgot-password`, data);
+  return response.data;
+};
