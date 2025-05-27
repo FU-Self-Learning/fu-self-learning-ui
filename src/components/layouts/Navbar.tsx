@@ -2,22 +2,30 @@
 
 import Link from "next/link";
 import DarkModeToggle from "../common/DarkModeToggle";
-import { Button, Dropdown, MenuProps } from "antd";
+import { Button, Dropdown, MenuProps, message } from "antd";
 import { motion } from "framer-motion";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { UserOutlined } from "@ant-design/icons";
 import { RootState } from "@/providers/store";
 import Image from "next/image";
-import Login from "@p/svgs/logo.svg"
+import Login from "@p/svgs/logo.svg";
 import { useRouter } from "next/navigation";
+import { selectIsAuthenticated } from "@/providers/auth/selector/authSelector";
+import { logout } from "@/providers/auth/reducer/authSlice";
 
 export default function Navbar() {
+  const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  );
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const router = useRouter();
-
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+    message.success("Logout successfully");
+    router.push("/login");
+  };
   const renderHeaderLogin = () => {
     return (
       <>
@@ -53,12 +61,7 @@ export default function Navbar() {
       {
         key: "logout",
         label: (
-          <button
-            onClick={() => {
-              console.log("Logout click");
-            }}
-            className="w-full text-left"
-          >
+          <button onClick={handleLogout} className="w-full text-left">
             Logout
           </button>
         ),
@@ -76,7 +79,7 @@ export default function Navbar() {
             type="link"
             className="hover:text-yellow-300 transition-colors !font-bold text-white flex items-center"
           >
-            {user?.name}{" "}
+            {user?.username}{" "}
             <motion.span transition={{ duration: 0.2 }} className="ml-1">
               <UserOutlined />
             </motion.span>
@@ -85,13 +88,23 @@ export default function Navbar() {
       </Dropdown>
     );
   };
+
   return (
-    <div >
+    <div>
       <header className="bg-gradient-to-l bg-[#0A092D] text-white px-8 py-6 flex justify-between items-center shadow-lg">
         <div className="flex items-center space-x-3 mt-4">
-          <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.95 }} className="flex">
+          <motion.div
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex"
+          >
             <span role="img" aria-label="music">
-              <Image onClick={() => router.push("/")} src={Login} alt="logo" className="!w-10 !h-10 !cursor-pointer" />
+              <Image
+                onClick={() => router.push("/")}
+                src={Login}
+                alt="logo"
+                className="!w-10 !h-10 !cursor-pointer"
+              />
             </span>
             <Button
               type="link"
@@ -100,9 +113,7 @@ export default function Navbar() {
             >
               <span className="font-semibold text-2xl">Studee</span>
             </Button>
-
           </motion.div>
-
         </div>
 
         <nav className="flex items-center space-x-6 mt-4">
@@ -142,6 +153,6 @@ export default function Navbar() {
           {isAuthenticated ? renderHeader() : renderHeaderLogin()}
         </nav>
       </header>
-    </div >
+    </div>
   );
 }

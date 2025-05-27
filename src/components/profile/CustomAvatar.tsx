@@ -50,7 +50,7 @@ const CustomAvartar = ({ avatar, isEdit, onAvatarChange }: Props) => {
           accept='image/*'
         >
           <div className='absolute bottom-0 right-2 cursor-pointer'>
-            <div className='flex items-center justify-center bg-[#FF8C5F] rounded-full !p-2'>
+            <div className='flex items-center justify-center bg-[#4178a7] rounded-full !p-2'>
               <CameraFilled style={{ color: '#fff', fontSize: '24px' }} />
             </div>
           </div>

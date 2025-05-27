@@ -1,6 +1,6 @@
 "use client";
 
-import { Form, Input, DatePicker, Button, Divider, notification, message } from "antd";
+import { Form, Input, DatePicker, Button, Divider, message } from "antd";
 import { useEffect, useState } from "react";
 import { useProfile } from "@/hooks/auth/useProfile";
 import CustomAvartar from "@/components/profile/CustomAvatar";
@@ -46,7 +46,7 @@ const Profile = () => {
   return (
     <>
       <div className="relative rounded-2xl bg-white h-full shadow-md">
-        <div className="bg-[#FF8C5F] h-[145px] rounded-t-2xl ">
+        <div className="bg-[#f5f3ea] h-[145px] rounded-t-2xl ">
           <div className="absolute top-12 mx-auto left-1/2 -translate-x-1/2 lg:left-12 lg:translate-x-0">
             <CustomAvartar
               avatar={data?.avatar_url}
@@ -104,7 +104,7 @@ const Profile = () => {
                   <>
                     <Button
                       onClick={handleEdit}
-                      className="!flex !justify-center z-5 !items-center !rounded-3xl !px-8 !py-4 !text-md !bg-[#FF8C5F] !border-[#FF8C5F] !text-white"
+                      className="!flex !justify-center z-5 !items-center !rounded-3xl !px-8 !py-4 !text-md !bg-[#4178a7] !border-[#4178a7] !text-white"
                     >
                       Edit Profile
                     </Button>
@@ -113,14 +113,14 @@ const Profile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-w-[900px]">
                     <Button
                       onClick={handleCancel}
-                      className="!flex !justify-center !items-center !rounded-2xl z-5 !px-5 !py-4 !border-[#FF8C5F] !text-[#FF8C5F] !text-md hover:!bg-[#FF8C5F] hover:!text-white"
+                      className="!flex !justify-center !items-center !rounded-2xl z-5 !px-5 !py-4 !border-[#4178a7] !text-[#4178a7] !text-md hover:!bg-[#4178a7] hover:!text-white"
                     >
                       Cancel
                     </Button>
                     <Button
                       type="primary"
                       htmlType="submit"
-                      className="!flex !justify-center !items-center !rounded-2xl z-5 !px-8 !py-4 !text-md !bg-[#FF8C5F]  !border-[#FF8C5F] !text-white"
+                      className="!flex !justify-center !items-center !rounded-2xl z-5 !px-8 !py-4 !text-md !bg-[#4178a7]  !border-[#4178a7] !text-white"
                     >
                       Save Profile
                     </Button>
