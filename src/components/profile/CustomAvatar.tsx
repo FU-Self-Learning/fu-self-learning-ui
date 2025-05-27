@@ -1,36 +1,20 @@
-import { CameraFilled, UserOutlined } from '@ant-design/icons';
+import { CameraFilled, LoadingOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Upload } from 'antd';
 import { UploadChangeParam } from 'antd/lib/upload';
-
-// import { ACCEPTED_IMAGE_TYPES, FILE_TYPE, MAX_IMAGE_FILE_SIZE_KB } from '@app/constants/file';
-// import { validateFile, ValidateFileParams } from '@app/helpers/fileValidation';
-// import {
-//   NotificationTypeEnum,
-//   openNotificationWithIcon,
-// } from '@app/services/notification/notificationService';
 
 interface Props {
   avatar?: string;
   isEdit?: boolean;
   onAvatarChange: (formdata: FormData) => void;
+  isUploading?: boolean;
 }
 
-const CustomAvartar = ({ avatar, isEdit, onAvatarChange }: Props) => {
+const CustomAvartar = ({ avatar, isEdit, onAvatarChange, isUploading }: Props) => {
   const handleChangeImage = (info: UploadChangeParam) => {
     const file = info.fileList[0]?.originFileObj;
     if (!file) return;
-    // const paramValid = {
-    //   file,
-    //   acceptedTypes: ACCEPTED_IMAGE_TYPES,
-    //   maxSizeKB: MAX_IMAGE_FILE_SIZE_KB,
-    //   type: FILE_TYPE.IMAGE,
-    // };
-    // const { isValid, errorMessageKey, errorMessageParams } = validateFile(paramValid);
-      // if (!isValid) {
-      //   const msgKey = errorMessageKey ?? 'PROFILE.AVATAR_UPLOAD_ERROR';
-      return;
     const formdata = new FormData();
-    // formdata.append('avatar', file);
+    formdata.append('avatar', file);
     onAvatarChange(formdata);
   };
   return (
@@ -55,6 +39,13 @@ const CustomAvartar = ({ avatar, isEdit, onAvatarChange }: Props) => {
             </div>
           </div>
         </Upload>
+      )}
+      {isUploading && (
+        <div className='absolute bottom-0 right-2 cursor-pointer'>
+          <div className='flex items-center justify-center bg-[#4178a7] rounded-full !p-2'>
+            <LoadingOutlined style={{ color: '#fff', fontSize: '24px' }} />
+          </div>
+        </div>
       )}
     </div>
   );

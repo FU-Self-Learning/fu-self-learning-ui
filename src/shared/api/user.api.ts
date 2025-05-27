@@ -21,3 +21,13 @@ export const updateUserProfile = async (
   });
   return response.data;
 };
+
+export const uploadAvatar = async (payload: FormData): Promise<UserInfo> => {
+  const response = await api.post(`${APP_URL}/users/avatar`, payload, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};

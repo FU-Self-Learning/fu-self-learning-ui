@@ -2,7 +2,7 @@
 
 import { Form, Input, DatePicker, Button, Divider, message } from "antd";
 import { useEffect, useState } from "react";
-import { useProfile, useUpdateProfile } from "@/hooks/auth/useProfile";
+import { useProfile, useUpdateProfile, useUploadAvatar } from "@/hooks/auth/useProfile";
 import CustomAvartar from "@/components/profile/CustomAvatar";
 import dayjs from "dayjs";
 
@@ -11,7 +11,7 @@ const Profile = () => {
   const [form] = Form.useForm();
   const { data } = useProfile();
   const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
-  //   const { mutate: uploadAvatar } = useUploadAvatar();
+  const { mutate: uploadAvatar, isPending: isUploading } = useUploadAvatar();
 
   useEffect(() => {
     if (data) {
@@ -36,7 +36,7 @@ const Profile = () => {
   };
 
   const handleSubmitUploadAvatar = async (values: FormData) => {
-    // uploadAvatar(values);
+    uploadAvatar(values);
     setIsEdit(false);
   };
 
@@ -53,6 +53,7 @@ const Profile = () => {
               avatar={data?.avatar_url}
               isEdit={isEdit}
               onAvatarChange={handleSubmitUploadAvatar}
+              isUploading={isUploading}
             />
           </div>
         </div>
