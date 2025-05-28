@@ -9,10 +9,17 @@ import { Typography, Button, Divider } from "antd";
 import { BannerPublic } from "@/components/common/BannerPublic";
 import { useActivateAccount } from "@/hooks/auth/useActiveAccount";
 import { useEffect } from "react";
+import { getGoogleLoginUrl } from "@/shared/api/auth.api";
 
 export default function LoginPage() {
   const router = useRouter();
   const { mutate: activateAccount } = useActivateAccount();
+
+  const handleLoginWithGoogle = () => {
+    const callbackUrl = `${window.location.origin}/auth/callback`;
+    const googleLoginUrl = getGoogleLoginUrl(callbackUrl);
+    window.location.href = googleLoginUrl;
+  };
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -40,6 +47,7 @@ export default function LoginPage() {
                 padding: '18px 30px',
                 border: '2px solid #DCDCDC',
               }}
+              onClick={handleLoginWithGoogle}
             >
               Using Google account
             </Button>
