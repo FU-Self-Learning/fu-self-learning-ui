@@ -1,20 +1,11 @@
-import { NextPage } from 'next';
-import Menu from "@/components/socialPage/menu";
-import ListFollowingPage from '@/components/socialPage/menu/listFollowing';
+import ContentSocial from "./contentSocial";
 
-
-type TProps = {
-    children: React.ReactNode;
-}
-const SocialPage: NextPage<TProps> = ({ children }) => {
+const SocialPage = () => {
     return (
-        <div className='flex justify-between mt-4'>
-            <Menu></Menu>
-            {children}
-            <ListFollowingPage />
-        </div>
+        <div className='flex justify-between mt-4' >
+            <ContentSocial></ContentSocial>
+        </div >
     )
 }
-
 
 export default SocialPage;

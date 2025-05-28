@@ -2,11 +2,12 @@
 import Image from "next/image"
 import Banner from "@p/svgs/banner.svg"
 import { useRouter } from "next/navigation";
-// import ProductSelection from "@/components/HomePage/productSection/index"
-import BenefitSection from "@/components/homePage/benefitSection/index"
-import PopularQuestion from "@/components/homePage/popularQuestion/index"
-import MembershipSection from "@/components/homePage/membershipSection/index"
-import CommunicationSection from "@/components/homePage/communicationSection/index"
+import BenefitSection from "@/components/HomePage/benefitSection/index"
+import PopularQuestion from "@/components/HomePage/popularQuestion/index"
+import MembershipSection from "@/components/HomePage/membershipSection/index"
+import CommunicationSection from "@/components/HomePage/communicationSection/index"
+import TopStudentPage from "@/components/HomePage/TopStudent/index";
+
 
 export default function HomePage() {
     const router = useRouter()
