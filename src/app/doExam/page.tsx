@@ -1,10 +1,9 @@
 "use client"
 
 import React, { useState } from 'react';
-import { Progress, Button, Radio, Checkbox, Card, Divider } from 'antd';
-import { StarFilled } from '@ant-design/icons';
-import SidebarDoExam from './SidebarDoExam';
-import { motion } from "framer-motion";
+import { Button } from 'antd';
+import SidebarDoExam from './SideBarDoExam';
+import ContentDoExam from './ContentDoExam';
 
 
 const questions = [
@@ -197,10 +196,6 @@ const DoExam = () => {
 
   const [pageIndex, setPageIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string | string[]>>({});
-  // console.log('answers', answers);
-
-  // remind start
-  const [remindQuestions, setRemindQuestions] = useState(false);
 
   const totalQuestions = questions.length;
   const totalPages = Math.ceil(totalQuestions / QUESTIONS_PER_PAGE);
@@ -209,94 +204,27 @@ const DoExam = () => {
 
   const percentComplete = Math.round((Object.keys(answers).length / totalQuestions) * 100);
 
-  // handle choose 1 option
-  const handleSingleChange = (questionId: number, value: string) => {
-    setAnswers({ ...answers, [questionId]: value });
-  };
-
-  // handle choose multiple options
-  const handleMultipleChange = (questionId: number, values: string[]) => {
-    setAnswers({ ...answers, [questionId]: values });
-  };
-
-  const handleRemind = () => {
-    setRemindQuestions(!remindQuestions);
-  };
-
-
   return (
     <div className="flex min-h-screen bg-white p-6">
       <SidebarDoExam percentComplete={percentComplete} setPageIndex={setPageIndex} QUESTIONS_PER_PAGE={QUESTIONS_PER_PAGE} pageIndex={pageIndex} answers={answers} questions={questions} />
-
       <div className="flex-1 px-10 bg-white z-100">
-        <div className='bg-[#D9D9D9] p-6 rounded-md shadow-md flex flex-col '>
-          <Progress percent={percentComplete} className="mb-5" />
-          <Divider />
-          <div className="flex flex-col gap-5">
-            {currentQuestions.map((question) => (
-              <Card key={question.id} className="shadow-sm">
-
-
-                <motion.div className='flex flex-row justify-between items-start'>
-                  <h3 className="text-lg font-semibold mb-4">{question.question}</h3>
-                  <StarFilled
-                    onClick={handleRemind}
-                    style={{ color: 'yellow' }}
-                    className="text-yellow-400 border-2 border-yellow-400 rounded-full p-1"
-                  />
-                </motion.div>
-
-                {question.type === 'single' ? (
-                  <Radio.Group
-                    onChange={(e) => handleSingleChange(question.id, e.target.value)}
-                    value={answers[question.id]}
-                    className="flex flex-col gap-3"
-                  >
-                    {question.options.map((opt) => (
-                      <div
-                        key={opt.label}
-                        onClick={() => handleSingleChange(question.id, opt.label)}
-                        className="w-full py-2 px-5 mb-2 border border-black rounded-[8px] cursor-pointer"
-                      >
-                        <Radio value={opt.label}>
-                          <span className="font-medium">{opt.label}:</span> {opt.text}
-                        </Radio>
-                      </div>
-                    ))}
-                  </Radio.Group>
-                ) : (
-                  <Checkbox.Group
-                    onChange={(checkedValues) => handleMultipleChange(question.id, checkedValues)}
-                    value={answers[question.id] || []}
-                    className="flex flex-col gap-3"
-                  >
-                    {question.options.map((opt) => (
-                      <label
-                        className='py-2 px-5 border-[1px] border-solid border-black rounded-[8px] cursor-pointer flex items-center gap-2'
-                        key={opt.label}
-                      >
-                        <Checkbox value={opt.label} />
-                        <span className="font-medium">{opt.label}:</span> {opt.text}
-                      </label>
-                    ))}
-                  </Checkbox.Group>
-
-                )}
-
-              </Card>
-            ))}
-          </div>
-
+        <div className="bg-[#D9D9D9] p-6 rounded-md shadow-md flex flex-col ">
+          <ContentDoExam
+            percentComplete={percentComplete}
+            currentQuestions={currentQuestions}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
           <div className="flex justify-between mt-6">
             <Button
-              className='z-10 !border-solid !border-black !border-t-[2px] !border-l-[2px] !border-b-[4px] !border-r-[4px]'
+              className="z-10 !border-solid !border-black !border-t-[2px] !border-l-[2px] !border-b-[4px] !border-r-[4px]"
               disabled={pageIndex === 0}
               onClick={() => setPageIndex(pageIndex - 1)}
             >
               Prev Page
             </Button>
             <Button
-              className='z-10 !border-solid !border-black !border-t-[2px] !border-l-[2px] !border-b-[4px] !border-r-[4px]'
+              className="z-10 !border-solid !border-black !border-t-[2px] !border-l-[2px] !border-b-[4px] !border-r-[4px]"
               disabled={pageIndex === totalPages - 1}
               onClick={() => setPageIndex(pageIndex + 1)}
             >

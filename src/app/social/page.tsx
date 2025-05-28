@@ -16,6 +16,5 @@ const SocialPage: NextPage<TProps> = ({ children }) => {
     )
 }
 
-//F5F4EA
 
 export default SocialPage;

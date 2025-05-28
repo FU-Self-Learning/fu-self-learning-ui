@@ -95,7 +95,7 @@ export default function PopularQuestion() {
                     <div>
                         <h3 className="text-lg font-semibold mb-2 text-black">Still have questions?</h3>
                         <p className="text-gray-600 text-sm mb-4">Please email us your questions.</p>
-                        <div className="flex flex-col  gap-2">
+                        <div className="flex flex-col gap-2">
                             <Input
                                 type="email"
                                 placeholder="Example: quandba154@gmail.com"
