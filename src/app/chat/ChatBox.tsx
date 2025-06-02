@@ -22,14 +22,22 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
       setMessages((prev) => [...prev, message]);
     };
 
+    const handleMessagesLoaded = (loadedMessages: ChatMessage[]) => {
+      setMessages(loadedMessages);
+    };
+
+    socket.emit("loadMessages", { senderUserId, receiverUserId });
+
+    socket.on("messagesLoaded", handleMessagesLoaded);
     socket.on("newMessage", handleIncomingMessage);
     socket.on("messageSent", handleIncomingMessage);
 
     return () => {
+      socket.off("messagesLoaded", handleMessagesLoaded);
       socket.off("newMessage", handleIncomingMessage);
       socket.off("messageSent", handleIncomingMessage);
     };
-  }, [socket]);
+  }, [!!socket, senderUserId, receiverUserId]);
 
   const sendMessage = (msg: string) => {
     const payload: ChatPayload = {
