@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useSearchParams } from "next/navigation";
 import { RootState } from "@/providers/store";
 import ChatBox from "@/app/chat/ChatBox";
+import UserList from "@/components/chat/UserList";
 
 export default function ChatPage() {
   const searchParams = useSearchParams();
@@ -12,17 +13,25 @@ export default function ChatPage() {
 
   const currentUser = useSelector((state: RootState) => state.auth.user);
 
-  if (!currentUser || !receiverUserId) {
-    return <div className="p-6 text-center text-gray-500">Loading chat...</div>;
+  if (!currentUser) {
+    return <div className="p-6 text-center text-gray-500">Loading...</div>;
   }
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Chat Realtime</h2>
-      <ChatBox
-        senderUserId={Number(currentUser.id)}
-        receiverUserId={receiverUserId}
-      />
+    <div className="flex h-140">
+      <UserList currentUserId={Number(currentUser.id)} />
+      <div className="flex-1 p-4">
+        {receiverUserId ? (
+          <ChatBox
+            senderUserId={Number(currentUser.id)}
+            receiverUserId={receiverUserId}
+          />
+        ) : (
+          <div className="flex items-center justify-center h-full text-gray-500">
+            Select a user to start chatting
+          </div>
+        )}
+      </div>
     </div>
   );
 }
