@@ -23,7 +23,6 @@ const MessageInput: React.FC<{ onSend: (msg: string) => void }> = ({
       onSubmit={handleSubmit}
       className="flex items-center gap-2 p-3 border-t bg-white rounded-b-xl"
     >
-      {/* Field ẩn để chặn auto-fill */}
       <input
         type="text"
         name="fake-user"

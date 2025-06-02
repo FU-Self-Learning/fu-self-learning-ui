@@ -18,7 +18,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex h-140">
+    <div className="flex h-[calc(100vh-6rem)]">
       <UserList currentUserId={Number(currentUser.id)} />
       <div className="flex-1 p-4">
         {receiverUserId ? (
