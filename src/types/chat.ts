@@ -6,8 +6,8 @@ export interface ChatPayload {
 
 export interface ChatMessage {
   id: number;
-  senderUserId: number;
-  receiverUserId: number;
+  senderId: number;
+  receiverId: number;
   message: string;
   createdAt: string;
 }

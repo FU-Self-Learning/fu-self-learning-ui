@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { ChatMessage } from "@/types/chat";
-import moment from 'moment';
+import moment from "moment";
 
 interface Props {
   messages: ChatMessage[];
@@ -18,19 +18,19 @@ const MessageList: React.FC<Props> = ({ messages, currentUserId }) => {
     const messageTime = moment(timestamp);
     const now = moment();
 
-    if (messageTime.isSame(now, 'day')) {
-      return messageTime.format('HH:mm'); // Same day: show time (e.g., 14:30)
-    } else if (messageTime.isSame(now, 'year')) {
-      return messageTime.format('MMM D, HH:mm'); // Same year: show month, day, time (e.g., Jul 15, 10:00)
+    if (messageTime.isSame(now, "day")) {
+      return messageTime.format("HH:mm");
+    } else if (messageTime.isSame(now, "year")) {
+      return messageTime.format("MMM D, HH:mm");
     } else {
-      return messageTime.format('MMM D, YYYY, HH:mm'); // Different year: show month, day, year, time (e.g., Jan 1, 2023, 08:00)
+      return messageTime.format("MMM D, YYYY, HH:mm");
     }
   };
 
   return (
     <div className="flex flex-col gap-3 p-4 overflow-y-auto flex-1 bg-gray-50">
       {messages.map((msg) => {
-        const isOwn = msg.senderUserId === currentUserId;
+        const isOwn = msg.senderId === currentUserId;
         return (
           <div
             key={msg.id}
@@ -45,11 +45,11 @@ const MessageList: React.FC<Props> = ({ messages, currentUserId }) => {
             >
               <div>{msg.message}</div>
               {msg.createdAt && (
-                <div className={
-                  `text-xs mt-1 ${
-                    isOwn ? 'text-blue-100' : 'text-gray-500'
-                  }`
-                }>
+                <div
+                  className={`text-xs mt-1 ${
+                    isOwn ? "text-blue-100" : "text-gray-500"
+                  }`}
+                >
                   {formatTimestamp(msg.createdAt)}
                 </div>
               )}

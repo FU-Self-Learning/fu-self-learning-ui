@@ -18,12 +18,30 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
   useEffect(() => {
     if (!socket) return;
 
-    const handleIncomingMessage = (message: ChatMessage) => {
-      setMessages((prev) => [...prev, message]);
+    const handleIncomingMessage = (msg: any) => {
+      const normalized: ChatMessage = {
+        id: msg.id,
+        message: msg.message,
+        createdAt: msg.createdAt,
+        senderId: msg.senderId ?? msg.senderUserId,
+        receiverId: msg.receiverId ?? msg.receiverUserId,
+      };
+
+      setMessages((prev) => [...prev, normalized]);
     };
 
-    const handleMessagesLoaded = (loadedMessages: ChatMessage[]) => {
-      setMessages(loadedMessages);
+    const handleMessagesLoaded = (loaded: any[]) => {
+      const normalized = loaded.map(
+        (msg): ChatMessage => ({
+          id: msg.id,
+          message: msg.message,
+          createdAt: msg.createdAt,
+          senderId: msg.senderId ?? msg.senderUserId,
+          receiverId: msg.receiverId ?? msg.receiverUserId,
+        })
+      );
+
+      setMessages(normalized);
     };
 
     socket.emit("loadMessages", { senderUserId, receiverUserId });

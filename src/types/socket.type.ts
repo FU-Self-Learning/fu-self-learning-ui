@@ -1,4 +1,4 @@
-import io from "socket.io-client"; // dùng default import
+import io from "socket.io-client";
 
 type Socket = ReturnType<typeof io>;
 
