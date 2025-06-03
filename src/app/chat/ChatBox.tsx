@@ -13,7 +13,7 @@ interface ChatBoxProps {
 
 const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const socket = useSocket();
+  const socket = useSocket(senderUserId);
 
   useEffect(() => {
     if (!socket) return;
