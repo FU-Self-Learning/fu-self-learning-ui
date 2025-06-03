@@ -11,7 +11,10 @@ const MessageList: React.FC<Props> = ({ messages, currentUserId }) => {
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    const container = endRef.current?.parentElement;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
   }, [messages]);
 
   const formatTimestamp = (timestamp: string | Date): string => {
@@ -28,7 +31,7 @@ const MessageList: React.FC<Props> = ({ messages, currentUserId }) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 p-4 overflow-y-auto flex-1 bg-gray-50">
+    <div className="flex flex-col gap-3 p-4 overflow-y-auto flex-1 bg-gray-50 rounded-2xl border border-gray-300">
       {messages.map((msg) => {
         const isOwn = msg.senderId === currentUserId;
         return (

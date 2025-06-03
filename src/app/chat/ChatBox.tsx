@@ -67,7 +67,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
   };
 
   return (
-    <div className="flex flex-col h-full max-w-full mx-auto shadow-lg rounded-xl border border-gray-200">
+    <div className="flex flex-col h-full max-w-full mx-auto shadow-md rounded-2xl border border-gray-300 bg-white">
       <MessageList messages={messages} currentUserId={senderUserId} />
       <MessageInput onSend={sendMessage} />
     </div>
