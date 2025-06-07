@@ -51,7 +51,7 @@ const Profile = () => {
         <div className="bg-[#f5f3ea] h-[145px] rounded-t-2xl ">
           <div className="absolute top-12 mx-auto left-1/2 -translate-x-1/2 lg:left-12 lg:translate-x-0">
             <CustomAvartar
-              avatar={data?.avatar_url}
+              avatar={data?.avatarUrl}
               isEdit={isEdit}
               onAvatarChange={handleSubmitUploadAvatar}
               isUploading={isUploading}

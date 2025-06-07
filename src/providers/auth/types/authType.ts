@@ -3,7 +3,7 @@ export interface UserInfo {
   username: string;
   email: string;
   phoneNumber: string;
-  avatar_url: string;
+  avatarUrl: string;
   dob: string;
 }
 
