@@ -10,6 +10,15 @@ interface ChatBoxProps {
   senderUserId: number;
   receiverUserId: number;
 }
+interface RawMessage {
+  id: number;
+  message: string;
+  createdAt: string;
+  senderId?: number;
+  receiverId?: number;
+  senderUserId?: number;
+  receiverUserId?: number;
+}
 
 const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -18,26 +27,30 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
   useEffect(() => {
     if (!socket) return;
 
-    const handleIncomingMessage = (msg: any) => {
+    const handleIncomingMessage = (msg: RawMessage) => {
+      if (!msg.senderId && !msg.senderUserId) {
+        throw new Error("Invalid message: missing senderId");
+      }
+
       const normalized: ChatMessage = {
         id: msg.id,
         message: msg.message,
         createdAt: msg.createdAt,
-        senderId: msg.senderId ?? msg.senderUserId,
-        receiverId: msg.receiverId ?? msg.receiverUserId,
+        senderId: (msg.senderId ?? msg.senderUserId) as number,
+        receiverId: (msg.receiverId ?? msg.receiverUserId) as number,
       };
 
       setMessages((prev) => [...prev, normalized]);
     };
 
-    const handleMessagesLoaded = (loaded: any[]) => {
+    const handleMessagesLoaded = (loaded: RawMessage[]) => {
       const normalized = loaded.map(
         (msg): ChatMessage => ({
           id: msg.id,
           message: msg.message,
           createdAt: msg.createdAt,
-          senderId: msg.senderId ?? msg.senderUserId,
-          receiverId: msg.receiverId ?? msg.receiverUserId,
+          senderId: (msg.senderId ?? msg.senderUserId) as number,
+          receiverId: (msg.receiverId ?? msg.receiverUserId) as number,
         })
       );
 

@@ -9,14 +9,14 @@ interface User {
   id: number;
   username: string;
   email: string;
-  avatar_url: string | null;
+  avatarUrl: string | null;
 }
 
 interface FollowRelationship {
   id: number;
-  created_at: string;
-  updated_at: string;
-  following_user: User;
+  createdAt: string;
+  updatedAt: string;
+  followingUser: User;
 }
 
 interface UserListProps {
@@ -39,7 +39,7 @@ const UserList: React.FC<UserListProps> = ({ currentUserId }) => {
       setLoading(true);
       setError(null);
       const response = await api.get<FollowRelationship[]>(`${APP_URL}/follow/followers`);
-      const followerUsers = response.data.map(item => item.following_user);
+      const followerUsers = response.data.map(item => item.followingUser);
       setUsers(followerUsers);
       console.log('Fetched users data:', response.data);
       console.log('Mapped users:', followerUsers);
@@ -128,7 +128,7 @@ const UserList: React.FC<UserListProps> = ({ currentUserId }) => {
               <List.Item.Meta
                 avatar={
                   <Avatar
-                    src={user.avatar_url || undefined}
+                    src={user.avatarUrl || undefined}
                     icon={<UserOutlined />}
                     className="bg-blue-500"
                   />
@@ -136,8 +136,8 @@ const UserList: React.FC<UserListProps> = ({ currentUserId }) => {
                 title={
                   <span className={
                     user.id === selectedUserId
-                      ? 'text-gray-800 font-semibold' // Darker gray and bold when selected
-                      : 'text-gray-600' // Default gray
+                      ? 'text-gray-800 font-semibold' 
+                      : 'text-gray-600' 
                   }>
                     {user.username}
                   </span>
