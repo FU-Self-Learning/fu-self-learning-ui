@@ -27,12 +27,12 @@ export default function SidebarDoExam(props: TSidebarDoExam) {
     const { QUESTIONS_PER_PAGE = 2, percentComplete = 0, setPageIndex = () => { }, pageIndex = 0, answers = {}, questions } = props;
 
 
-    const handleSummit = () => {
+    const handleSubmit = () => {
         if (percentComplete < 100) {
             message.warning("You must answer all questions before submitting.");
             return;
         }
-        console.log("summit");
+        console.log("submit");
     };
     return (
         <div className="w-1/6 flex flex-col text-center justify-between bg-[#D9D9D9] p-4 rounded-lg shadow ">
@@ -40,7 +40,7 @@ export default function SidebarDoExam(props: TSidebarDoExam) {
                 <div className=" p-4 mt-4 bg-[#D9D9D9] rounded-xl shadow-lg transition-transform duration-300 hover:scale-105 border-solid border-black border-l-2 border-t-2 border-r-4 border-b-4">
                     <Statistic.Countdown
                         title={<span className="text-3xl text-gray-700 font-bold">Time left</span>}
-                        value={dayjs().add(15, 'minute')}
+                        value={dayjs().add(15, 'minute').valueOf()}
                         onFinish={() => {
                             console.log("HET GIƠ NUII BAI DIIIII");
                         }}
@@ -93,9 +93,9 @@ export default function SidebarDoExam(props: TSidebarDoExam) {
             <Button
                 className="!text-sm !font-bold text-white tracking-wide uppercase shadow-sm hover:shadow-md transition-all duration-200 !border-solid border-black !border-t-2 border-l-2 !border-b-4 !border-r-4"
                 type="primary"
-                onClick={handleSummit}
+                onClick={handleSubmit}
             >
-                Summit
+                Submit
             </Button>
 
         </div>

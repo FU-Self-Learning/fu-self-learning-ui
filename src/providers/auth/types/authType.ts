@@ -2,6 +2,9 @@ export interface UserInfo {
   id: string;
   name: string;
   email: string;
+  phoneNumber: string;
+  avatarUrl: string;
+  dob: string;
 }
 
 export interface AuthState {

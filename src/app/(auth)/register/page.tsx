@@ -12,12 +12,19 @@ import GoogleIcon from "@p/svgs/google.svg"
 // import LogoIcon from "@p/svgs/logo.svg"
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { BannerPublic } from "@/components/common/BannerPublic";
+import { getGoogleLoginUrl } from "@/shared/api/auth.api";
 
 export default function LoginPage() {
   const [index, setIndex] = useState<number>(0);
   const router = useRouter();
   const [isLoginFormVisible] = useState<boolean>(true);
+
+  const handleLoginWithGoogle = () => {
+    const callbackUrl = `${window.location.origin}/auth/callback`;
+    const googleLoginUrl = getGoogleLoginUrl(callbackUrl);
+    window.location.href = googleLoginUrl;
+  };
 
   return (
     <div className="flex justify-center min-h-[90vh]  bg-gray-200 bg-cover bg-center">
@@ -90,6 +97,7 @@ export default function LoginPage() {
                 padding: '18px 30px',
                 border: '2px solid #DCDCDC',
               }}
+              onClick={handleLoginWithGoogle}
             >
               Using Google account
             </Button>
