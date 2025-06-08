@@ -6,34 +6,49 @@ import {
   CourseDetailTabs,
   CourseDetailContent,
 } from "@/components/course/courseDetail";
-import { courseOverview, tabItems, courseSections } from "./courseData";
 import { useCourseDetail } from "@/hooks/course/useCourseDetail";
 import { Spin } from "antd";
+import { useTopics } from "@/hooks/topic/useTopics";
+import { useState } from "react";
+import { LessonInTopic } from "@/types/topicType";
 
 const CourseDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const [selectedLesson, setSelectedLesson] = useState<LessonInTopic | null>(null);
 
   const { data: courseDetail, isLoading } = useCourseDetail(id);
+  const { data: topics, isLoading: isLoadingTopics } = useTopics(id);
 
-  if (isLoading || !courseDetail)
+  if (isLoading || !courseDetail || isLoadingTopics)
     return <Spin className="flex justify-center items-center h-screen" />;
+  
+  const stats = {
+    totalLessons: courseDetail.totalLessons,
+    totalDuration: courseDetail.totalDuration,
+    rating: 0,
+    reviewCount: 0,
+  };
 
   return (
     <div className="max-w-screen-xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2">
         <CourseDetailHeader
-          videoIntroUrl={courseDetail.videoIntroUrl}
+          videoIntroUrl={selectedLesson ? selectedLesson.videoUrl : courseDetail.videoIntroUrl}
           title={courseDetail.title}
           category={courseDetail.categories[0].name}
-          stats={courseDetail.topics.length.toString()}
+          stats={stats}
         />
         <CourseDetailTabs
-          items={tabItems}
-          description={courseOverview.description}
-          learningPoints={courseOverview.learningPoints}
+          description={courseDetail.description}
+          learningPoints={courseDetail.topics.map((topic) => topic.title)}
+          author={courseDetail.instructor}
+          reviews={[]}
         />
       </div>
-      <CourseDetailContent sections={courseSections} />
+      <CourseDetailContent 
+        sections={topics || []} 
+        onLessonSelect={setSelectedLesson}
+      />
     </div>
   );
 };

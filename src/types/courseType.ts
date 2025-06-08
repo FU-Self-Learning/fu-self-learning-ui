@@ -9,7 +9,7 @@ export interface CoursesResponse {
     updatedAt?: string;
 }
 
-interface InstructorCourse {
+export interface InstructorCourse {
     id?: string;
     username: string;
     email?: string;
@@ -27,6 +27,8 @@ export interface CourseDetailResponse {
     description: string;
     videoIntroUrl: string;
     createdAt: string;
+    totalLessons: number;
+    totalDuration: number;
     instructor: InstructorCourse;
     topics: TopicCourse[];
     categories: CategoryCourse[];

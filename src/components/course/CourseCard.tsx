@@ -1,4 +1,4 @@
-import { CoursesResponse } from "@/providers/auth/types/courseType";
+import { CoursesResponse } from "@/types/courseType";
 import { Card, Tag, Space, Progress, Button, Avatar, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";

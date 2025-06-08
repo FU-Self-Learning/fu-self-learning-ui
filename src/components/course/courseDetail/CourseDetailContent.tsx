@@ -1,33 +1,46 @@
-import { Button, Collapse, Divider, Space } from "antd";
+import { Button, Collapse, Divider, Empty, Space } from "antd";
 import { LockOutlined, PlayCircleOutlined } from "@ant-design/icons";
+import { LessonInTopic, TopicResponse } from "@/types/topicType";
+import { formatDuration } from "@/utils/convertTime";
 
-const CourseDetailContent = ({ sections }: { sections: any[] }) => {
-  const collapseItems = sections.map((section) => ({
-    key: section.key,
+interface CourseDetailContentProps {
+  sections: TopicResponse[];
+  onLessonSelect: (lesson: LessonInTopic) => void;
+}
+
+const CourseDetailContent = ({ sections, onLessonSelect }: CourseDetailContentProps) => {
+  const collapseItems = sections.sort((a, b) => a.id - b.id).map((section) => ({
+    key: section.id.toString(),
     label: (
       <div className="flex justify-between w-full">
         <span>{section.title}</span>
-        <span className="text-gray-500 text-sm">{section.duration}</span>
+        <span className="text-gray-500 text-sm">
+          {formatDuration(section.totalDuration)}
+        </span>
       </div>
     ),
-    children: section.lessons ? (
-      <ul className="text-sm text-gray-600 space-y-1">
-        {section.lessons.map((lesson: any, idx: number) => (
-          <li
-            key={idx}
-            className="flex justify-between py-2 border-b border-gray-200"
-          >
-            <Space>
-              <PlayCircleOutlined />
-              {lesson.title}
-            </Space>
-            <span>{lesson.duration}</span>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p className="text-gray-500 text-sm">No lesson detail</p>
-    ),
+    children:
+      section.lessons && section.lessons.length > 0 ? (
+        <ul className="text-sm text-gray-600 space-y-1">
+          {section.lessons
+            .sort((a, b) => a.id - b.id)
+            .map((lesson: LessonInTopic, idx: number) => (
+              <li
+                key={idx}
+                className="flex justify-between py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-50 px-2 rounded"
+                onClick={() => onLessonSelect(lesson)}
+              >
+                <Space>
+                  <PlayCircleOutlined />
+                  {lesson.title}
+                </Space>
+                <span>{formatDuration(lesson.videoDuration)}</span>
+              </li>
+            ))}
+        </ul>
+      ) : (
+        <Empty description="No lesson detail" />
+      ),
   }));
 
   return (

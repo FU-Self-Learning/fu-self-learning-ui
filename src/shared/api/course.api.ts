@@ -3,7 +3,7 @@ import api from "./index";
 import {
   CourseDetailResponse,
   CoursesResponse,
-} from "@/providers/auth/types/courseType";
+} from "@/types/courseType";
 
 export const getCourses = async (): Promise<CoursesResponse[]> => {
   const response = await api.get(`${APP_URL}/courses`);
