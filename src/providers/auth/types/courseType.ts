@@ -20,3 +20,23 @@ export interface CategoryCourse {
     id: string;
     name: string;
 }
+
+export interface CourseDetailResponse {
+    id: string;
+    title: string;
+    description: string;
+    videoIntroUrl: string;
+    createdAt: string;
+    instructor: InstructorCourse;
+    topics: TopicCourse[];
+    categories: CategoryCourse[];
+}
+
+interface TopicCourse {
+    id: string;
+    title: string;
+    description: string;
+    // duration: string;
+    // videoUrl: string;
+}
+

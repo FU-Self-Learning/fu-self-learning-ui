@@ -2,6 +2,7 @@ import { CoursesResponse } from "@/providers/auth/types/courseType";
 import { Card, Tag, Space, Progress, Button, Avatar, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
 
 const { Paragraph, Text } = Typography;
 
@@ -10,6 +11,12 @@ export default function CourseCard({
 }: {
   material: CoursesResponse;
 }) {
+  const router = useRouter();
+
+  const handleStartLearning = () => {
+    router.push(`/course/${material.id}`);
+  };
+
   return (
     <Card
       hoverable
@@ -63,7 +70,7 @@ export default function CourseCard({
         <Progress percent={30} size="small" />
       </div>
 
-      <Button block type="primary" className="mt-4">
+      <Button block type="primary" className="mt-4" onClick={handleStartLearning}>
         Start Learning
       </Button>
     </Card>
