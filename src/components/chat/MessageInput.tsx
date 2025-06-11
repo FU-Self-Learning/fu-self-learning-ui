@@ -38,7 +38,7 @@ const MessageInput: React.FC<{ onSend: (msg: string) => void }> = ({
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Type a message..."
-        className="flex-1 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm placeholder-gray-400 shadow-sm"
+        className="text-black flex-1 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm placeholder-gray-400 shadow-sm"
       />
       <button
         type="submit"
