@@ -1,34 +1,105 @@
+import React from "react";
+import { Input, Avatar, Button, Card, Typography } from "antd";
+import { CloseCircleOutlined, SearchOutlined } from "@ant-design/icons";
+import { motion } from "framer-motion";
 
-import { NextPage } from 'next';
-import {
-    CloseOutlined,
-} from "@ant-design/icons";
-import { Input } from "antd";
-
-type TProps = {
-    handleCloseSearch: () => void;
+interface Suggestion {
+    username: string;
+    email: string;
+    avatarUrl: string;
 }
 
-const SearchSocialPage: NextPage<TProps> = ({ handleCloseSearch }) => {
+interface SearchSocialPageProps {
+    handleCloseSearch: () => void
+}
+
+
+const suggestions: Suggestion[] = [
+    {
+        username: "kuyn.anh_",
+        email: "le@gmai.com",
+        avatarUrl: "https://i.pravatar.cc/150?img=1",
+    },
+    {
+        username: "joy_tt5",
+        email: "nguyen@gmail.com",
+        avatarUrl: "https://i.pravatar.cc/150?img=2",
+    },
+    {
+        username: "wizhazhs.23",
+        email: "mc@gmail.com",
+        avatarUrl: "https://i.pravatar.cc/150?img=3",
+    },
+    {
+        username: "hpuccc",
+        email: "nguyen@gmail.com",
+        avatarUrl: "https://i.pravatar.cc/150?img=4",
+    },
+    {
+        username: "dangghungg_19",
+        email: "nguyen@gmail.com",
+        avatarUrl: "https://i.pravatar.cc/150?img=5",
+    },
+];
+
+
+const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
+
     return (
-        <div className="bg-black text-white w-[calc(100vw - 250px)] w-[550px] p-4 z-40  rounded-tr-2xl">
-            <div className="flex items-center justify-between mb-4">
+        <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-96 bg-white rounded-2xl shadow-lg p-6 h-[calc(100vh-2rem)] overflow-y-auto"
+        >
+            <div className="mb-6">
+                <div className="flex flex-row justify-between items-center  !h-full ">
+                    <Typography.Title level={4} className=" !text-center !text-gray-800 !text-2xl !font-bold">
+                        Search
+                    </Typography.Title>
+                    <CloseCircleOutlined className="text-3xl !text-black" onClick={handleCloseSearch} />
+                </div>
                 <Input
-                    placeholder="Search"
-                    className="bg-[#262626] text-white rounded-lg"
-                    style={{ width: 'calc(100% - 30px)' }}
+                    size="large"
+                    placeholder="Search users..."
+                    prefix={<SearchOutlined className="text-gray-400" />}
+                    className="!rounded-xl !border-gray-200 hover:!border-blue-400 focus:!border-blue-400 !shadow-sm"
                 />
-                <CloseOutlined onClick={handleCloseSearch} style={{ color: 'white', cursor: 'pointer', marginLeft: 8 }} />
             </div>
-            <div className="border-t border-gray-700 my-2"></div>
-            <div>
-                <h2 className="text-sm font-bold mb-2">Recent</h2>
-            </div>
-            <div className="flex h-screen justify-center items-center my-auto">
-                <p className="text-gray-400 text-sm">There are no recent searches.</p>
-            </div>
-        </div>
-    )
-}
 
-export default SearchSocialPage
+            <div className="space-y-4">
+                {suggestions.map((item, index) => (
+                    <Card
+                        styles={{ body: { padding: 10 } }}
+                        key={index}
+                        className="!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] cursor-pointer"
+                    >
+                        <div className="flex items-center gap-4">
+                            <Avatar
+                                size={48}
+                                src={item.avatarUrl}
+                                className="!flex !items-center !justify-center"
+                            />
+                            <div className="flex-1 min-w-0">
+                                <Typography.Text strong className="block text-gray-800 text-lg truncate">
+                                    {item.username}
+                                </Typography.Text>
+                                <Typography.Text className="text-sm text-gray-500 block">
+                                    {item.email}
+                                </Typography.Text>
+                            </div>
+                            <Button
+                                type="primary"
+                                className="!bg-blue-500 hover:!bg-blue-600 !rounded-full !px-4"
+                            >
+                                Follow
+                            </Button>
+                        </div>
+                    </Card>
+                ))}
+            </div>
+        </motion.div>
+    );
+};
+
+export default SearchSocialPage;

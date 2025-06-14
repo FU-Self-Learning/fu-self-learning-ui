@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Menu } from "antd";
+import { Menu, Button, Avatar } from "antd";
 import {
     HomeOutlined,
     BellOutlined,
     FolderOpenOutlined,
     SearchOutlined,
     PlusOutlined,
+    UserOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { useRouter } from "next/navigation";
@@ -29,18 +30,13 @@ const menuItems: MenuItem[] = [
     },
     {
         key: "search",
-        icon: <SearchOutlined style={{ fontSize: 20, }} />,
+        icon: <SearchOutlined style={{ fontSize: 20 }} />,
         label: "Search",
     },
     {
         key: "notification",
         icon: <BellOutlined style={{ fontSize: 20 }} />,
         label: "Notification",
-    },
-    {
-        key: "new-post",
-        icon: <PlusOutlined style={{ fontSize: 20 }} />,
-        label: "Post Something",
     },
 ];
 
@@ -83,23 +79,59 @@ const MenuPage = () => {
     };
 
     return (
-        <div className="relative h-screen flex">
-            <div
-                className={`hover:text-white z-20 text-white transition-all duration-300 ${isCollapsed ? "w-[80px]" : "w-[350px]"}`}
-            >
+        <div className="relative">
+            <div className={`bg-white rounded-2xl shadow-lg transition-all duration-300 ${isCollapsed ? "w-[80px]" : "w-[280px]"}`}>
+                <div className="p-4 border-b border-gray-100">
+                    <div className="flex items-center gap-3">
+                        <Avatar
+                            size={48}
+                            icon={<UserOutlined />}
+                            className="!bg-blue-100 !text-blue-600 cursor-pointer hover:!bg-blue-200 transition-colors"
+                        />
+                        {!isCollapsed && (
+                            <div className="flex-1">
+                                <div className="text-gray-800 font-medium hover:text-blue-600 transition-colors cursor-pointer">
+                                    Your Profile
+                                </div>
+
+                            </div>
+                        )}
+                    </div>
+                </div>
                 <Menu
                     onClick={handleMenuClick}
                     mode="inline"
                     defaultSelectedKeys={["home"]}
                     items={menuItems}
-                    style={{ backgroundColor: "transparent", color: "white" }}
-                    className={`flex flex-col items-center justify-center text-center custom-menu border-none bg-transparent cursor-pointer border-l border-white border-opacity-40 ${!showSearch ? "!flex !text-amber-300" : "!flex !text-amber-300"}`}
+                    className="!border-0 !bg-transparent custom-menu"
+                    style={{ backgroundColor: "transparent", margin:  0 }}
                     inlineCollapsed={isCollapsed}
                 />
+                {!isCollapsed && (
+                    <div className="p-4 border-t border-gray-100">
+                        <Button
+                            type="primary"
+                            icon={<PlusOutlined />}
+                            block
+                            onClick={() => setIsModalOpen(true)}
+                            className="!bg-blue-500 hover:!bg-blue-600 !text-white !font-medium !rounded-xl !h-10 !shadow-md hover:!shadow-lg !transition-all"
+                        >
+                            Create Post
+                        </Button>
+                    </div>
+                )}
+
                 <CreatePostModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
             </div>
-            {showSearch && <SearchSocialPage handleCloseSearch={handleCloseSearch} />}
-        </div >
+            {showSearch && (
+                <>
+                    <div className="fixed inset-0 bg-black/50 z-40" onClick={handleCloseSearch} />
+                    <div className="absolute top-0 left-full ml-4 z-50">
+                        <SearchSocialPage handleCloseSearch={handleCloseSearch} />
+                    </div>
+                </>
+            )}
+        </div>
     );
 };
 

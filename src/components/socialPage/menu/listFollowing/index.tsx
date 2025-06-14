@@ -1,7 +1,8 @@
 "use client"
 
 import React from "react";
-import { Avatar, Button } from "antd";
+import { Avatar, Button, Card, Typography } from "antd";
+import { motion } from "framer-motion";
 
 type Suggestion = {
     username: string;
@@ -39,26 +40,56 @@ const suggestions: Suggestion[] = [
 
 const ListFollowingPage = () => {
     return (
-        <div className="bg-black text-white p-4 max-w-sm w-full z-40">
-            <div className="flex justify-between mb-4 cursor-pointer">
-                <h2 className="font-semibold text-lg">Followers</h2>
-                <button className="text-blue-400 text-sm cursor-pointer">View all</button>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-80 bg-white rounded-2xl shadow-lg p-6 h-[calc(100vh-2rem)] sticky top-4 overflow-y-auto"
+        >
+            <div className="flex justify-between items-center mb-6">
+                <Typography.Title level={4} className="!mb-0 !text-gray-800">
+                    Followers
+                </Typography.Title>
+                <Button
+                    type="link"
+                    className="!text-blue-500 hover:!text-blue-600 !p-0 !h-auto"
+                >
+                    View all
+                </Button>
             </div>
-            {suggestions.map((item, index) => (
-                <div key={index} className="flex justify-between items-center mb-4">
-                    <div className="flex items-center gap-3 ">
-                        <Avatar src={item.avatarUrl} size={40} className="cursor-pointer" />
-                        <div className="text-sm">
-                            <div className="font-semibold cursor-pointer">{item.username}</div>
-                            <div className="text-gray-400 cursor-pointer">{item.email}</div>
+
+            <div className="space-y-4">
+                {suggestions.map((item, index) => (
+                    <Card
+                        key={index}
+                        className="!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] cursor-pointer"
+                        styles={{ body: { padding: 10 } }}
+                    >
+                        <div className="flex items-center gap-4">
+                            <Avatar
+                                size={48}
+                                src={item.avatarUrl}
+                                className="!flex !items-center !justify-center"
+                            />
+                            <div className="flex-1 min-w-0">
+                                <Typography.Text strong className="block text-gray-800 text-lg truncate">
+                                    {item.username}
+                                </Typography.Text>
+                                <Typography.Text className="text-sm text-gray-500 block">
+                                    {item.email}
+                                </Typography.Text>
+                            </div>
+                            <Button
+                                type="link"
+                                className="!text-blue-500 hover:!text-blue-600 !p-0 !h-auto"
+                            >
+                                View
+                            </Button>
                         </div>
-                    </div>
-                    <Button type="link" className="text-blue-400 p-0 h-auto cursor-pointer">
-                        View more
-                    </Button>
-                </div>
-            ))}
-        </div>
+                    </Card>
+                ))}
+            </div>
+        </motion.div>
     );
 };
 

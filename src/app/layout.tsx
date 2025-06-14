@@ -37,11 +37,11 @@ export default function RootLayout({
           <ReduxProvider>
             <QueryClientProvider>
               <AuthHydration />
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
+              <div className="min-h-screen flex flex-col">
+                <Navbar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
             </QueryClientProvider>
           </ReduxProvider>
         </ConfigProvider>

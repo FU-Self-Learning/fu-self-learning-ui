@@ -13,7 +13,6 @@ import security from "@p/svgs/security.svg";
 import touch_real_time from "@p/svgs/touch_real_time.svg";
 import setting from "@p/svgs/setting.svg";
 import Section from "@/components/common/Section";
-
 import CardBenefit from "./CardBenefit";
 
 

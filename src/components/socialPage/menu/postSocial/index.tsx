@@ -14,8 +14,6 @@ type Props = {
     onClose: () => void;
 };
 
-
-
 const filters = [
     { name: "None", style: "none" },
     { name: "Grayscale", style: "grayscale(100%)" },
@@ -209,7 +207,6 @@ const CreatePostModal = ({ open, onClose }: Props) => {
                 </div>
                 <div>
                     <label className="font-semibold">Description</label>
-                    {/* <TextEditor></TextEditor> */}
                     <TextArea rows={4} placeholder="The start of a wonderful story..." maxLength={360} />
                 </div>
                 <div className="flex justify-end gap-2 mt-2">
