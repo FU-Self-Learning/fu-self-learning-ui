@@ -12,7 +12,7 @@ const SocialFeed = () => {
     const queryClient = useQueryClient();
     const { data, isLoading, isError, error } = usePosts();
 
-    const posts = data?.pages?.flatMap(page => page) || [];
+    const posts = data || [];
 
     const handlePostCreated = () => {
         console.log("handlePostCreated called, invalidating posts query.");
@@ -35,7 +35,6 @@ const SocialFeed = () => {
     return (
         <>
             <PostList posts={posts} />
-
             <CreatePostModal
                 open={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

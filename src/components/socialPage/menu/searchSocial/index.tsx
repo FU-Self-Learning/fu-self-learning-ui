@@ -2,48 +2,17 @@ import React from "react";
 import { Input, Avatar, Button, Card, Typography } from "antd";
 import { CloseCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";
+import { useUsers } from "@/hooks/useUsers";
 
-interface Suggestion {
-    username: string;
-    email: string;
-    avatarUrl: string;
-}
+
+
 
 interface SearchSocialPageProps {
     handleCloseSearch: () => void
 }
 
-
-const suggestions: Suggestion[] = [
-    {
-        username: "kuyn.anh_",
-        email: "le@gmai.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=1",
-    },
-    {
-        username: "joy_tt5",
-        email: "nguyen@gmail.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=2",
-    },
-    {
-        username: "wizhazhs.23",
-        email: "mc@gmail.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=3",
-    },
-    {
-        username: "hpuccc",
-        email: "nguyen@gmail.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=4",
-    },
-    {
-        username: "dangghungg_19",
-        email: "nguyen@gmail.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=5",
-    },
-];
-
-
 const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
+    const { data: users } = useUsers();
 
     return (
         <motion.div
@@ -68,7 +37,7 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
             </div>
 
             <div className="space-y-4">
-                {suggestions.map((item, index) => (
+                {users?.map((item, index) => (
                     <Card
                         styles={{ body: { padding: 10 } }}
                         key={index}
