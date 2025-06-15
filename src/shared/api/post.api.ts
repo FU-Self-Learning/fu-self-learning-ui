@@ -2,9 +2,7 @@ import { APP_URL } from "../constants/apiConstants";
 import api from "./index";
 import { PostResponse } from "@/types/postType";
 
-export const getPosts = async (
-  // pageParam: number = 1
-): Promise<PostResponse[]> => {
+export const getPosts = async (): Promise<PostResponse[]> => {
   const response = await api.get(`${APP_URL}/posts`);
   return response.data;
 };

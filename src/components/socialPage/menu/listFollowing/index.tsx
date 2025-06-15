@@ -1,12 +1,24 @@
 "use client"
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Avatar, Button, Card, Typography, Spin, message } from "antd";
 import { motion } from "framer-motion";
-import { useUsers } from "@/hooks/useUsers";
+import { useFollowers } from "@/hooks/follow/useFollowers";
+import { useUnfollow } from "@/hooks/follow/useUnfollow";
 
 const ListFollowingPage = () => {
-    const { data: users, isLoading, isError, error } = useUsers();
+    const { data: followers, isLoading, isError, error } = useFollowers();
+    const { mutate: unfollow, isPending: isUnfollowing } = useUnfollow();
+
+    useEffect(() => {
+        if (isError) {
+            message.error("Failed to load followers: " + error?.message);
+        }
+    }, [isError, error]);
+
+    const handleUnfollow = (id: number) => {
+        unfollow(id);
+    };
 
     if (isLoading) {
         return (
@@ -17,8 +29,7 @@ const ListFollowingPage = () => {
     }
 
     if (isError) {
-        message.error("Failed to load users: " + error?.message);
-        return <div className="text-red-500">Error loading users.</div>;
+        return <div className="text-red-500">Error loading followers.</div>;
     }
 
     return (
@@ -41,7 +52,7 @@ const ListFollowingPage = () => {
             </div>
 
             <div className="space-y-4">
-                {users?.map((item) => (
+                {followers?.map((item) => (
                     <Card
                         key={item.id}
                         className="!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] !cursor-pointer !mb-2"
@@ -50,23 +61,27 @@ const ListFollowingPage = () => {
                         <div className="flex items-center gap-4">
                             <Avatar
                                 size={48}
-                                src={item.avatarUrl}
+                                src={item.followingUser.avatarUrl}
                                 className="!flex !items-center !justify-center"
                             />
                             <div className="flex-1 min-w-0">
                                 <Typography.Text strong className="block text-gray-800 text-lg truncate">
-                                    {item.username}
+                                    {item.followingUser.username}
                                 </Typography.Text>
                                 <Typography.Text className="text-sm text-gray-500 block">
-                                    {item.email}
+                                    {item.followingUser.email}
                                 </Typography.Text>
                             </div>
                             <Button
-                                type="link"
-                                className="!text-blue-500 hover:!text-blue-600 !p-0 !h-auto !cursor-pointer"
+                                type="primary"
+                                danger
+                                className="!rounded-full !px-1 !h-auto !font-bold"
+                                onClick={() => handleUnfollow(Number(item.followingUser.id))}
+                                loading={isUnfollowing}
                             >
-                                Follow
+                                UnFollow
                             </Button>
+
                         </div>
                     </Card>
                 ))}

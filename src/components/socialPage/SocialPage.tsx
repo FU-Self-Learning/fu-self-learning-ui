@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Spin, message } from "antd";
 import CreatePostModal from "./menu/postSocial";
 import PostList from "./post/PostList";
@@ -14,15 +14,17 @@ const SocialFeed = () => {
 
     const posts = data || [];
 
+    useEffect(() => {
+        if (isError) {
+            message.error("Failed to load posts: " + error?.message);
+        }
+    }, [isError, error]);
+
     const handlePostCreated = () => {
         console.log("handlePostCreated called, invalidating posts query.");
         setIsModalOpen(false);
         queryClient.invalidateQueries({ queryKey: ["posts"] });
     };
-
-    if (isError) {
-        message.error("Failed to load posts: " + error?.message);
-    }
 
     if (isLoading && !posts.length) {
         return (
