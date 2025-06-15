@@ -73,15 +73,14 @@ const ListFollowingPage = () => {
                                 </Typography.Text>
                             </div>
                             <Button
-                                type="primary"
+                                type="default"
                                 danger
-                                className="!rounded-full !px-1 !h-auto !font-bold"
+                                className="!rounded-full !px-4"
                                 onClick={() => handleUnfollow(Number(item.followingUser.id))}
                                 loading={isUnfollowing}
                             >
                                 UnFollow
                             </Button>
-
                         </div>
                     </Card>
                 ))}

@@ -1,18 +1,53 @@
 import React from "react";
-import { Input, Avatar, Button, Card, Typography } from "antd";
+import { Input, Avatar, Button, Card, Typography, Spin, message } from "antd";
 import { CloseCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";
 import { useUsers } from "@/hooks/useUsers";
-
-
-
+import { useFollow } from "@/hooks/follow/useFollow";
+import { useFollowers } from "@/hooks/follow/useFollowers";
+import { useUnfollow } from "@/hooks/follow/useUnfollow";
 
 interface SearchSocialPageProps {
     handleCloseSearch: () => void
 }
 
 const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
-    const { data: users } = useUsers();
+    const { data: users, isLoading: usersLoading, isError: usersError, error: usersFetchError } = useUsers();
+    const { mutate: follow, isPending: isFollowing } = useFollow();
+    const { data: followers, isLoading: followersLoading, isError: followersError, error: followersFetchError } = useFollowers();
+    const { mutate: unfollow, isPending: isUnfollowing } = useUnfollow();
+
+    React.useEffect(() => {
+        if (usersError) {
+            message.error("Failed to load users: " + usersFetchError?.message);
+        }
+        if (followersError) {
+            message.error("Failed to load followers: " + followersFetchError?.message);
+        }
+    }, [usersError, usersFetchError, followersError, followersFetchError]);
+
+    const handleFollow = (id: number) => {
+        follow(id);
+    };
+
+    const handleUnfollow = (id: number) => {
+        unfollow(id);
+    };
+
+    if (usersLoading || followersLoading) {
+        return (
+            <div className="flex justify-center items-center h-full">
+                <Spin size="large" />
+            </div>
+        );
+    }
+
+    if (usersError || followersError) {
+        return <div className="text-red-500">Error loading data.</div>;
+    }
+
+    // Create a set of follower IDs for quick lookup
+    const followedUserIds = new Set(followers?.map(f => f.followingUser.id));
 
     return (
         <motion.div
@@ -37,35 +72,52 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
             </div>
 
             <div className="space-y-4">
-                {users?.map((item, index) => (
-                    <Card
-                        styles={{ body: { padding: 10 } }}
-                        key={index}
-                        className="!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] cursor-pointer"
-                    >
-                        <div className="flex items-center gap-4">
-                            <Avatar
-                                size={48}
-                                src={item.avatarUrl}
-                                className="!flex !items-center !justify-center"
-                            />
-                            <div className="flex-1 min-w-0">
-                                <Typography.Text strong className="block text-gray-800 text-lg truncate">
-                                    {item.username}
-                                </Typography.Text>
-                                <Typography.Text className="text-sm text-gray-500 block">
-                                    {item.email}
-                                </Typography.Text>
+                {users?.map((item, index) => {
+                    const isCurrentlyFollowing = followedUserIds.has(item.id);
+                    return (
+                        <Card
+                            styles={{ body: { padding: 10 } }}
+                            key={index}
+                            className="!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] cursor-pointer"
+                        >
+                            <div className="flex items-center gap-4">
+                                <Avatar
+                                    size={48}
+                                    src={item.avatarUrl}
+                                    className="!flex !items-center !justify-center"
+                                />
+                                <div className="flex-1 min-w-0">
+                                    <Typography.Text strong className="block text-gray-800 text-lg truncate">
+                                        {item.username}
+                                    </Typography.Text>
+                                    <Typography.Text className="text-sm text-gray-500 block">
+                                        {item.email}
+                                    </Typography.Text>
+                                </div>
+                                {isCurrentlyFollowing ? (
+                                    <Button
+                                        type="default"
+                                        danger
+                                        className="!rounded-full !px-4"
+                                        onClick={() => handleUnfollow(Number(item.id))}
+                                        loading={isUnfollowing}
+                                    >
+                                        UnFollow
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        type="primary"
+                                        className="!bg-blue-500 hover:!bg-blue-600 !rounded-full !px-4"
+                                        onClick={() => handleFollow(Number(item.id))}
+                                        loading={isFollowing}
+                                    >
+                                        Follow
+                                    </Button>
+                                )}
                             </div>
-                            <Button
-                                type="primary"
-                                className="!bg-blue-500 hover:!bg-blue-600 !rounded-full !px-4"
-                            >
-                                Follow
-                            </Button>
-                        </div>
-                    </Card>
-                ))}
+                        </Card>
+                    );
+                })}
             </div>
         </motion.div>
     );
