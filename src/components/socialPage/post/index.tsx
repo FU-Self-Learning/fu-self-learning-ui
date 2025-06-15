@@ -1,15 +1,8 @@
 import React from "react";
 import { Badge } from "antd";
 import { CheckCircleFilled } from "@ant-design/icons";
+import { PostProps } from "@/types/postType"
 
-type PostProps = {
-    imageUrl: string;
-    title: string;
-    edition: string;
-    isbn: string;
-    publisher: string;
-    solutionCount: number;
-};
 
 const PostPage: React.FC<PostProps> = ({
     imageUrl,

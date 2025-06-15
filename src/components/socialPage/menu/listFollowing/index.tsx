@@ -1,44 +1,26 @@
 "use client"
 
 import React from "react";
-import { Avatar, Button, Card, Typography } from "antd";
+import { Avatar, Button, Card, Typography, Spin, message } from "antd";
 import { motion } from "framer-motion";
-
-type Suggestion = {
-    username: string;
-    email: string;
-    avatarUrl: string;
-};
-
-const suggestions: Suggestion[] = [
-    {
-        username: "kuyn.anh_",
-        email: "le@gmai.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=1",
-    },
-    {
-        username: "joy_tt5",
-        email: "nguyen@gmail.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=2",
-    },
-    {
-        username: "wizhazhs.23",
-        email: "mc@gmail.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=3",
-    },
-    {
-        username: "hpuccc",
-        email: "nguyen@gmail.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=4",
-    },
-    {
-        username: "dangghungg_19",
-        email: "nguyen@gmail.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=5",
-    },
-];
+import { useUsers } from "@/hooks/useUsers";
 
 const ListFollowingPage = () => {
+    const { data: users, isLoading, isError, error } = useUsers();
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-full">
+                <Spin size="large" />
+            </div>
+        );
+    }
+
+    if (isError) {
+        message.error("Failed to load users: " + error?.message);
+        return <div className="text-red-500">Error loading users.</div>;
+    }
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -59,10 +41,10 @@ const ListFollowingPage = () => {
             </div>
 
             <div className="space-y-4">
-                {suggestions.map((item, index) => (
+                {users?.map((item) => (
                     <Card
-                        key={index}
-                        className="!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] cursor-pointer"
+                        key={item.id}
+                        className="!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] !cursor-pointer !mb-2"
                         styles={{ body: { padding: 10 } }}
                     >
                         <div className="flex items-center gap-4">
@@ -81,9 +63,9 @@ const ListFollowingPage = () => {
                             </div>
                             <Button
                                 type="link"
-                                className="!text-blue-500 hover:!text-blue-600 !p-0 !h-auto"
+                                className="!text-blue-500 hover:!text-blue-600 !p-0 !h-auto !cursor-pointer"
                             >
-                                View
+                                Follow
                             </Button>
                         </div>
                     </Card>

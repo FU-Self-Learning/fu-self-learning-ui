@@ -14,6 +14,9 @@ import type { MenuProps } from "antd";
 import { useRouter } from "next/navigation";
 import CreatePostModal from "@/components/socialPage/menu/postSocial";
 import SearchSocialPage from "./searchSocial";
+import { useProfile } from "@/hooks/auth/useProfile";
+
+
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -41,6 +44,8 @@ const menuItems: MenuItem[] = [
 ];
 
 const MenuPage = () => {
+
+    const { data } = useProfile();
     const router = useRouter();
     const [mounted, setMounted] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -85,13 +90,14 @@ const MenuPage = () => {
                     <div className="flex items-center gap-3">
                         <Avatar
                             size={48}
+                            src={data?.avatarUrl}
                             icon={<UserOutlined />}
                             className="!bg-blue-100 !text-blue-600 cursor-pointer hover:!bg-blue-200 transition-colors"
                         />
                         {!isCollapsed && (
                             <div className="flex-1">
                                 <div className="text-gray-800 font-medium hover:text-blue-600 transition-colors cursor-pointer">
-                                    Your Profile
+                                    {data?.username}
                                 </div>
 
                             </div>
@@ -104,7 +110,7 @@ const MenuPage = () => {
                     defaultSelectedKeys={["home"]}
                     items={menuItems}
                     className="!border-0 !bg-transparent custom-menu"
-                    style={{ backgroundColor: "transparent", margin:  0 }}
+                    style={{ backgroundColor: "transparent", margin: 0 }}
                     inlineCollapsed={isCollapsed}
                 />
                 {!isCollapsed && (
