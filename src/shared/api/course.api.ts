@@ -3,6 +3,7 @@ import api from "./index";
 import {
   CourseDetailResponse,
   CoursesResponse,
+  CreateCourseRequest,
 } from "@/types/courseType";
 
 export const getCourses = async (): Promise<CoursesResponse[]> => {
@@ -17,12 +18,16 @@ export const getCourseById = async (
   return response.data;
 };
 
-export const createCourse = async (course: CoursesResponse) => {
-  const response = await api.post(`${APP_URL}/courses`, course);
+export const createCourse = async (course: FormData) => {
+  const response = await api.post(`${APP_URL}/courses`, course, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
 
-export const updateCourse = async (id: string, course: CoursesResponse) => {
+export const updateCourse = async (id: string, course: CreateCourseRequest) => {
   const response = await api.put(`${APP_URL}/courses/${id}`, course);
   return response.data;
 };
