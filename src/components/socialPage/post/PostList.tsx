@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import { Card, Avatar, Button } from "antd";
-import { UserOutlined, MessageOutlined } from "@ant-design/icons";
+import { UserOutlined, MessageOutlined, LikeOutlined, HeartFilled } from "@ant-design/icons";
 import { PostResponse } from "@/types/postType";
 import TimeAgoText from "./TimeAgoText";
 import PostCommentModal from "./PostCommentModal";
+
 
 interface PostListProps {
     posts: PostResponse[];
@@ -14,6 +15,7 @@ interface PostListProps {
 const PostList: React.FC<PostListProps> = ({ posts }) => {
     const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
     const [selectedPost, setSelectedPost] = useState<PostResponse | null>(null);
+
 
     const handleCommentClick = (post: PostResponse) => {
         setSelectedPost(post);
@@ -68,6 +70,13 @@ const PostList: React.FC<PostListProps> = ({ posts }) => {
                         </div>
                     )}
                     <div className="flex justify-around items-center border-t border-gray-200 pt-4 mt-4">
+                        <Button
+                            type="text"
+                            icon={post.isLikedByCurrentUser ? <HeartFilled style={{ color: 'red' }} /> : <LikeOutlined />}
+                        >
+                            {post.likesCount > 0 && <span className="mr-1">{post.likesCount}</span>}
+                            {post.isLikedByCurrentUser ? "Unlike" : "Like"}
+                        </Button>
                         <Button type="text" icon={<MessageOutlined />} onClick={() => handleCommentClick(post)}>
                             Comment
                         </Button>

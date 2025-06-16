@@ -1,8 +1,12 @@
-import React from "react";
-import { Modal, Avatar, Typography, Input, Button } from "antd";
+import React, { useState } from "react";
+import { Modal, Avatar, Typography, Input, Button, Spin } from "antd";
 import { UserOutlined, SendOutlined } from "@ant-design/icons";
 import { PostResponse } from "@/types/postType";
 import TimeAgoText from "./TimeAgoText";
+import { useCommentsByPostId } from "@/hooks/comments/useCommentsByPostId";
+import { useCreateComment } from "@/hooks/comments/useCreateComment";
+import { CommentResponse } from "@/types/commentType";
+import { useProfile } from "@/hooks/auth/useProfile";
 
 interface PostCommentModalProps {
     visible: boolean;
@@ -11,6 +15,59 @@ interface PostCommentModalProps {
 }
 
 const PostCommentModal: React.FC<PostCommentModalProps> = ({ visible, onClose, post }) => {
+    const { data: currentUserProfile } = useProfile();
+    const { data: comments, isLoading, isError, error } = useCommentsByPostId(post.id);
+    const { mutate: createComment, isPending: isCreatingComment } = useCreateComment();
+
+    const [commentContent, setCommentContent] = useState("");
+    const [replyingToCommentId, setReplyingToCommentId] = useState<number | null>(null);
+    const [replyingToUsername, setReplyingToUsername] = useState<string | null>(null);
+
+    const handlePostComment = () => {
+        if (commentContent.trim()) {
+            createComment({ postId: post.id, content: commentContent, parentId: replyingToCommentId || undefined });
+            setCommentContent("");
+            setReplyingToCommentId(null);
+            setReplyingToUsername(null);
+        }
+    };
+
+    const handleReplyClick = (commentId: number, username: string) => {
+        setReplyingToCommentId(commentId);
+        setReplyingToUsername(username);
+        setCommentContent(`@${username} `); // Pre-fill input with @username
+    };
+
+    const renderComments = (commentList: CommentResponse[], level = 0) => {
+        const indentationUnit = 6; // Tailwind's ml-6 is 1.5rem / 24px
+
+        return commentList.map((comment) => {
+            const indentationClass = level > 0
+                ? `ml-${level * indentationUnit} border-l pl-2 border-gray-200`
+                : '';
+
+            return (
+                <div key={comment.id} className={`mb-4 ${indentationClass}`}>
+                    <div className="flex items-center gap-2 mb-1">
+                        <Avatar icon={<UserOutlined />} src={comment.user?.avatarUrl || undefined} size="small" />
+                        <Typography.Text strong>{comment.user?.username || "Unknown User"}</Typography.Text>
+                        <Typography.Text className="text-gray-500 text-xs">
+                            <TimeAgoText date={comment.createdAt} />
+                        </Typography.Text>
+                    </div>
+                    <Typography.Paragraph className="mb-2 text-sm">{comment.content}</Typography.Paragraph>
+                    <div className="flex gap-4 mt-1">
+                        <Button type="link" className="!p-0 !h-auto !text-blue-500" onClick={() => handleReplyClick(comment.id, comment.user?.username || "Unknown User")}>Reply</Button>
+                    </div>
+                    {comment.replies && comment.replies.length > 0 && (
+                        // Recursively render replies with an incremented level
+                        renderComments(comment.replies, level + 1)
+                    )}
+                </div>
+            );
+        });
+    };
+
     return (
         <Modal
             open={visible}
@@ -43,13 +100,13 @@ const PostCommentModal: React.FC<PostCommentModalProps> = ({ visible, onClose, p
                     {post?.images && post.images.length > 0 && (
                         <div
                             className={`grid gap-2 ${post.images.length === 1
-                                    ? "grid-cols-1"
-                                    : post.images.length === 2
-                                        ? "grid-cols-2"
-                                        : "grid-cols-2 sm:grid-cols-3"
+                                ? "grid-cols-1"
+                                : post.images.length === 2
+                                    ? "grid-cols-2"
+                                    : "grid-cols-2 sm:grid-cols-3"
                                 }`}
                         >
-                            {post.images.map((imgUrl, imgIndex) => (
+                            {post.images.map((imgUrl: string, imgIndex: number) => (
                                 <img
                                     key={imgIndex}
                                     src={imgUrl}
@@ -62,15 +119,38 @@ const PostCommentModal: React.FC<PostCommentModalProps> = ({ visible, onClose, p
                 </div>
                 <div className="flex-1 overflow-y-auto mb-4">
                     <Typography.Text strong>Comments</Typography.Text>
-                    <div className="mt-2 text-gray-500">No comments yet.</div>
+                    {isLoading ? (
+                        <div className="flex justify-center items-center h-24">
+                            <Spin size="large" />
+                        </div>
+                    ) : isError ? (
+                        <div className="text-red-500 mt-2">Error loading comments: {error?.message}</div>
+                    ) : comments && comments.length > 0 ? (
+                        <div className="mt-2">
+                            {renderComments(comments)}
+                        </div>
+                    ) : (
+                        <div className="mt-2 text-gray-500">No comments yet.</div>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-2 border-t pt-4">
-                    <Avatar icon={<UserOutlined />} className="mr-2" />
+                    <Avatar icon={<UserOutlined />} src={currentUserProfile?.avatarUrl} className="mr-2" />
                     <Input
-                        placeholder="Write a comment..."
+                        placeholder={replyingToUsername ? `Replying to @${replyingToUsername}...` : "Write a comment..."}
                         className="!rounded-full !flex-1"
-                        suffix={<Button type="text" icon={<SendOutlined />} />}
+                        value={commentContent}
+                        onChange={(e) => setCommentContent(e.target.value)}
+                        onPressEnter={handlePostComment}
+                        suffix={
+                            <Button
+                                type="text"
+                                icon={<SendOutlined />}
+                                onClick={handlePostComment}
+                                loading={isCreatingComment}
+                                disabled={!commentContent.trim()}
+                            />
+                        }
                     />
                 </div>
             </div>

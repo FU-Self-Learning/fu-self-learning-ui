@@ -18,6 +18,8 @@ export interface PostResponse {
   status: string;
   createdAt: string;
   updatedAt: string;
+  likesCount: number;
+  isLikedByCurrentUser: boolean;
 }
 
 export type PostProps = {
