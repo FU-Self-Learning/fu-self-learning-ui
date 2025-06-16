@@ -1,16 +1,30 @@
 "use client";
 
-import React from "react";
-import { Card, Avatar } from "antd";
-import { UserOutlined } from "@ant-design/icons";
-import { Post } from "@/types/postType";
+import React, { useState } from "react";
+import { Card, Avatar, Button } from "antd";
+import { UserOutlined, MessageOutlined } from "@ant-design/icons";
+import { PostResponse } from "@/types/postType";
 import TimeAgoText from "./TimeAgoText";
+import PostCommentModal from "./PostCommentModal";
 
 interface PostListProps {
-    posts: Post[];
+    posts: PostResponse[];
 }
 
 const PostList: React.FC<PostListProps> = ({ posts }) => {
+    const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
+    const [selectedPost, setSelectedPost] = useState<PostResponse | null>(null);
+
+    const handleCommentClick = (post: PostResponse) => {
+        setSelectedPost(post);
+        setIsCommentModalVisible(true);
+    };
+
+    const handleCloseCommentModal = () => {
+        setIsCommentModalVisible(false);
+        setSelectedPost(null);
+    };
+
     return (
         <div className="space-y-4">
             {posts.map((post, index) => (
@@ -43,7 +57,7 @@ const PostList: React.FC<PostListProps> = ({ posts }) => {
                                     : "grid-cols-2 sm:grid-cols-3"
                                 }`}
                         >
-                            {post.images.map((imgUrl, imgIndex) => (
+                            {post.images.map((imgUrl: string, imgIndex: number) => (
                                 <img
                                     key={imgIndex}
                                     src={imgUrl}
@@ -53,8 +67,20 @@ const PostList: React.FC<PostListProps> = ({ posts }) => {
                             ))}
                         </div>
                     )}
+                    <div className="flex justify-around items-center border-t border-gray-200 pt-4 mt-4">
+                        <Button type="text" icon={<MessageOutlined />} onClick={() => handleCommentClick(post)}>
+                            Comment
+                        </Button>
+                    </div>
                 </Card>
             ))}
+            {selectedPost && (
+                <PostCommentModal
+                    visible={isCommentModalVisible}
+                    onClose={handleCloseCommentModal}
+                    post={selectedPost}
+                />
+            )}
         </div>
     );
 };
