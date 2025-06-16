@@ -10,6 +10,7 @@ import ThuyT from "@p/svgs/ThuyT.svg"
 import Ellip from "@p/svgs/Ellip.svg"
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useRef, useState } from 'react';
+import { ChatBoxAi } from '@/components/chat-box-ai';
 
 
 
@@ -65,6 +66,7 @@ export default function CommunicationSection() {
 
     return (
         <div className="max-w-7xl mx-auto my-[200px] relative flex flex-col gap-[100px] ">
+            <ChatBoxAi />
             <div className='text-4xl font-bold text-black flex justify-center'>
                 Feedback about Studee
             </div>

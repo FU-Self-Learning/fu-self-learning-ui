@@ -1,0 +1,40 @@
+.chatBox {
+    --df-messenger-bot-message: #f0f2f5;
+    --df-messenger-button-titlebar-color: #2c3e50;
+    --df-messenger-chat-background-color: #ffffff;
+    --df-messenger-font-color: #333333;
+    --df-messenger-user-message: #0084ff;
+    --df-messenger-input-box-color: #ffffff;
+    --df-messenger-input-font-color: #333333;
+    --df-messenger-minimized-chat-close-icon-color: #ffffff;
+    --df-messenger-send-icon: #0084ff;
+}
+
+/* Custom styles for the chat box */
+:global(df-messenger) {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+:global(df-messenger-chat) {
+    border-radius: 10px;
+}
+
+:global(df-messenger-chat-message) {
+    border-radius: 15px;
+    margin: 5px 0;
+}
+
+:global(df-messenger-user-message) {
+    background-color: var(--df-messenger-user-message) !important;
+    color: white !important;
+}
+
+:global(df-messenger-bot-message) {
+    background-color: var(--df-messenger-bot-message) !important;
+    color: var(--df-messenger-font-color) !important;
+} 
