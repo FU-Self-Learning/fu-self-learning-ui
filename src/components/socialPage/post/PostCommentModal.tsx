@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Modal, Avatar, Typography, Input, Button, Spin } from "antd";
-import { UserOutlined, SendOutlined } from "@ant-design/icons";
+import { Modal, Avatar, Typography, Input, Button, Spin, Dropdown, Menu } from "antd";
+import { UserOutlined, SendOutlined, MoreOutlined } from "@ant-design/icons";
 import { PostResponse } from "@/types/postType";
 import TimeAgoText from "./TimeAgoText";
 import { useCommentsByPostId } from "@/hooks/comments/useCommentsByPostId";
@@ -35,11 +35,11 @@ const PostCommentModal: React.FC<PostCommentModalProps> = ({ visible, onClose, p
     const handleReplyClick = (commentId: number, username: string) => {
         setReplyingToCommentId(commentId);
         setReplyingToUsername(username);
-        setCommentContent(`@${username} `); // Pre-fill input with @username
+        setCommentContent(`@${username} `);
     };
 
     const renderComments = (commentList: CommentResponse[], level = 0) => {
-        const indentationUnit = 6; // Tailwind's ml-6 is 1.5rem / 24px
+        const indentationUnit = 6;
 
         return commentList.map((comment) => {
             const indentationClass = level > 0
@@ -48,12 +48,26 @@ const PostCommentModal: React.FC<PostCommentModalProps> = ({ visible, onClose, p
 
             return (
                 <div key={comment.id} className={`mb-4 ${indentationClass}`}>
-                    <div className="flex items-center gap-2 mb-1">
-                        <Avatar icon={<UserOutlined />} src={comment.user?.avatarUrl || undefined} size="small" />
-                        <Typography.Text strong>{comment.user?.username || "Unknown User"}</Typography.Text>
-                        <Typography.Text className="text-gray-500 text-xs">
-                            <TimeAgoText date={comment.createdAt} />
-                        </Typography.Text>
+                    <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                            <Avatar icon={<UserOutlined />} src={comment.user?.avatarUrl || undefined} size="small" />
+                            <Typography.Text strong>{comment.user?.username || "Unknown User"}</Typography.Text>
+                            <Typography.Text className="text-gray-500 text-xs">
+                                <TimeAgoText date={comment.createdAt} />
+                            </Typography.Text>
+                        </div>
+                        <Dropdown placement="bottomRight" overlay={(
+                            <Menu className="rounded-lg shadow-md min-w-[120px]">
+                                <Menu.Item key="update" className="px-3 py-2 text-sm hover:bg-gray-100 hover:text-blue-500" onClick={() => console.log("Update clicked for comment", comment.id)}>
+                                    Update
+                                </Menu.Item>
+                                <Menu.Item key="delete" className="px-3 py-2 text-sm hover:bg-gray-100 hover:text-blue-500" onClick={() => console.log("Delete clicked for comment", comment.id)}>
+                                    Delete
+                                </Menu.Item>
+                            </Menu>
+                        )} trigger={['click']}>
+                            <MoreOutlined />
+                        </Dropdown>
                     </div>
                     <Typography.Paragraph className="mb-2 text-sm">{comment.content}</Typography.Paragraph>
                     <div className="flex gap-4 mt-1">
