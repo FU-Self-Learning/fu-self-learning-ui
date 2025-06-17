@@ -53,3 +53,15 @@ export interface CreateCourseRequest {
     categoryIds: number[];
 }
 
+// ================================ Instructor ================================
+
+export interface CourseInstructorDetailResponse {
+    id: string;
+    title: string;
+    description: string;
+    imageUrl: string;
+    videoIntroUrl: string;
+    documentUrl: string;
+    createdAt: Date;
+    updatedAt: Date;
+}

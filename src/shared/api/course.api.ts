@@ -2,6 +2,7 @@ import { APP_URL } from "../constants/apiConstants";
 import api from "./index";
 import {
   CourseDetailResponse,
+  CourseInstructorDetailResponse,
   CoursesResponse,
   CreateCourseRequest,
 } from "@/types/courseType";
@@ -34,5 +35,17 @@ export const updateCourse = async (id: string, course: CreateCourseRequest) => {
 
 export const deleteCourse = async (id: string) => {
   const response = await api.delete(`${APP_URL}/courses/${id}`);
+  return response.data;
+};
+
+// ================================ Instructor ================================
+
+export const getMyCourses = async () => {
+  const response = await api.get(`${APP_URL}/courses/instructor`);
+  return response.data;
+};
+
+export const getCourseInstructorDetail = async (id: string): Promise<CourseInstructorDetailResponse> => {
+  const response = await api.get(`${APP_URL}/courses/instructor/${id}`);
   return response.data;
 };
