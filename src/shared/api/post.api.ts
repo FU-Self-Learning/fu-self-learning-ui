@@ -36,3 +36,11 @@ export const unlikePost = async (postId: number): Promise<void> => {
     },
   });
 };
+
+export const deletePost = async (postId: number): Promise<void> => {
+  await api.delete(`${APP_URL}/posts/${postId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
+  });
+};

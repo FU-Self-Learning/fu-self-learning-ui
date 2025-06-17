@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Avatar, Typography, Input, Button, Spin, Dropdown, Menu } from "antd";
+import { Modal, Avatar, Typography, Input, Button, Spin, Dropdown } from "antd";
 import { UserOutlined, SendOutlined, MoreOutlined } from "@ant-design/icons";
 import { PostResponse } from "@/types/postType";
 import TimeAgoText from "./TimeAgoText";
@@ -14,7 +14,7 @@ interface PostCommentModalProps {
     post: PostResponse;
 }
 
-const PostCommentModal: React.FC<PostCommentModalProps> = ({ visible, onClose, post }) => {
+const PostCommentModal = ({ visible, onClose, post }: PostCommentModalProps) => {
     const { data: currentUserProfile } = useProfile();
     const { data: comments, isLoading, isError, error } = useCommentsByPostId(post.id);
     const { mutate: createComment, isPending: isCreatingComment } = useCreateComment();
@@ -56,16 +56,23 @@ const PostCommentModal: React.FC<PostCommentModalProps> = ({ visible, onClose, p
                                 <TimeAgoText date={comment.createdAt} />
                             </Typography.Text>
                         </div>
-                        <Dropdown placement="bottomRight" overlay={(
-                            <Menu className="rounded-lg shadow-md min-w-[120px]">
-                                <Menu.Item key="update" className="px-3 py-2 text-sm hover:bg-gray-100 hover:text-blue-500" onClick={() => console.log("Update clicked for comment", comment.id)}>
-                                    Update
-                                </Menu.Item>
-                                <Menu.Item key="delete" className="px-3 py-2 text-sm hover:bg-gray-100 hover:text-blue-500" onClick={() => console.log("Delete clicked for comment", comment.id)}>
-                                    Delete
-                                </Menu.Item>
-                            </Menu>
-                        )} trigger={['click']}>
+                        <Dropdown placement="bottomRight" menu={{
+                            items: [
+                                {
+                                    key: 'update',
+                                    label: 'Update',
+                                    className: 'px-3 py-2 text-sm hover:bg-gray-100 hover:text-blue-500',
+                                    onClick: () => console.log("Update clicked for comment", comment.id)
+                                },
+                                {
+                                    key: 'delete',
+                                    label: 'Delete',
+                                    className: 'px-3 py-2 text-sm hover:bg-gray-100 hover:text-blue-500',
+                                    onClick: () => console.log("Delete clicked for comment", comment.id)
+                                }
+                            ],
+                            className: 'rounded-lg shadow-md min-w-[120px]'
+                        }} trigger={['click']}>
                             <MoreOutlined />
                         </Dropdown>
                     </div>
@@ -74,7 +81,6 @@ const PostCommentModal: React.FC<PostCommentModalProps> = ({ visible, onClose, p
                         <Button type="link" className="!p-0 !h-auto !text-blue-500" onClick={() => handleReplyClick(comment.id, comment.user?.username || "Unknown User")}>Reply</Button>
                     </div>
                     {comment.replies && comment.replies.length > 0 && (
-                        // Recursively render replies with an incremented level
                         renderComments(comment.replies, level + 1)
                     )}
                 </div>

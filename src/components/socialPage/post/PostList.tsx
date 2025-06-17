@@ -1,20 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, Avatar, Button } from "antd";
-import { UserOutlined, MessageOutlined, LikeOutlined, HeartFilled } from "@ant-design/icons";
+import { Card, Avatar, Button, Dropdown, Modal, message } from "antd";
+import { UserOutlined, MessageOutlined, LikeOutlined, HeartFilled, MoreOutlined } from "@ant-design/icons";
 import { PostResponse } from "@/types/postType";
 import TimeAgoText from "./TimeAgoText";
 import PostCommentModal from "./PostCommentModal";
+import { useDeletePost } from "@/hooks/posts/usePosts";
 
 
 interface PostListProps {
     posts: PostResponse[];
 }
 
-const PostList: React.FC<PostListProps> = ({ posts }) => {
+const PostList = ({ posts }: PostListProps) => {
     const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
     const [selectedPost, setSelectedPost] = useState<PostResponse | null>(null);
+
+    const { mutate: deletePostMutation } = useDeletePost();
 
 
     const handleCommentClick = (post: PostResponse) => {
@@ -27,24 +30,66 @@ const PostList: React.FC<PostListProps> = ({ posts }) => {
         setSelectedPost(null);
     };
 
+    const handleDeletePost = (postId: number) => {
+        Modal.confirm({
+            title: 'Are you sure you want to delete this post?',
+            content: 'This action cannot be undone.',
+            okText: 'Delete',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            onOk() {
+                console.log('Delete confirmed for post', postId);
+                deletePostMutation(postId, {
+                    onSuccess: () => {
+                        message.success('Post deleted successfully!');
+                    },
+                    onError: (error) => {
+                        message.error(`Failed to delete post: ${error.message}`);
+                    },
+                });
+            },
+            onCancel() {
+                console.log('Delete cancelled');
+            },
+        });
+    };
+
     return (
         <div className="space-y-4">
             {posts.map((post, index) => (
                 <Card key={`${post?.id}-${index}`} className="w-full !mb-4">
-                    <div className="flex items-center mb-4 gap-2">
-                        <Avatar
-                            icon={<UserOutlined />}
-                            src={post.user?.avatarUrl || undefined}
-                            className="mr-2"
-                        />
-                        <div>
-                            <div className="font-bold text-[14px]">
-                                {post.user?.username || "Unknown User"}
-                            </div>
-                            <div className="text-gray-500 text-sm">
-                                <TimeAgoText date={post?.createdAt} />
+                    <div className="flex items-center justify-between mb-4 gap-2">
+                        <div className="flex items-center gap-2">
+                            <Avatar
+                                icon={<UserOutlined />}
+                                src={post.user?.avatarUrl || undefined}
+                                className="mr-2"
+                            />
+                            <div>
+                                <div className="font-bold text-[14px]">
+                                    {post.user?.username || "Unknown User"}
+                                </div>
+                                <div className="text-gray-500 text-sm">
+                                    <TimeAgoText date={post?.createdAt} />
+                                </div>
                             </div>
                         </div>
+                        <Dropdown
+                            placement="bottomRight"
+                            menu={{
+                                items: [
+                                    {
+                                        key: 'delete',
+                                        label: 'Delete',
+                                        danger: true,
+                                        onClick: () => handleDeletePost(post.id),
+                                    },
+                                ],
+                            }}
+                            trigger={['click']}
+                        >
+                            <Button type="text" icon={<MoreOutlined />} />
+                        </Dropdown>
                     </div>
 
                     <h3 className="text-lg font-semibold mb-2">{post?.title}</h3>
