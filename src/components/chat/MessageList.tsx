@@ -5,20 +5,10 @@ import moment from "moment";
 interface Props {
   messages: ChatMessage[];
   currentUserId: number;
-  onLoadMore: () => void;
-  hasMore: boolean;
-  isLoading: boolean;
 }
 
-const MessageList: React.FC<Props> = ({ 
-  messages, 
-  currentUserId, 
-  onLoadMore, 
-  hasMore, 
-  isLoading 
-}) => {
+const MessageList: React.FC<Props> = ({ messages, currentUserId }) => {
   const endRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = endRef.current?.parentElement;
@@ -26,20 +16,6 @@ const MessageList: React.FC<Props> = ({
       container.scrollTop = container.scrollHeight;
     }
   }, [messages]);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const handleScroll = () => {
-      if (container.scrollTop === 0 && hasMore && !isLoading) {
-        onLoadMore();
-      }
-    };
-
-    container.addEventListener('scroll', handleScroll);
-    return () => container.removeEventListener('scroll', handleScroll);
-  }, [hasMore, isLoading, onLoadMore]);
 
   const formatTimestamp = (timestamp: string | Date): string => {
     const messageTime = moment(timestamp);
@@ -55,15 +31,7 @@ const MessageList: React.FC<Props> = ({
   };
 
   return (
-    <div 
-      ref={containerRef}
-      className="flex flex-col gap-3 p-4 overflow-y-auto flex-1 bg-gray-50 rounded-2xl border border-gray-300"
-    >
-      {isLoading && (
-        <div className="text-center text-gray-500 text-sm py-2">
-          Loading more messages...
-        </div>
-      )}
+    <div className="flex flex-col gap-3 p-4 overflow-y-auto flex-1 bg-gray-50 rounded-2xl border border-gray-300">
       {messages.map((msg) => {
         const isOwn = msg.senderId === currentUserId;
         return (
