@@ -1,24 +1,17 @@
 import React from "react";
 import { Badge } from "antd";
 import { CheckCircleFilled } from "@ant-design/icons";
+import { PostProps } from "@/types/postType"
 
-type PostProps = {
-    imageUrl: string;
-    title: string;
-    edition: string;
-    isbn: string;
-    publisher: string;
-    solutionCount: number;
-};
 
-const PostPage: React.FC<PostProps> = ({
+const PostPage = ({
     imageUrl,
     title,
     edition,
     isbn,
     publisher,
     solutionCount,
-}) => {
+}: PostProps) => {
     return (
         <div className="flex gap-4 bg-[#1B1E32] text-white p-4 rounded-xl w-full max-w-md shadow-md">
             <img

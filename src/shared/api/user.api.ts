@@ -31,3 +31,13 @@ export const uploadAvatar = async (payload: FormData): Promise<UserInfo> => {
   });
   return response.data;
 };
+
+export const getAllUsers = async (): Promise<UserInfo[]> => {
+  try {
+    const response = await api.get(`${APP_URL}/users`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all users:", error);
+    throw error;
+  }
+};

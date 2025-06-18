@@ -1,34 +1,126 @@
+import React from "react";
+import { Input, Avatar, Button, Card, Typography, Spin, message } from "antd";
+import { CloseCircleOutlined, SearchOutlined } from "@ant-design/icons";
+import { motion } from "framer-motion";
+import { useUsers } from "@/hooks/useUsers";
+import { useFollow } from "@/hooks/follow/useFollow";
+import { useFollowers } from "@/hooks/follow/useFollowers";
+import { useUnfollow } from "@/hooks/follow/useUnfollow";
 
-import { NextPage } from 'next';
-import {
-    CloseOutlined,
-} from "@ant-design/icons";
-import { Input } from "antd";
-
-type TProps = {
-    handleCloseSearch: () => void;
+interface SearchSocialPageProps {
+    handleCloseSearch: () => void
 }
 
-const SearchSocialPage: NextPage<TProps> = ({ handleCloseSearch }) => {
+const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
+    const { data: users, isLoading: usersLoading, isError: usersError, error: usersFetchError } = useUsers();
+    const { mutate: follow, isPending: isFollowing } = useFollow();
+    const { data: followers, isLoading: followersLoading, isError: followersError, error: followersFetchError } = useFollowers();
+    const { mutate: unfollow, isPending: isUnfollowing } = useUnfollow();
+
+    React.useEffect(() => {
+        if (usersError) {
+            message.error("Failed to load users: " + usersFetchError?.message);
+        }
+        if (followersError) {
+            message.error("Failed to load followers: " + followersFetchError?.message);
+        }
+    }, [usersError, usersFetchError, followersError, followersFetchError]);
+
+    const handleFollow = (id: number) => {
+        follow(id);
+    };
+
+    const handleUnfollow = (id: number) => {
+        unfollow(id);
+    };
+
+    if (usersLoading || followersLoading) {
+        return (
+            <div className="flex justify-center items-center h-full">
+                <Spin size="large" />
+            </div>
+        );
+    }
+
+    if (usersError || followersError) {
+        return <div className="text-red-500">Error loading data.</div>;
+    }
+
+    // Create a set of follower IDs for quick lookup
+    const followedUserIds = new Set(followers?.map(f => f.followingUser.id));
+
     return (
-        <div className="bg-black text-white w-[calc(100vw - 250px)] w-[550px] p-4 z-40  rounded-tr-2xl">
-            <div className="flex items-center justify-between mb-4">
+        <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-96 bg-white rounded-2xl shadow-lg p-6 h-[calc(100vh-2rem)] overflow-y-auto"
+        >
+            <div className="mb-6">
+                <div className="flex flex-row justify-between items-center  !h-full ">
+                    <Typography.Title level={4} className=" !text-center !text-gray-800 !text-2xl !font-bold">
+                        Search
+                    </Typography.Title>
+                    <CloseCircleOutlined className="text-3xl !text-black" onClick={handleCloseSearch} />
+                </div>
                 <Input
-                    placeholder="Search"
-                    className="bg-[#262626] text-white rounded-lg"
-                    style={{ width: 'calc(100% - 30px)' }}
+                    size="large"
+                    placeholder="Search users..."
+                    prefix={<SearchOutlined className="text-gray-400" />}
+                    className="!rounded-xl !border-gray-200 hover:!border-blue-400 focus:!border-blue-400 !shadow-sm"
                 />
-                <CloseOutlined onClick={handleCloseSearch} style={{ color: 'white', cursor: 'pointer', marginLeft: 8 }} />
             </div>
-            <div className="border-t border-gray-700 my-2"></div>
-            <div>
-                <h2 className="text-sm font-bold mb-2">Recent</h2>
-            </div>
-            <div className="flex h-screen justify-center items-center my-auto">
-                <p className="text-gray-400 text-sm">There are no recent searches.</p>
-            </div>
-        </div>
-    )
-}
 
-export default SearchSocialPage
+            <div className="space-y-4">
+                {users?.map((item, index) => {
+                    const isCurrentlyFollowing = followedUserIds.has(item.id);
+                    return (
+                        <Card
+                            styles={{ body: { padding: 10 } }}
+                            key={index}
+                            className="!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] cursor-pointer"
+                        >
+                            <div className="flex items-center gap-4">
+                                <Avatar
+                                    size={48}
+                                    src={item.avatarUrl}
+                                    className="!flex !items-center !justify-center"
+                                />
+                                <div className="flex-1 min-w-0">
+                                    <Typography.Text strong className="block text-gray-800 text-lg truncate">
+                                        {item.username}
+                                    </Typography.Text>
+                                    <Typography.Text className="text-sm text-gray-500 block">
+                                        {item.email}
+                                    </Typography.Text>
+                                </div>
+                                {isCurrentlyFollowing ? (
+                                    <Button
+                                        type="default"
+                                        danger
+                                        className="!rounded-full !px-4"
+                                        onClick={() => handleUnfollow(Number(item.id))}
+                                        loading={isUnfollowing}
+                                    >
+                                        UnFollow
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        type="primary"
+                                        className="!bg-blue-500 hover:!bg-blue-600 !rounded-full !px-4"
+                                        onClick={() => handleFollow(Number(item.id))}
+                                        loading={isFollowing}
+                                    >
+                                        Follow
+                                    </Button>
+                                )}
+                            </div>
+                        </Card>
+                    );
+                })}
+            </div>
+        </motion.div>
+    );
+};
+
+export default SearchSocialPage;

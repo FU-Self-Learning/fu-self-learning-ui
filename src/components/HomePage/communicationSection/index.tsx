@@ -9,10 +9,8 @@ import Ethan from "@p/svgs/Ethan.svg"
 import ThuyT from "@p/svgs/ThuyT.svg"
 import Ellip from "@p/svgs/Ellip.svg"
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { useRef, useState } from 'react';
-
-
-
+import { useRef } from 'react';
+import { CarouselRef } from 'antd/es/carousel';
 
 const dataCommunicationFBack = [
     {
@@ -54,12 +52,8 @@ const dataCommunicationFBack = [
     },
 ];
 
-
-
 export default function CommunicationSection() {
-    const carouselRef = useRef<any>(null);
-    const [current, setCurrent] = useState<number>(0);
-
+    const carouselRef = useRef<CarouselRef | null>(null);
     const prev = () => carouselRef.current?.prev();
     const next = () => carouselRef.current?.next();
 
@@ -89,7 +83,7 @@ export default function CommunicationSection() {
                     dots={true}
                     slidesToShow={3}
                     slidesToScroll={3}
-                    afterChange={(currentSlide) => setCurrent(currentSlide)}
+                    afterChange={() => prev()}
                     responsive={[
                         {
                             breakpoint: 1024,

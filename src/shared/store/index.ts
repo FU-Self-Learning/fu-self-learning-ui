@@ -1,4 +1,4 @@
-const isClient = typeof window !== 'undefined';
+const isClient = typeof window !== "undefined";
 
 export const fromStoredData = (storageData: any) => {
   try {

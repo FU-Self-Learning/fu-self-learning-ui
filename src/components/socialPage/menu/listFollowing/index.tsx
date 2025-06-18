@@ -1,64 +1,91 @@
 "use client"
 
-import React from "react";
-import { Avatar, Button } from "antd";
-
-type Suggestion = {
-    username: string;
-    email: string;
-    avatarUrl: string;
-};
-
-const suggestions: Suggestion[] = [
-    {
-        username: "kuyn.anh_",
-        email: "le@gmai.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=1",
-    },
-    {
-        username: "joy_tt5",
-        email: "nguyen@gmail.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=2",
-    },
-    {
-        username: "wizhazhs.23",
-        email: "mc@gmail.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=3",
-    },
-    {
-        username: "hpuccc",
-        email: "nguyen@gmail.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=4",
-    },
-    {
-        username: "dangghungg_19",
-        email: "nguyen@gmail.com",
-        avatarUrl: "https://i.pravatar.cc/150?img=5",
-    },
-];
+import React, { useEffect } from "react";
+import { Avatar, Button, Card, Typography, Spin, message } from "antd";
+import { motion } from "framer-motion";
+import { useFollowers } from "@/hooks/follow/useFollowers";
+import { useUnfollow } from "@/hooks/follow/useUnfollow";
 
 const ListFollowingPage = () => {
-    return (
-        <div className="bg-black text-white p-4 max-w-sm w-full z-40">
-            <div className="flex justify-between mb-4 cursor-pointer">
-                <h2 className="font-semibold text-lg">Followers</h2>
-                <button className="text-blue-400 text-sm cursor-pointer">View all</button>
+    const { data: followers, isLoading, isError, error } = useFollowers();
+    const { mutate: unfollow, isPending: isUnfollowing } = useUnfollow();
+
+    useEffect(() => {
+        if (isError) {
+            message.error("Failed to load followers: " + error?.message);
+        }
+    }, [isError, error]);
+
+    const handleUnfollow = (id: number) => {
+        unfollow(id);
+    };
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-full">
+                <Spin size="large" />
             </div>
-            {suggestions.map((item, index) => (
-                <div key={index} className="flex justify-between items-center mb-4">
-                    <div className="flex items-center gap-3 ">
-                        <Avatar src={item.avatarUrl} size={40} className="cursor-pointer" />
-                        <div className="text-sm">
-                            <div className="font-semibold cursor-pointer">{item.username}</div>
-                            <div className="text-gray-400 cursor-pointer">{item.email}</div>
+        );
+    }
+
+    if (isError) {
+        return <div className="text-red-500">Error loading followers.</div>;
+    }
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-80 bg-white rounded-2xl shadow-lg p-6 h-[calc(100vh-2rem)] sticky top-4 overflow-y-auto"
+        >
+            <div className="flex justify-between items-center mb-6">
+                <Typography.Title level={4} className="!mb-0 !text-gray-800">
+                    Followers
+                </Typography.Title>
+                <Button
+                    type="link"
+                    className="!text-blue-500 hover:!text-blue-600 !p-0 !h-auto"
+                >
+                    View all
+                </Button>
+            </div>
+
+            <div className="space-y-4">
+                {followers?.map((item) => (
+                    <Card
+                        key={item.id}
+                        className="!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] !cursor-pointer !mb-2"
+                        styles={{ body: { padding: 10 } }}
+                    >
+                        <div className="flex items-center gap-4">
+                            <Avatar
+                                size={48}
+                                src={item.followingUser.avatarUrl}
+                                className="!flex !items-center !justify-center"
+                            />
+                            <div className="flex-1 min-w-0">
+                                <Typography.Text strong className="block text-gray-800 text-lg truncate">
+                                    {item.followingUser.username}
+                                </Typography.Text>
+                                <Typography.Text className="text-sm text-gray-500 block">
+                                    {item.followingUser.email}
+                                </Typography.Text>
+                            </div>
+                            <Button
+                                type="default"
+                                danger
+                                className="!rounded-full !px-4"
+                                onClick={() => handleUnfollow(Number(item.followingUser.id))}
+                                loading={isUnfollowing}
+                            >
+                                UnFollow
+                            </Button>
                         </div>
-                    </div>
-                    <Button type="link" className="text-blue-400 p-0 h-auto cursor-pointer">
-                        View more
-                    </Button>
-                </div>
-            ))}
-        </div>
+                    </Card>
+                ))}
+            </div>
+        </motion.div>
     );
 };
 

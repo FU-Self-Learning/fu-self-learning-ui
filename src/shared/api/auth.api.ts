@@ -20,7 +20,9 @@ export const login = async (payload: LoginPayload) => {
 };
 
 export const getGoogleLoginUrl = (redirectUrl: string) => {
-  return `${APP_URL}/auth/google?redirectUrl=${encodeURIComponent(redirectUrl)}`;
+  return `${APP_URL}/auth/google?redirectUrl=${encodeURIComponent(
+    redirectUrl
+  )}`;
 };
 
 export const logout = async () => {
@@ -46,8 +48,14 @@ export const forgotPassword = async (data: { email: string }) => {
   return response.data;
 };
 
-export const resetPassword = async (data: { token: string; password: string }) => {
-  const response = await api.post(`${APP_URL}/users/update-forgot-password`, data);
+export const resetPassword = async (data: {
+  token: string;
+  password: string;
+}) => {
+  const response = await api.post(
+    `${APP_URL}/users/update-forgot-password`,
+    data
+  );
   return response.data;
 };
 

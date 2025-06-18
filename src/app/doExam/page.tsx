@@ -1,11 +1,12 @@
 "use client"
 
 import React, { useState } from 'react';
-import { Progress, Button, Radio, Checkbox, Card, Divider } from 'antd';
-import { StarFilled } from '@ant-design/icons';
+import { Button, Radio, Checkbox, Card, Divider, Typography, Alert } from 'antd';
+import { StarFilled, StarOutlined, ClockCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import SidebarDoExam from './SidebarDoExam';
 import { motion } from "framer-motion";
 
+const { Title, Text } = Typography;
 
 const questions = [
   {
@@ -190,117 +191,160 @@ const questions = [
   },
 ];
 
-
 const QUESTIONS_PER_PAGE = 2;
 
 const DoExam = () => {
-
   const [pageIndex, setPageIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string | string[]>>({});
-  // console.log('answers', answers);
-
-  // remind start
-  const [remindQuestions, setRemindQuestions] = useState(false);
+  const [markedQuestions, setMarkedQuestions] = useState<number[]>([]);
 
   const totalQuestions = questions.length;
-  const totalPages = Math.ceil(totalQuestions / QUESTIONS_PER_PAGE);
-
-  const currentQuestions = questions.slice(pageIndex * QUESTIONS_PER_PAGE, (pageIndex + 1) * QUESTIONS_PER_PAGE);
-
   const percentComplete = Math.round((Object.keys(answers).length / totalQuestions) * 100);
 
-  // handle choose 1 option
   const handleSingleChange = (questionId: number, value: string) => {
     setAnswers({ ...answers, [questionId]: value });
   };
 
-  // handle choose multiple options
   const handleMultipleChange = (questionId: number, values: string[]) => {
     setAnswers({ ...answers, [questionId]: values });
   };
 
-  const handleRemind = () => {
-    setRemindQuestions(!remindQuestions);
+  const handleRemind = (questionId: number) => {
+    setMarkedQuestions(prev => {
+      if (prev.includes(questionId)) {
+        return prev.filter(id => id !== questionId);
+      }
+      return [...prev, questionId];
+    });
   };
 
+  const currentQuestions = questions.slice(
+    pageIndex * QUESTIONS_PER_PAGE,
+    (pageIndex + 1) * QUESTIONS_PER_PAGE
+  );
 
   return (
-    <div className="flex min-h-screen bg-white p-6">
-      <SidebarDoExam percentComplete={percentComplete} setPageIndex={setPageIndex} QUESTIONS_PER_PAGE={QUESTIONS_PER_PAGE} pageIndex={pageIndex} answers={answers} questions={questions} />
+    <div className="flex min-h-screen bg-gray-50">
+      <SidebarDoExam
+        percentComplete={percentComplete}
+        setPageIndex={setPageIndex}
+        QUESTIONS_PER_PAGE={QUESTIONS_PER_PAGE}
+        pageIndex={pageIndex}
+        answers={answers}
+        questions={questions}
+        markedQuestions={markedQuestions}
+      />
 
-      <div className="flex-1 px-10 bg-white z-100">
-        <div className='bg-[#D9D9D9] p-6 rounded-md shadow-md flex flex-col '>
-          <Progress percent={percentComplete} className="mb-5" />
-          <Divider />
-          <div className="flex flex-col gap-5">
+      <div className="flex-1 p-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8">
+            <Alert
+              message={
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <ClockCircleOutlined className="text-xl" />
+                    <Text strong>Time Remaining: 15:00</Text>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <CheckCircleOutlined className="text-xl" />
+                    <Text strong>Progress: {percentComplete}%</Text>
+                  </div>
+                </div>
+              }
+              type="info"
+              showIcon={false}
+              className="!bg-blue-50 !border-blue-200"
+            />
+          </div>
+
+          <div className="flex flex-col gap-6">
             {currentQuestions.map((question) => (
-              <Card key={question.id} className="shadow-sm">
+              <motion.div
+                key={question.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Card
+                  className={`shadow-md hover:shadow-lg transition-shadow duration-300
+                    ${markedQuestions.includes(question.id) ? 'border-yellow-400 bg-yellow-50' : ''}`}
+                >
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="flex-1">
+                      <Title level={4} className="!mb-2">
+                        Question {question.id}
+                      </Title>
+                      <Text className="text-lg">{question.question}</Text>
+                    </div>
+                    <Button
+                      type="text"
+                      icon={markedQuestions.includes(question.id) ?
+                        <StarFilled className="text-yellow-500" /> :
+                        <StarOutlined className="text-gray-400" />
+                      }
+                      onClick={() => handleRemind(question.id)}
+                      className={`!p-2 hover:!bg-yellow-50 !rounded-full transition-colors
+                        ${markedQuestions.includes(question.id) ? '!text-yellow-500' : '!text-gray-400'}`}
+                    />
+                  </div>
 
+                  <Divider className="!my-4" />
 
-                <motion.div className='flex flex-row justify-between items-start'>
-                  <h3 className="text-lg font-semibold mb-4">{question.question}</h3>
-                  <StarFilled
-                    onClick={handleRemind}
-                    style={{ color: 'yellow' }}
-                    className="text-yellow-400 border-2 border-yellow-400 rounded-full p-1"
-                  />
-                </motion.div>
-
-                {question.type === 'single' ? (
-                  <Radio.Group
-                    onChange={(e) => handleSingleChange(question.id, e.target.value)}
-                    value={answers[question.id]}
-                    className="flex flex-col gap-3"
-                  >
-                    {question.options.map((opt) => (
-                      <div
-                        key={opt.label}
-                        onClick={() => handleSingleChange(question.id, opt.label)}
-                        className="w-full py-2 px-5 mb-2 border border-black rounded-[8px] cursor-pointer"
-                      >
-                        <Radio value={opt.label}>
-                          <span className="font-medium">{opt.label}:</span> {opt.text}
-                        </Radio>
-                      </div>
-                    ))}
-                  </Radio.Group>
-                ) : (
-                  <Checkbox.Group
-                    onChange={(checkedValues) => handleMultipleChange(question.id, checkedValues)}
-                    value={answers[question.id] || []}
-                    className="flex flex-col gap-3"
-                  >
-                    {question.options.map((opt) => (
-                      <label
-                        className='py-2 px-5 border-[1px] border-solid border-black rounded-[8px] cursor-pointer flex items-center gap-2'
-                        key={opt.label}
-                      >
-                        <Checkbox value={opt.label} />
-                        <span className="font-medium">{opt.label}:</span> {opt.text}
-                      </label>
-                    ))}
-                  </Checkbox.Group>
-
-                )}
-
-              </Card>
+                  {question.type === 'single' ? (
+                    <Radio.Group
+                      onChange={(e) => handleSingleChange(question.id, e.target.value)}
+                      value={answers[question.id]}
+                      className="flex flex-col gap-3"
+                    >
+                      {question.options.map((opt) => (
+                        <div
+                          key={opt.label}
+                          onClick={() => handleSingleChange(question.id, opt.label)}
+                          className="w-full p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                        >
+                          <Radio value={opt.label}>
+                            <span className="font-medium text-blue-600">{opt.label}:</span> {opt.text}
+                          </Radio>
+                        </div>
+                      ))}
+                    </Radio.Group>
+                  ) : (
+                    <Checkbox.Group
+                      onChange={(checkedValues) => handleMultipleChange(question.id, checkedValues)}
+                      value={answers[question.id] || []}
+                      className="flex flex-col gap-3"
+                    >
+                      {question.options.map((opt) => (
+                        <label
+                          key={opt.label}
+                          className="w-full p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors flex items-center gap-2"
+                        >
+                          <Checkbox value={opt.label} />
+                          <span className="font-medium text-blue-600">{opt.label}:</span> {opt.text}
+                        </label>
+                      ))}
+                    </Checkbox.Group>
+                  )}
+                </Card>
+              </motion.div>
             ))}
           </div>
 
-          <div className="flex justify-between mt-6">
+          <div className="mt-8 flex justify-between">
             <Button
-              className='z-10 !border-solid !border-black !border-t-[2px] !border-l-[2px] !border-b-[4px] !border-r-[4px]'
+              size="large"
+              onClick={() => setPageIndex(prev => Math.max(0, prev - 1))}
               disabled={pageIndex === 0}
-              onClick={() => setPageIndex(pageIndex - 1)}
             >
-              Prev Page
+              Previous
             </Button>
             <Button
-              className='z-10 !border-solid !border-black !border-t-[2px] !border-l-[2px] !border-b-[4px] !border-r-[4px]'
-              disabled={pageIndex === totalPages - 1}
-              onClick={() => setPageIndex(pageIndex + 1)}
+              type="primary"
+              size="large"
+              onClick={() => setPageIndex(prev => Math.min(Math.ceil(totalQuestions / QUESTIONS_PER_PAGE) - 1, prev + 1))}
+              disabled={pageIndex === Math.ceil(totalQuestions / QUESTIONS_PER_PAGE) - 1}
             >
-              Next Page
+              Next
             </Button>
           </div>
         </div>

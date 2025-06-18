@@ -3,7 +3,7 @@
 import { selectIsAuthenticated } from "@/providers/auth/selector/authSelector";
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -13,11 +13,14 @@ type AuthLayoutProps = {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const router = useRouter();
+
   useEffect(() => {
     if (isAuthenticated) {
-      redirect("/");
+      router.push("/");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, router]);
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -20, filter: "blur(10px)" }}

@@ -1,26 +1,29 @@
 "use client"
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getStorageData } from "@/shared/store";
 
 interface PrivateRouteProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const auth = !!localStorage.getItem("theme"); // hoặc token nếu bạn đang kiểm tra đăng nhập
-    setAuthenticated(auth);
+    const token = getStorageData("accessToken");
+    setAuthenticated(!!token);
   }, []);
 
   if (authenticated === null) {
-    return null; // hoặc spinner, loading...
+    return null;
   }
 
   if (!authenticated) {
-    return <Link href="/login" replace />;
+    router.push("/login");
+    return null;
   }
 
   return <>{children}</>;

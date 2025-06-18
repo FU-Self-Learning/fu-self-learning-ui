@@ -1,20 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Modal, Input, Upload, Button, Dropdown, MenuProps, Popconfirm } from "antd";
-import { UploadOutlined, MoreOutlined, FileOutlined } from "@ant-design/icons";
+import { Modal, Input, Upload, Button, Dropdown, MenuProps, Popconfirm, message } from "antd";
+import { UploadOutlined, MoreOutlined } from "@ant-design/icons";
 import Group from "@p/svgs/Group.svg";
 import TextArea from "antd/es/input/TextArea";
-
-
-
+import { createPost } from "@/shared/api/post.api";
 
 type Props = {
     open: boolean;
     onClose: () => void;
+    onPostCreated?: () => void;
 };
-
-
 
 const filters = [
     { name: "None", style: "none" },
@@ -22,14 +19,21 @@ const filters = [
     { name: "Sepia", style: "sepia(60%)" },
 ];
 
-const CreatePostModal = ({ open, onClose }: Props) => {
+const CreatePostModal = ({ open, onClose, onPostCreated }: Props) => {
     const [fileList, setFileList] = useState<any[]>([]);
     const [selectedFileUid, setSelectedFileUid] = useState<string | null>(null);
     const [filterStyle, setFilterStyle] = useState<string>("none");
+    const [title, setTitle] = useState("");
+    const [body, setBody] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (open) {
             setFilterStyle("none");
+            setTitle("");
+            setBody("");
+            setFileList([]);
+            setSelectedFileUid(null);
         }
     }, [open]);
 
@@ -39,6 +43,8 @@ const CreatePostModal = ({ open, onClose }: Props) => {
         setFileList([]);
         setSelectedFileUid(null);
         setFilterStyle("none");
+        setTitle("");
+        setBody("");
         onClose();
     };
 
@@ -65,7 +71,6 @@ const CreatePostModal = ({ open, onClose }: Props) => {
             ),
         },
     ];
-    ;
 
     const onFileChange = (info: any) => {
         setFileList(info.fileList);
@@ -73,11 +78,63 @@ const CreatePostModal = ({ open, onClose }: Props) => {
 
     const onSelectFile = (uid: string) => {
         setSelectedFileUid(uid);
-        setFilterStyle("none"); // reset filter khi chọn file mới
+        setFilterStyle("none");
     };
 
     const onFilterChange = (style: string) => {
         setFilterStyle(style);
+    };
+
+    const handlePost = async () => {
+        if (!title.trim()) {
+            message.error("Please enter a title");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            if (fileList.length === 0) {
+                message.error("Please upload at least one image");
+                setLoading(false);
+                return;
+            }
+
+            const formData = new FormData();
+            // Append all images
+            fileList.forEach((file) => {
+                const imageFile = file.originFileObj;
+                if (imageFile) {
+                    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                    if (!allowedTypes.includes(imageFile.type)) {
+                        throw new Error("Please upload only JPG, PNG or WebP images");
+                    }
+                    formData.append('images', imageFile);
+                }
+            });
+
+            formData.append('title', title);
+            formData.append('body', body);
+            formData.append('status', 'published');
+
+            const response = await createPost(formData);
+
+            message.success("Post created successfully!");
+            onPostCreated?.();
+            handleDiscard();
+        } catch (error: any) {
+            console.error('Error creating post:', error);
+            if (error.response) {
+                console.error('Error response data:', error.response.data);
+                console.error('Error response status:', error.response.status);
+            } else if (error.request) {
+                console.error('No response received from server:', error.request);
+            } else {
+                console.error('Error in request setup:', error.message);
+            }
+            message.error(error.response?.data?.message || error.message || "Failed to create post");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -102,7 +159,7 @@ const CreatePostModal = ({ open, onClose }: Props) => {
                         multiple={true}
                         fileList={fileList}
                         onChange={onFileChange}
-                        accept="image/*,.pdf,.doc,.docx"
+                        accept="image/*"
                         beforeUpload={() => false}
                         showUploadList={false}
                         className="w-full"
@@ -111,14 +168,13 @@ const CreatePostModal = ({ open, onClose }: Props) => {
                             <UploadOutlined />
                         </p>
                         <p className="text-sm text-gray-500">
-                            Drop image or file here or <span className="text-blue-500">browse</span>
+                            Drop images here or <span className="text-blue-500">browse</span>
                         </p>
                     </Upload.Dragger>
                 </div>
 
                 <div className="flex flex-col w-2/3 overflow-auto">
-                    <label className="font-semibold mb-2">Uploaded Files or Image</label>
-
+                    <label className="font-semibold mb-2">Uploaded Image</label>
 
                     <div className="flex flex-wrap gap-3 max-h-[350px] overflow-auto">
                         {fileList.map((file) => (
@@ -131,7 +187,7 @@ const CreatePostModal = ({ open, onClose }: Props) => {
                             >
                                 <div
                                     onClick={(e) => {
-                                        e.stopPropagation(); // Ngăn không cho kích hoạt onClick của div cha (chọn file)
+                                        e.stopPropagation();
                                         setFileList((prev) => prev.filter((f) => f.uid !== file.uid));
                                         if (selectedFileUid === file.uid) {
                                             setSelectedFileUid(null);
@@ -145,7 +201,7 @@ const CreatePostModal = ({ open, onClose }: Props) => {
                                     ×
                                 </div>
 
-                                {isImage(file) ? (
+                                {isImage(file) && (
                                     <img
                                         src={URL.createObjectURL(file.originFileObj)}
                                         alt={file.name}
@@ -157,16 +213,10 @@ const CreatePostModal = ({ open, onClose }: Props) => {
                                             borderRadius: 4,
                                         }}
                                     />
-                                ) : (
-                                    <div className="flex items-center gap-1 p-2">
-                                        <FileOutlined style={{ fontSize: 32 }} />
-                                        <span className="truncate max-w-[150px]">{file.name}</span>
-                                    </div>
                                 )}
                             </div>
                         ))}
                     </div>
-
 
                     {selectedFileUid && isImage(fileList.find((f) => f.uid === selectedFileUid)) && (
                         <div className="mt-4">
@@ -205,18 +255,34 @@ const CreatePostModal = ({ open, onClose }: Props) => {
             <div className="flex flex-col gap-4 mt-4">
                 <div>
                     <label className="font-semibold">Title</label>
-                    <Input placeholder="Once upon a time..." maxLength={180} />
+                    <Input
+                        placeholder="Enter post title..."
+                        maxLength={180}
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
                 </div>
                 <div>
                     <label className="font-semibold">Description</label>
-                    {/* <TextEditor></TextEditor> */}
-                    <TextArea rows={4} placeholder="The start of a wonderful story..." maxLength={360} />
+                    <TextArea
+                        rows={4}
+                        placeholder="Write your post content..."
+                        maxLength={360}
+                        value={body}
+                        onChange={(e) => setBody(e.target.value)}
+                    />
                 </div>
                 <div className="flex justify-end gap-2 mt-2">
                     <Dropdown menu={{ items }} trigger={["click"]}>
                         <Button icon={<MoreOutlined />} />
                     </Dropdown>
-                    <Button type="primary">Post</Button>
+                    <Button
+                        type="primary"
+                        onClick={handlePost}
+                        loading={loading}
+                    >
+                        Post
+                    </Button>
                 </div>
             </div>
         </Modal>
