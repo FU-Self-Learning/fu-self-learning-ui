@@ -14,11 +14,13 @@ import {
   InfoCircleOutlined,
   UploadOutlined,
   FileOutlined,
+  ArrowLeftOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import type { UploadFile, UploadProps } from "antd/es/upload/interface";
 import { RcFile } from "antd/lib/upload";
 import { CourseInstructorDetailResponse } from "@/types/courseType";
+import { useRouter } from "next/navigation";
 
 interface CourseDetailsTabProps {
   course: CourseInstructorDetailResponse;
@@ -26,6 +28,7 @@ interface CourseDetailsTabProps {
 }
 
 export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
+  const router = useRouter();
   const [form] = Form.useForm();
   const [isChanged, setIsChanged] = useState(false);
   const [imageFile, setImageFile] = useState<UploadFile | null>(null);
@@ -129,9 +132,17 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <Typography.Title level={3}>Video Details</Typography.Title>
-        <Button 
-          type="primary" 
+        <Space className="flex items-center gap-2">
+          <Button
+            type="primary"
+            icon={<ArrowLeftOutlined />}
+            className="mb-2 !bg-white !text-black"
+            onClick={() => router.back()}
+          />
+          <Typography.Title level={3}>Course Details</Typography.Title>
+        </Space>
+        <Button
+          type="primary"
           onClick={() => form.submit()}
           disabled={!isChanged}
         >
@@ -152,10 +163,7 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
           <Form.Item
             name="title"
             label={
-              <Typography.Text
-                strong
-                className="flex items-center gap-1 mb-2"
-              >
+              <Typography.Text strong className="flex items-center gap-1 mb-2">
                 Title (required) <InfoCircleOutlined />
               </Typography.Text>
             }
@@ -167,21 +175,15 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
           <Form.Item
             name="description"
             label={
-              <Typography.Text
-                strong
-                className="flex items-center gap-1 mb-2"
-              >
+              <Typography.Text strong className="flex items-center gap-1 mb-2">
                 Description <InfoCircleOutlined />
               </Typography.Text>
             }
           >
-            <Input.TextArea
-              rows={4}
-              placeholder="Enter video description"
-            />
+            <Input.TextArea rows={4} placeholder="Enter video description" />
           </Form.Item>
 
-          <Space size="large" className="w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Form.Item
               name="imageUrl"
               label={
@@ -194,7 +196,7 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
               }
             >
               <div className="space-y-4">
-                <div className="w-[300px] h-[200px] border border-gray-200 rounded-lg overflow-hidden">
+                <div className="w-full h-[200px] border border-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
                   {imageFile?.url ? (
                     <Image
                       src={imageFile.url}
@@ -205,7 +207,9 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                      <Typography.Text type="secondary">No image</Typography.Text>
+                      <Typography.Text type="secondary">
+                        No image
+                      </Typography.Text>
                     </div>
                   )}
                 </div>
@@ -231,7 +235,7 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
               }
             >
               <div className="space-y-4">
-                <div className="w-[300px] h-[200px] border border-gray-200 rounded-lg overflow-hidden">
+                <div className="w-full h-[200px] border border-gray-200 rounded-lg overflow-hidden">
                   {videoFile?.url ? (
                     <video
                       src={videoFile.url}
@@ -240,7 +244,9 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                      <Typography.Text type="secondary">No video</Typography.Text>
+                      <Typography.Text type="secondary">
+                        No video
+                      </Typography.Text>
                     </div>
                   )}
                 </div>
@@ -266,14 +272,14 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
               }
             >
               <div className="space-y-4">
-                <div className="w-[300px] h-[200px] border border-gray-200 rounded-lg overflow-hidden">
+                <div className="w-full h-[200px] border border-gray-200 rounded-lg overflow-hidden">
                   {documentFile?.url ? (
                     <div className="w-full h-full flex items-center justify-center bg-gray-50">
                       <Space direction="vertical" align="center">
                         <FileOutlined className="text-4xl" />
-                        <a 
-                          href={documentFile.url} 
-                          target="_blank" 
+                        <a
+                          href={documentFile.url}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-500 hover:underline"
                         >
@@ -283,7 +289,9 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
                     </div>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                      <Typography.Text type="secondary">No document</Typography.Text>
+                      <Typography.Text type="secondary">
+                        No document
+                      </Typography.Text>
                     </div>
                   )}
                 </div>
@@ -296,9 +304,9 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
                 </Upload>
               </div>
             </Form.Item>
-          </Space>
+          </div>
         </div>
       </Form>
     </div>
   );
-}; 
+};

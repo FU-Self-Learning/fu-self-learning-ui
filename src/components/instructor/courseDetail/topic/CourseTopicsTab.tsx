@@ -1,7 +1,7 @@
 "use client";
 
-import { Button, List, Spin, Typography } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Button, List, Space, Spin, Typography } from "antd";
+import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { AddTopicModal } from "./AddTopicModal";
 import { DeleteTopicModal } from "./DeleteTopicModal";
@@ -9,12 +9,14 @@ import { useCreateTopic } from "@/hooks/topic/instructor/useCreateTopic";
 import { TopicInstructorCreateRequest } from "@/types/topicType";
 import { useTopics } from "@/hooks/topic/useTopics";
 import { useDeleteTopic } from "@/hooks/topic/instructor/useDeleteTopic";
+import { useRouter } from "next/navigation";
 
 interface CourseTopicsTabProps {
   courseId: string;
 }
 
 export const CourseTopicsTab = ({ courseId }: CourseTopicsTabProps) => {
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [topicToDelete, setTopicToDelete] = useState<string | null>(null);
   const { mutate: createTopic, isPending } = useCreateTopic(courseId);
@@ -47,7 +49,15 @@ export const CourseTopicsTab = ({ courseId }: CourseTopicsTabProps) => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <Typography.Title level={3}>Course Topics</Typography.Title>
+        <Space>
+          <Button
+            type="primary"
+            icon={<ArrowLeftOutlined />}
+            className="mb-2 !bg-white !text-black"
+            onClick={() => router.back()}
+          />
+          <Typography.Title level={3}>Course Topics</Typography.Title>
+        </Space>
         <Button
           type="primary"
           icon={<PlusOutlined />}

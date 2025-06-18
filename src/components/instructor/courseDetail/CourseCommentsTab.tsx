@@ -1,18 +1,26 @@
 "use client";
 
-import { Avatar, List, Typography } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { Avatar, Button, List, Typography, Space } from "antd";
+import { ArrowLeftOutlined, UserOutlined } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
 
 interface CourseCommentsTabProps {
   courseId: string;
 }
 
 export const CourseCommentsTab = ({ courseId }: CourseCommentsTabProps) => {
+  const router = useRouter();
   return (
     <div>
-      <div className="mb-6">
+      <Space className="mb-6">
+        <Button
+          type="primary"
+          icon={<ArrowLeftOutlined />}
+          className="mb-2 !bg-white !text-black"
+          onClick={() => router.back()}
+        />
         <Typography.Title level={3}>Course Comments</Typography.Title>
-      </div>
+      </Space>
       <List
         className="bg-white rounded-lg"
         itemLayout="horizontal"
@@ -36,4 +44,4 @@ export const CourseCommentsTab = ({ courseId }: CourseCommentsTabProps) => {
       />
     </div>
   );
-}; 
+};

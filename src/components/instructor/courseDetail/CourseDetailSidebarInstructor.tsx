@@ -1,6 +1,8 @@
 "use client";
 
-import { Image, Layout, Menu } from "antd";
+import { Image, Layout, Menu, Tooltip } from "antd";
+import { PlayCircleOutlined } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
 
 interface CourseDetailSidebarInstructorProps {
   items: { key: string; label: string }[];
@@ -19,6 +21,7 @@ export const CourseDetailSidebarInstructor = ({
   activeTab,
   onTabChange,
 }: CourseDetailSidebarInstructorProps) => {
+  const router = useRouter();
   return (
     <Sider
       width={300}
@@ -28,14 +31,27 @@ export const CourseDetailSidebarInstructor = ({
       }}
     >
       <div className="p-4">
-        <div className="relative w-full h-40 mb-4">
+        <div
+          className="mb-4 rounded overflow-hidden cursor-pointer relative group"
+          onClick={() => router.push(`/course/${courseId}`)}
+          title="View detail course"
+          style={{ width: "100%", height: "170px" }}
+        >
           <Image
             src={imageUrl}
             alt="Course cover"
             className="object-cover rounded-lg"
-            width={256}
-            height={144}
+            preview={false}
           />
+          <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-40 transition duration-300" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Tooltip title="View detail course">
+              <PlayCircleOutlined
+                className="text-5xl opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300 rounded-full"
+                style={{ fontSize: 48 }}
+              />
+            </Tooltip>
+          </div>
         </div>
         <Menu
           mode="inline"
