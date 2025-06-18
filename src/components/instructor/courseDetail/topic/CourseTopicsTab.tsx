@@ -1,12 +1,14 @@
 "use client";
 
-import { Button, List, Spin, Typography, message } from "antd";
+import { Button, List, Spin, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { AddTopicModal } from "./AddTopicModal";
+import { DeleteTopicModal } from "./DeleteTopicModal";
 import { useCreateTopic } from "@/hooks/topic/instructor/useCreateTopic";
 import { TopicInstructorCreateRequest } from "@/types/topicType";
 import { useTopics } from "@/hooks/topic/useTopics";
+import { useDeleteTopic } from "@/hooks/topic/instructor/useDeleteTopic";
 
 interface CourseTopicsTabProps {
   courseId: string;
@@ -14,11 +16,32 @@ interface CourseTopicsTabProps {
 
 export const CourseTopicsTab = ({ courseId }: CourseTopicsTabProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [topicToDelete, setTopicToDelete] = useState<string | null>(null);
   const { mutate: createTopic, isPending } = useCreateTopic(courseId);
+  const { mutate: deleteTopic, isPending: isDeleting } =
+    useDeleteTopic(courseId);
   const { data: topics, isLoading } = useTopics(courseId);
 
   const handleAddTopic = async (values: TopicInstructorCreateRequest) => {
     createTopic(values);
+  };
+
+  const handleDeleteClick = (topicId: string) => {
+    setTopicToDelete(topicId);
+  };
+
+  const handleConfirmDelete = () => {
+    if (topicToDelete) {
+      deleteTopic(topicToDelete, {
+        onSuccess: () => {
+          setTopicToDelete(null);
+        },
+      });
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setTopicToDelete(null);
   };
 
   return (
@@ -47,7 +70,12 @@ export const CourseTopicsTab = ({ courseId }: CourseTopicsTabProps) => {
                 <Button key="edit" type="link">
                   Edit
                 </Button>,
-                <Button key="delete" type="link" danger>
+                <Button
+                  key="delete"
+                  type="link"
+                  danger
+                  onClick={() => handleDeleteClick(item.id.toString())}
+                >
                   Delete
                 </Button>,
               ]}
@@ -66,6 +94,13 @@ export const CourseTopicsTab = ({ courseId }: CourseTopicsTabProps) => {
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleAddTopic}
         isLoading={isPending}
+      />
+
+      <DeleteTopicModal
+        isOpen={!!topicToDelete}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
       />
     </div>
   );

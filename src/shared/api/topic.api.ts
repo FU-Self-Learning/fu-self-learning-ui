@@ -13,6 +13,16 @@ export const createTopicInstructor = async (
   courseId: string,
   request: TopicInstructorCreateRequest
 ): Promise<TopicResponse> => {
-  const response = await api.post(`${APP_URL}/courses/${courseId}/topics`, request);
+  const response = await api.post(
+    `${APP_URL}/courses/${courseId}/topics`,
+    request
+  );
   return response.data;
+};
+
+export const deleteTopicInstructor = async (
+  courseId: string,
+  topicId: string
+): Promise<void> => {
+  await api.delete(`${APP_URL}/courses/${courseId}/topics/${topicId}`);
 };
