@@ -41,3 +41,13 @@ export const getAllUsers = async (): Promise<UserInfo[]> => {
     throw error;
   }
 };
+
+export const getAllUsersSocial = async (): Promise<UserInfo[]> => {
+  try {
+    const response = await api.get(`${APP_URL}/users/social`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all users:", error);
+    throw error;
+  }
+};
