@@ -63,6 +63,11 @@ export default function Navbar() {
         label: <Link href="/profile">Profile</Link>,
       },
       {
+        key: "instructor",
+        label: <Link href="/instructor">Instructor</Link>,
+        style: user?.role !== "instructor" ? { display: "none" } : {},
+      },
+      {
         key: "logout",
         label: (
           <button onClick={handleLogout} className="w-full text-left">

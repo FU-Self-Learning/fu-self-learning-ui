@@ -1,0 +1,14 @@
+.course-detail-sidebar-instructor {
+  background-color: #fff !important;
+  .ant-layout-sider-children {
+    padding: 10px 10px 0 10px !important;
+    .ant-menu-item-selected {
+      background-color: #f5f3ea !important;
+      color: #000 !important;
+    }
+    .ant-menu-item:hover {
+      background-color: #f5f3ea !important;
+      color: blue !important;
+    }
+  }
+}

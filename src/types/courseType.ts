@@ -1,3 +1,5 @@
+import { UploadFile } from "antd";
+
 export interface CoursesResponse {
     id: string;
     title: string;
@@ -42,3 +44,24 @@ interface TopicCourse {
     // videoUrl: string;
 }
 
+export interface CreateCourseRequest {
+    title: string;
+    description: string;
+    image: UploadFile[];
+    video: UploadFile[];
+    document: UploadFile[];
+    categoryIds: number[];
+}
+
+// ================================ Instructor ================================
+
+export interface CourseInstructorDetailResponse {
+    id: string;
+    title: string;
+    description: string;
+    imageUrl: string;
+    videoIntroUrl: string;
+    documentUrl: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
