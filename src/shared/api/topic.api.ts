@@ -20,6 +20,18 @@ export const createTopicInstructor = async (
   return response.data;
 };
 
+export const updateTopicInstructor = async (
+  courseId: string,
+  topicId: string,
+  request: TopicInstructorCreateRequest
+): Promise<TopicResponse> => {
+  const response = await api.put(
+    `${APP_URL}/courses/${courseId}/topics/${topicId}`,
+    request
+  );
+  return response.data;
+};
+
 export const deleteTopicInstructor = async (
   courseId: string,
   topicId: string
