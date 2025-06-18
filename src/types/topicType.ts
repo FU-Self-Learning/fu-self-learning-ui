@@ -12,3 +12,10 @@ export interface TopicResponse {
   totalDuration: number;
   lessons: LessonInTopic[];
 }
+
+// ================================ Instructor ================================
+
+export interface TopicInstructorCreateRequest {
+  title: string;
+  description: string;
+}

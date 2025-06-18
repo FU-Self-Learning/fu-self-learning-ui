@@ -1,17 +1,20 @@
 "use client";
 
-import { Input, Layout, Spin, Typography } from "antd";
+import { Layout, Spin } from "antd";
 import { useParams } from "next/navigation";
 import { useCourseInstructorDetail } from "@/hooks/course/instructor/useCourseInstructorDetail";
 import { CourseDetailSidebarInstructor } from "@/components/instructor/courseDetail/CourseDetailSidebarInstructor";
-import { InfoCircleOutlined } from "@ant-design/icons";
-import "./InstructorCourseDetail.css";
+import { CourseDetailsTab } from "@/components/instructor/courseDetail/CourseDetailsTab";
+import { CourseTopicsTab } from "@/components/instructor/courseDetail/topic/CourseTopicsTab";
+import { CourseCommentsTab } from "@/components/instructor/courseDetail/CourseCommentsTab";
+import { useState } from "react";
 
 const { Content } = Layout;
 
 export default function CourseDetailPage() {
   const { id } = useParams();
   const { data: course, isLoading } = useCourseInstructorDetail(id as string);
+  const [activeTab, setActiveTab] = useState("1");
 
   if (isLoading)
     return <Spin className="flex justify-center items-center h-screen" />;
@@ -19,9 +22,31 @@ export default function CourseDetailPage() {
 
   const items = [
     { key: "1", label: "Details" },
-    { key: "2", label: "Statistics" },
+    { key: "2", label: "Topics" },
     { key: "3", label: "Comments" },
   ];
+
+  const handleSave = async (values: any) => {
+    try {
+      // TODO: Implement save logic here
+      console.log("Saving values:", values);
+    } catch (error) {
+      console.error("Error saving:", error);
+    }
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "1":
+        return <CourseDetailsTab course={course} onSave={handleSave} />;
+      case "2":
+        return <CourseTopicsTab courseId={course.id} />;
+      case "3":
+        return <CourseCommentsTab courseId={course.id} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <Layout style={{ minHeight: "80vh" }} className="course-detail-page">
@@ -29,6 +54,8 @@ export default function CourseDetailPage() {
         items={items}
         imageUrl={course.imageUrl}
         courseId={course.id}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
       />
       <Layout>
         <Content
@@ -37,35 +64,7 @@ export default function CourseDetailPage() {
             background: "#fff",
           }}
         >
-          <Typography.Title level={3}>Video Details</Typography.Title>
-          <div className="space-y-6">
-            <div>
-              <Typography.Text strong className="flex items-center gap-1 mb-2">
-                Title (required) <InfoCircleOutlined />
-              </Typography.Text>
-              <Input
-                value={course.title}
-                maxLength={100}
-                placeholder="Enter video title"
-                className="mt-1"
-              />
-              <div className="text-right text-xs text-gray-500">
-                {course.title.length}/100
-              </div>
-            </div>
-
-            <div>
-              <Typography.Text strong className="flex items-center gap-1 mb-2">
-                Description <InfoCircleOutlined />
-              </Typography.Text>
-              <Input.TextArea
-                value={course.description}
-                rows={4}
-                placeholder="Enter video description"
-                className="mt-1"
-              />
-            </div>
-          </div>
+          {renderContent()}
         </Content>
       </Layout>
     </Layout>
