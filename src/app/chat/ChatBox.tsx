@@ -10,7 +10,6 @@ interface ChatBoxProps {
   senderUserId: number;
   receiverUserId: number;
 }
-
 interface RawMessage {
   id: number;
   message: string;
@@ -21,58 +20,36 @@ interface RawMessage {
   receiverUserId?: number;
 }
 
-interface PaginatedMessages {
-  messages: RawMessage[];
-  total: number;
-  page: number;
-  limit: number;
-}
-
 const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const socket = useSocket(senderUserId);
-
-  const loadMessages = (pageNum: number = 1) => {
-    if (!socket || isLoading) return;
-
-    setIsLoading(true);
-    socket.emit("loadMessages", {
-      senderUserId,
-      receiverUserId,
-      page: pageNum,
-      limit: 20,
-    });
-  };
 
   useEffect(() => {
     if (!socket) return;
 
     const handleIncomingMessage = (msg: RawMessage) => {
-      if (!msg.senderId && !msg.senderUserId) {
-        throw new Error("Invalid message: missing senderId");
-      }
+      const sender = msg.senderId ?? msg.senderUserId;
+      const receiver = msg.receiverId ?? msg.receiverUserId;
+
+      const isFromCurrentChat =
+        (sender === senderUserId && receiver === receiverUserId) ||
+        (sender === receiverUserId && receiver === senderUserId);
+
+      if (!isFromCurrentChat) return;
 
       const normalized: ChatMessage = {
         id: msg.id,
         message: msg.message,
         createdAt: msg.createdAt,
-        senderId: (msg.senderId ?? msg.senderUserId) as number,
-        receiverId: (msg.receiverId ?? msg.receiverUserId) as number,
+        senderId: sender,
+        receiverId: receiver,
       };
 
       setMessages((prev) => [...prev, normalized]);
     };
 
-    const handleMessagesLoaded = (data: PaginatedMessages) => {
-      if (!data || !Array.isArray(data.messages)) {
-        console.error("Invalid messages data received:", data);
-        return;
-      }
-
-      const normalized = data.messages.map(
+    const handleMessagesLoaded = (loaded: RawMessage[]) => {
+      const normalized = loaded.map(
         (msg): ChatMessage => ({
           id: msg.id,
           message: msg.message,
@@ -82,26 +59,10 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
         })
       );
 
-      setMessages((prev) => {
-        if (data.page === 1) {
-          return normalized.sort(
-            (a, b) =>
-              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          );
-        }
-        const combined = [...normalized, ...prev];
-        return combined.sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
-      });
-
-      setHasMore(normalized.length === data.limit);
-      setPage(data.page);
-      setIsLoading(false);
+      setMessages(normalized);
     };
 
-    loadMessages(1);
+    socket.emit("loadMessages", { senderUserId, receiverUserId });
 
     socket.on("messagesLoaded", handleMessagesLoaded);
     socket.on("newMessage", handleIncomingMessage);
@@ -114,12 +75,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
     };
   }, [!!socket, senderUserId, receiverUserId]);
 
-  const loadMoreMessages = () => {
-    if (hasMore && !isLoading) {
-      loadMessages(page + 1);
-    }
-  };
-
   const sendMessage = (msg: string) => {
     const payload: ChatPayload = {
       senderUserId,
@@ -131,13 +86,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
 
   return (
     <div className="flex flex-col h-full max-w-full mx-auto shadow-md rounded-2xl border border-gray-300 bg-white">
-      <MessageList
-        messages={messages}
-        currentUserId={senderUserId}
-        onLoadMore={loadMoreMessages}
-        hasMore={hasMore}
-        isLoading={isLoading}
-      />
+      <MessageList messages={messages} currentUserId={senderUserId} />
       <MessageInput onSend={sendMessage} />
     </div>
   );
