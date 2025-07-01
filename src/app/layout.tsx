@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Studee Courses - Learn Anything",
-  description: "Studee Courses - Learn Anything",
+  title: "Eduhub Courses - Learn Anything",
+  description: "Eduhub Courses - Learn Anything",
 };
 
 export default function RootLayout({

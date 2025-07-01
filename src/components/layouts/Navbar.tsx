@@ -21,7 +21,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   if (!hasMounted) {
-    return <Spin className="h-screen flex justify-center items-center"/>;
+    return <Spin className="h-screen flex justify-center items-center" />;
   }
 
   const handleLogout = () => {
@@ -128,7 +128,7 @@ export default function Navbar() {
               className="cursor-pointer"
               onClick={() => router.push("/")}
             >
-              <span className="font-semibold text-2xl">Studee</span>
+              <span className="font-semibold text-2xl">Eduhub</span>
             </Button>
           </motion.div>
         </div>

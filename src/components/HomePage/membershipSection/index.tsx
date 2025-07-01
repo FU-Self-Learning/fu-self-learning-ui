@@ -31,7 +31,7 @@ const data = [
         title: "Advanced",
         description:
             "Ideal for expanding study groups and using advanced features.",
-        price: 100000,
+        price: 50000,
         features: [
             "Unlimited group creation",
             "Access to premium learning resources",

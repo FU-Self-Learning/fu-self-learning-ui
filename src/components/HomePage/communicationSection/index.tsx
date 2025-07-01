@@ -67,7 +67,7 @@ export default function CommunicationSection() {
     <div className="max-w-7xl mx-auto my-[200px] relative flex flex-col gap-[100px] ">
       <ChatBoxAi />
       <div className="text-4xl font-bold text-black flex justify-center">
-        Feedback about Studee
+        Feedback about Eduhub
       </div>
       <div>
         <button
