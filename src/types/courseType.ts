@@ -32,6 +32,7 @@ export interface CourseDetailResponse {
     totalLessons: number;
     totalDuration: number;
     instructor: InstructorCourse;
+    price: number;
     topics: TopicCourse[];
     categories: CategoryCourse[];
 }
