@@ -27,6 +27,7 @@ export interface CourseDetailResponse {
     id: string;
     title: string;
     description: string;
+    imageUrl?: string;
     videoIntroUrl: string;
     createdAt: string;
     totalLessons: number;

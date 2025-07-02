@@ -2,47 +2,20 @@ import { Button, Collapse, Divider, Empty, Space } from "antd";
 import { LockOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { LessonInTopic, TopicResponse } from "@/types/topicType";
 import { formatDuration } from "@/utils/convertTime";
-import { createOrder } from "@/shared/api/order.api";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 
 interface CourseDetailContentProps {
   sections: TopicResponse[];
   onLessonSelect: (lesson: LessonInTopic) => void;
-  price?: number;
+  courseId: string;
 }
 
-const CourseDetailContent = ({ sections, onLessonSelect, price }: CourseDetailContentProps) => {
-  const params = useParams();
-  let courseId = params?.id;
-  if (Array.isArray(courseId)) {
-    courseId = courseId[0];
-  }
-
-  const handleBuyCourse = async () => {
-    if (!courseId) {
-      console.error("Course ID not found in URL");
-      return;
-    }
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("User token not found. Please login.");
-        return;
-      }
-      const numericCourseId = Number(courseId);
-      if (isNaN(numericCourseId)) {
-        console.error("Course ID is not a valid number");
-        return;
-      }
-      const order = await createOrder(numericCourseId, Number(price), token);
-      if (order?.payUrl) {
-        window.location.href = order.payUrl;
-      } else {
-        console.log("Order created:", order);
-      }
-    } catch (error) {
-      console.error("Failed to create order:", error);
-    }
+const CourseDetailContent = ({ sections, onLessonSelect, courseId }: CourseDetailContentProps) => {
+  const router = useRouter();
+  const handleEnroll = () => {
+    const target = `/payment/payment-confirm?courseId=${courseId}`;
+    router.push(target);
   };
 
   const collapseItems = sections.sort((a, b) => a.id - b.id).map((section) => ({
@@ -83,8 +56,8 @@ const CourseDetailContent = ({ sections, onLessonSelect, price }: CourseDetailCo
     <div className="bg-white rounded-lg shadow-sm border p-4 h-fit">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-medium">Course content</h2>
-        <Button type="primary" icon={<LockOutlined />} onClick={handleBuyCourse}>
-          {price ? `${parseInt(price.toString(), 10)} VND` : "Free"}
+        <Button type="primary" icon={<LockOutlined />} onClick={handleEnroll}>
+          Enroll
         </Button>
       </div>
       <Divider size="small" />
