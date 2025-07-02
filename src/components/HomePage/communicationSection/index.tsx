@@ -14,47 +14,46 @@ import { ChatBoxAi } from "@/components/chatbot";
 
 const dataCommunicationFBack = [
   {
-    name: "Linh Tran",
-    email: "@linhtran@gmail.com",
+    name: "Linh Trần",
+    email: "linhtran@gmail.com",
     avt: fort,
     content:
-      "This platform helps me organize my study group effortlessly. I can share resources and track progress with ease.",
+      "Nền tảng này giúp mình tổ chức nhóm học rất tiện lợi, chia sẻ tài liệu và theo dõi tiến độ dễ dàng. Tuy nhiên, đôi khi tốc độ tải hơi chậm khi nhiều người cùng truy cập.",
   },
   {
-    name: "Minh Nguyen",
-    email: "@minhnguyen@gmail.com",
+    name: "Minh Nguyễn",
+    email: "minhla@fpt.edu.vn",
     avt: linhtran,
     content:
-      "User-friendly interface. I love the flashcard feature. It’s quick and easy to create and review my cards.",
+      "Giao diện dễ dùng, mình rất thích tính năng flashcard. Tạo và ôn bài rất nhanh. Còn thiếu một số chức năng như nhắc nhở lịch học.",
   },
   {
-    name: "Trang Le",
-    email: "@trangle@gmail.com",
+    name: "Trang Lê",
+    email: "trangle@gmail.com",
     avt: Ethan,
-
     content:
-      "I use it for tutoring sessions. It saves me a lot of time organizing and sharing resources with my students.",
+      "Mình dùng để dạy kèm học sinh, tiết kiệm rất nhiều thời gian trong việc tổ chức và chia sẻ tài liệu. Tuy nhiên, tính năng tìm kiếm còn hơi hạn chế.",
   },
   {
-    name: "Huy Pham",
-    email: "@huypham.@gmail.com",
+    name: "Huy Phạm",
+    email: "huypham@gmail.com",
     avt: linhtran,
     content:
-      "Tried the free version, loved it, and upgraded the next day! The extra features are definitely worth it.",
+      "Mình dùng thử bản miễn phí thấy rất ổn nên nâng cấp ngay hôm sau! Các tính năng thêm rất đáng giá, nhưng phần chat chưa có nên hơi hạn chế",
   },
   {
-    name: "Duy Vo",
-    email: "@duyvo@gmail.com",
+    name: "Duy Võ",
+    email: "duylea@fpt.edu.vn",
     avt: ThuyT,
     content:
-      "Our team can study and collaborate from anywhere. Real-time sharing of ideas and resources is fantastic.",
+      "Nhóm mình có thể học và làm việc nhóm từ xa rất hiệu quả. Chia sẻ tài liệu theo thời gian thực rất tiện. Chỉ mong thêm chức năng chat nhóm trực tiếp thì sẽ hoàn hảo.",
   },
   {
-    name: "Mai Dang",
-    email: "@maidang@gmail.com",
+    name: "Mai Đặng",
+    email: "maidang@gmail.com",
     avt: Ellip,
     content:
-      "Great experience overall. It’s a must-have for anyone looking to improve their study habits or productivity.",
+      "Trải nghiệm nhìn chung rất tốt. Đây là công cụ nên có nếu bạn muốn cải thiện thói quen học tập. Mong rằng trong tương lai sẽ có thêm tích hợp lịch học tự động.",
   },
 ];
 
@@ -72,14 +71,14 @@ export default function CommunicationSection() {
       <div>
         <button
           onClick={prev}
-          className="absolute top-1/2 left-[-40px] -translate-y-1/2 z-10 bg-[#0A092D] cursor-pointer text-white p-3 rounded-full shadow-lg transition-transform transition-colors duration-300 ease-in-out hover:bg-[#070624] hover:scale-110 active:scale-95"
+          className="absolute top-1/2 left-[-40px] -translate-y-1/2 z-10 bg-[#0A092D] cursor-pointer text-white p-3 rounded-full shadow-lg transition-transform  duration-300 ease-in-out hover:bg-[#070624] hover:scale-110 active:scale-95"
           aria-label="Previous"
         >
           <LeftOutlined />
         </button>
         <button
           onClick={next}
-          className="absolute top-1/2 right-[-40px] -translate-y-1/2 z-10 bg-[#0A092D] cursor-pointer text-white p-3 rounded-full shadow-lg transition-transform transition-colors duration-300 ease-in-out hover:bg-[#070624] hover:scale-110 active:scale-95"
+          className="absolute top-1/2 right-[-40px] -translate-y-1/2 z-10 bg-[#0A092D] cursor-pointer text-white p-3 rounded-full shadow-lg transition-transform  duration-300 ease-in-out hover:bg-[#070624] hover:scale-110 active:scale-95"
           aria-label="Next"
         >
           <RightOutlined />
@@ -90,7 +89,6 @@ export default function CommunicationSection() {
           dots={true}
           slidesToShow={3}
           slidesToScroll={3}
-          afterChange={() => prev()}
           responsive={[
             {
               breakpoint: 1024,
