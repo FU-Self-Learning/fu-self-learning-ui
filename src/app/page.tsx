@@ -22,19 +22,21 @@ export default function HomePage() {
         <Image src={Bg} alt="background" fill className="object-cover z-0" />
         <div className="absolute top-20 left-20 max-w-xl z-10">
           <h1 className="text-4xl font-bold text-white mb-2">
-            Chia sẻ khóa học lập trình cùng bạn
+            Khóa học lập trình thực chiến cho người mới bắt đầu
           </h1>
           <h2 className="text-3xl font-bold text-[#00ff84] underline underline-offset-4 mb-4">
-            Uy tín, Chất lượng, Dễ tiếp cận
+            Uy tín – Chất lượng – Học là hiểu
           </h2>
           <p className="text-white mb-4 text-lg leading-relaxed">
-            Khám phá các khóa học lập trình chất lượng, giá hợp lý.
+            Tiếp cận các khóa học lập trình từ cơ bản đến nâng cao với phương
+            pháp dễ hiểu, thực hành ngay trong quá trình học.
             <br />
-            Học cùng giảng viên thân thiện, dễ hiểu, hỗ trợ tận tâm.
+            Hỗ trợ 1-1 cùng giảng viên, cập nhật kiến thức mới nhất theo xu
+            hướng.
           </p>
           <div className="flex gap-4 mb-6">
             <button className="bg-[#6c4cff] text-white px-8 py-2 rounded-md font-semibold hover:bg-[#4b2fff] transition">
-              Khám phá khóa học
+              Đăng ký ngay
             </button>
             <button className="border border-[#00ff84] text-[#00ff84] px-8 py-2 rounded-md font-semibold hover:bg-[#00ff8420] transition">
               Xem phản hồi học viên
@@ -42,16 +44,17 @@ export default function HomePage() {
           </div>
           <div className="flex gap-8 text-white text-base">
             <div className="flex items-center gap-2">
-              <span>🎓</span> Tải tài liệu, video mọi lúc
+              <span>🎓</span> Tải tài liệu, video học tập trọn đời
             </div>
             <div className="flex items-center gap-2">
-              <span>📹</span> Nội dung luôn cập nhật
+              <span>📹</span> Nội dung cập nhật liên tục
             </div>
             <div className="flex items-center gap-2">
-              <span>🔒</span> Truy cập không giới hạn
+              <span>🔒</span> Truy cập không giới hạn mọi lúc, mọi nơi
             </div>
           </div>
         </div>
+
         <div className="absolute right-50 top-20 flex flex-col gap-6 items-end z-10">
           <div className="flex gap-6">
             <motion.div
@@ -64,7 +67,7 @@ export default function HomePage() {
               <Image
                 src={Student}
                 alt="student"
-                className="rounded-xl w-[240px] h-[240px] object-cover"
+                className="rounded-xl w-[340px] h-[340px] object-cover"
               />
               <motion.div
                 className="absolute -bottom-8 left-0 bg-white/90 rounded-lg px-6 py-4 shadow-lg flex items-center gap-3 cursor-pointer"
@@ -89,7 +92,7 @@ export default function HomePage() {
               <Image
                 src={Teacher}
                 alt="teacher"
-                className="rounded-xl w-[120px] h-[120px] object-cover"
+                className="rounded-xl w-[180px] h-[180px] object-cover"
               />
             </motion.div>
           </div>
@@ -107,7 +110,7 @@ export default function HomePage() {
                 className="rounded-xl w-[120px] h-[120px] object-cover"
               />
               <motion.div
-                className="absolute -bottom-8 left-0 bg-white/90 rounded-lg px-6 py-4 shadow-lg flex items-center gap-3 cursor-pointer"
+                className="absolute -bottom-14 left-0 bg-white/90 rounded-lg px-6 py-4 shadow-lg flex items-center gap-3 cursor-pointer"
                 style={{ minWidth: 220 }}
               >
                 <span className="text-2xl text-[#4255ff]">🏅</span>
@@ -138,7 +141,7 @@ export default function HomePage() {
             rotate: [0, -5, 5, -5, 5, 0],
             transition: { duration: 0.5, repeat: 0 },
           }}
-          className="fixed bottom-25 right-4 z-50 cursor-pointer"
+          className="fixed bottom-7 right-20 z-50 cursor-pointer"
         >
           <Image src={Messenger} alt="Messenger" width={60} height={60} />
         </motion.div>
