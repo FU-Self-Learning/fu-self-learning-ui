@@ -6,12 +6,17 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start -H 0.0.0.0",
-    "lint": "next lint",
-    "prepare": "husky install",
-    "precommit": "lint-staged"
+    "format": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,scss,md,json,html}\" ",
+    "lint": "eslint ./src --ext .jsx,.js,.ts,.tsx,.scss,.html --quiet --fix --ignore-path ./.gitignore",
+    "lint:staged": "lint-staged",
+    "type-check": "tsc",
+    "prepare": "husky install"
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": "eslint --fix"
+    "*.{jsx,js,ts,tsx,scss,html}": [
+      "npm run format",
+      "git add ."
+    ]
   },
   "dependencies": {
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
