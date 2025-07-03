@@ -1,5 +1,5 @@
 import React from "react";
-import { Badge } from "antd";
+import { Badge, Image } from "antd";
 import { CheckCircleFilled } from "@ant-design/icons";
 import { PostProps } from "@/types/postType"
 
@@ -14,8 +14,9 @@ const PostPage = ({
 }: PostProps) => {
     return (
         <div className="flex gap-4 bg-[#1B1E32] text-white p-4 rounded-xl w-full max-w-md shadow-md">
-            <img
+            <Image
                 src={imageUrl}
+                preview={false}
                 alt={title}
                 className="w-24 h-32 object-cover rounded-lg"
             />

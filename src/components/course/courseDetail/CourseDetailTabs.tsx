@@ -1,8 +1,6 @@
-import { Image, Tabs, Typography } from "antd";
+import { Image, Tabs } from "antd";
 import { InstructorCourse } from "@/types/courseType";
 import { UserOutlined, MailOutlined, StarOutlined, BookOutlined, CheckCircleOutlined } from "@ant-design/icons";
-
-const { Text, Title } = Typography;
 
 interface CourseDetailTabsProps {
   description: string;
@@ -75,7 +73,7 @@ const OverviewSection = ({ description, learningPoints }: OverviewSectionProps) 
 
     <div className="mt-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-3">
-        What You'll Learn
+        What You&apos;ll Learn
       </h3>
       <ul className="space-y-2">
         {learningPoints.map((point, i) => (
@@ -101,7 +99,7 @@ const ReviewsSection = ({ reviews }: ReviewsSectionProps) => (
     <p className="mb-2 font-medium">What students are saying:</p>
     <ul className="text-sm text-gray-600 list-disc pl-5 space-y-1">
       {reviews.map((review, i) => (
-        <li key={i}>"{review}"</li>
+        <li key={i}>&quot;{review}&quot;</li>
       ))}
     </ul>
   </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { LoginForm } from "@/components/login/LoginForm";
-import GoogleIcon from "@p/svgs/google.svg"
+import GoogleIcon from "@/assets/svgs/google.svg"
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,7 @@ export default function LoginPage() {
       activateAccount(activateToken);
       router.replace('/login');
     }
-  }, []);
+  }, [activateAccount, router]);
   return (
     <div className="flex justify-center min-h-[90vh]  bg-gray-200 bg-cover bg-center">
       <div className="flex justify-center bg-white items-center py-2 px-2 h-full w-[1100px] my-auto mx-auto rounded-3xl">

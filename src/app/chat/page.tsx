@@ -5,8 +5,10 @@ import { useSearchParams } from "next/navigation";
 import { RootState } from "@/providers/store";
 import ChatBox from "@/app/chat/ChatBox";
 import UserList from "@/components/chat/UserList";
+import { Suspense } from "react";
+import { Spin } from "antd";
 
-export default function ChatPage() {
+function ChatPageComponent() {
   const searchParams = useSearchParams();
   const userParam = searchParams.get("user");
   const receiverUserId = userParam ? parseInt(userParam, 10) : null;
@@ -33,5 +35,13 @@ export default function ChatPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<Spin />}>
+      <ChatPageComponent />
+    </Suspense>
   );
 }

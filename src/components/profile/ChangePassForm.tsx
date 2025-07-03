@@ -1,11 +1,9 @@
 "use client";
 
 import { useChangePass } from "@/hooks/auth/useChangePass";
-import { Form, Input, Button, message } from "antd";
-import { useRouter } from "next/navigation";
+import { Form, Input, Button } from "antd";
 
 const ChangePassForm = () => {
-  const router = useRouter();
   const { mutate: changePassword, isPending } = useChangePass();
   const [form] = Form.useForm();
 

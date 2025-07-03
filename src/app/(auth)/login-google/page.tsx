@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/providers/store";
 import { setUser } from "@/providers/auth/reducer/authSlice";
 import { setStorageData } from "@/shared/store";
+import { Spin } from "antd";
 
-export default function LoginWithGoogle() {
+function LoginWithGoogle() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
@@ -38,7 +39,15 @@ export default function LoginWithGoogle() {
     } else {
       router.replace("/login");
     }
-  }, [searchParams]);
+  }, [searchParams, router, dispatch]);
 
   return <p className="text-center mt-20">Signing in with Google...</p>;
+}
+
+export default function LoginWithGooglePage() {
+  return (
+    <Suspense fallback={<Spin />}>
+      <LoginWithGoogle />
+    </Suspense>
+  );
 }

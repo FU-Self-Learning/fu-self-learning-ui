@@ -1,8 +1,8 @@
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import io from "socket.io-client";
 import type { Socket } from "@/types/socket.type";
 
-export const useSocket = (userId: Number) => {
+export const useSocket = (userId: number) => {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export const useSocket = (userId: Number) => {
     return () => {
       newSocket.disconnect();
     };
-  }, []);
+  }, [userId]);
 
   return socket;
 };

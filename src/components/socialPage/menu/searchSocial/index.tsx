@@ -18,14 +18,14 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
     isError: usersError,
     error: usersFetchError,
   } = useUsersSocial();
-  const { mutate: follow, isPending: isFollowing } = useFollow();
+  const { mutate: follow } = useFollow();
   const {
     data: followers,
     isLoading: followersLoading,
     isError: followersError,
     error: followersFetchError,
   } = useFollowers();
-  const { mutate: unfollow, isPending: isUnfollowing } = useUnfollow();
+  const { mutate: unfollow } = useUnfollow();
 
   // Track loading state for each specific user
   const [loadingStates, setLoadingStates] = React.useState<{

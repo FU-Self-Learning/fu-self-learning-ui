@@ -6,8 +6,6 @@ import {
   Input,
   Modal,
   Typography,
-  Upload,
-  message,
 } from "antd";
 import { useEffect, useState } from "react";
 import type { UploadFile } from "antd/es/upload/interface";

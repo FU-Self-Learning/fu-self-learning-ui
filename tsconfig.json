@@ -30,6 +30,6 @@
     ".next/types/**/*.ts",
     "src/app/page.tsx",
     "src/views/social/page.stsx"
-  ],
+, "next.config.js"  ],
   "exclude": ["node_modules"]
 }

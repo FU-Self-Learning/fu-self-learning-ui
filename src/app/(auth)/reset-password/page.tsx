@@ -1,11 +1,12 @@
 "use client";
 
-import { Form, Typography } from "antd";
+import { Form, Spin, Typography } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ResetPasswordForm } from "@/components/reset-pass/ResetPasswordForm";
 import { BannerPublic } from "@/components/common/BannerPublic";
 import { useResetPassword } from "@/hooks/auth/useResetPassword";
+import { Suspense } from "react";
 
 const ResetPassword = () => {
   const router = useRouter();
@@ -61,4 +62,10 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<Spin />}>
+      <ResetPassword />
+    </Suspense>
+  );
+}

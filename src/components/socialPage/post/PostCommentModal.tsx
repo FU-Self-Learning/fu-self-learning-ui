@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Avatar, Typography, Input, Button, Spin, Dropdown } from "antd";
+import { Modal, Avatar, Typography, Input, Button, Spin, Dropdown, Image } from "antd";
 import { UserOutlined, SendOutlined, MoreOutlined } from "@ant-design/icons";
 import { PostResponse } from "@/types/postType";
 import TimeAgoText from "./TimeAgoText";
@@ -127,10 +127,11 @@ const PostCommentModal = ({ visible, onClose, post }: PostCommentModalProps) => 
                                 }`}
                         >
                             {post.images.map((imgUrl: string, imgIndex: number) => (
-                                <img
+                                <Image
                                     key={imgIndex}
                                     src={imgUrl}
                                     alt={`Post image ${imgIndex + 1}`}
+                                    preview={false}
                                     className="w-full h-64 object-cover rounded"
                                 />
                             ))}

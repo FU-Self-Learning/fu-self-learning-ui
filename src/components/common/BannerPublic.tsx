@@ -1,5 +1,5 @@
 import Image from "next/image";
-import LoginBanner from "@p/images/Login.png";
+import LoginBanner from "@/assets/images/Login.png";
 import { Button } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";

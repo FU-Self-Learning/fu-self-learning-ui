@@ -1,6 +1,5 @@
 import api from "./index";
 import { APP_URL } from "../constants/apiConstants";
-import { UserInfo } from "@/providers/auth/types/authType";
 
 export interface LoginPayload {
   email: string;

@@ -4,14 +4,14 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
-import fast_easy from "@p/svgs/fast_easy.svg";
-import lovely from "@p/svgs/lovely.svg";
-import effective from "@p/svgs/effective.svg";
-import managements from "@p/svgs/management.svg";
-import infinity from "@p/svgs/infinity.svg";
-import security from "@p/svgs/security.svg";
-import touch_real_time from "@p/svgs/touch_real_time.svg";
-import setting from "@p/svgs/setting.svg";
+import fast_easy from "@/assets/svgs/fast_easy.svg";
+import lovely from "@/assets/svgs/lovely.svg";
+import effective from "@/assets/svgs/effective.svg";
+import managements from "@/assets/svgs/management.svg";
+import infinity from "@/assets/svgs/infinity.svg";
+import security from "@/assets/svgs/security.svg";
+import touch_real_time from "@/assets/svgs/touch_real_time.svg";
+import setting from "@/assets/svgs/setting.svg";
 import Section from "@/components/common/Section";
 import CardBenefit from "./CardBenefit";
 

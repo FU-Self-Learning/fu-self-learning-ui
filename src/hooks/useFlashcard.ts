@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface Topic {
   id: number;
@@ -29,7 +29,7 @@ export function useFlashcard(topicId: number = 1): UseFlashcardReturn {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchFlashcards = async () => {
+  const fetchFlashcards = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -46,11 +46,11 @@ export function useFlashcard(topicId: number = 1): UseFlashcardReturn {
     } finally {
       setLoading(false);
     }
-  };
+  }, [topicId]);
 
   useEffect(() => {
     fetchFlashcards();
-  }, [topicId]);
+  }, [topicId, fetchFlashcards]);
 
   return {
     flashcards,

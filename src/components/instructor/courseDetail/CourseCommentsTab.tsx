@@ -10,6 +10,8 @@ interface CourseCommentsTabProps {
 
 export const CourseCommentsTab = ({ courseId }: CourseCommentsTabProps) => {
   const router = useRouter();
+  console.log(courseId);
+
   return (
     <div>
       <Space className="mb-6">
@@ -25,7 +27,7 @@ export const CourseCommentsTab = ({ courseId }: CourseCommentsTabProps) => {
         className="bg-white rounded-lg"
         itemLayout="horizontal"
         dataSource={[]}
-        renderItem={(item) => (
+        renderItem={() => (
           <List.Item>
             <List.Item.Meta
               avatar={<Avatar icon={<UserOutlined />} />}

@@ -1,12 +1,10 @@
 "use client"
-import Image from "next/image"
-import Banner from "@p/svgs/banner.svg"
 import { useRouter } from "next/navigation";
-// import ProductSelection from "@/components/HomePage/productSection/index"
 import BenefitSection from "@/components/homePage/benefitSection/index"
 import PopularQuestion from "@/components/homePage/popularQuestion/index"
 import MembershipSection from "@/components/homePage/membershipSection/index"
 import CommunicationSection from "@/components/homePage/communicationSection/index"
+import Image from "next/image"
 
 export default function HomePage() {
     const router = useRouter()
@@ -14,10 +12,10 @@ export default function HomePage() {
         <>
             <div className="relative w-full h-screen">
                 <Image
-                    src={Banner}
+                    src='/svgs/banner.svg'
                     alt="image"
                     fill
-                    className="object-cover"
+                    className="object-cover w-full h-full"
                 />
                 <div className="absolute top-10 left-14 text-white flex flex-col items-start gap-4 max-w-xl">
                     <h1 className="text-[80px] font-bold w-[600px]">

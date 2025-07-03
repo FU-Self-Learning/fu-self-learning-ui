@@ -10,9 +10,10 @@ import {
   MenuProps,
   Popconfirm,
   message,
+  Image,
 } from "antd";
 import { UploadOutlined, MoreOutlined } from "@ant-design/icons";
-import Group from "@p/svgs/Group.svg";
+import Group from "@/assets/svgs/Group.svg";
 import TextArea from "antd/es/input/TextArea";
 import { useCreatePost } from "@/hooks/posts/useCreatePost";
 
@@ -207,9 +208,10 @@ const CreatePostModal = ({ open, onClose }: Props) => {
                 </div>
 
                 {isImage(file) && (
-                  <img
+                  <Image
                     src={URL.createObjectURL(file.originFileObj)}
                     alt={file.name}
+                    preview={false}
                     style={{
                       width: 100,
                       height: 100,
@@ -241,12 +243,13 @@ const CreatePostModal = ({ open, onClose }: Props) => {
                       style={{ width: 70, height: 70 }}
                       title={filter.name}
                     >
-                      <img
+                      <Image
                         src={URL.createObjectURL(
                           fileList.find((f) => f.uid === selectedFileUid)!
                             .originFileObj
                         )}
                         alt={filter.name}
+                        preview={false}
                         style={{
                           width: "100%",
                           height: "100%",

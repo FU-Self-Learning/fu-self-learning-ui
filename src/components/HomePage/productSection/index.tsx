@@ -1,4 +1,4 @@
-import TopThree from './cardProduct';
+import TopThree from './CardProduct';
 import LeaderboardTable from './Table';
 
 export const ProductSelectionPage = () => {

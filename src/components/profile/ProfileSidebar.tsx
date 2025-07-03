@@ -2,7 +2,6 @@
 
 import { Menu } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { useRouter } from "next/navigation";
 
 interface ProfileSidebarProps {
   activeTab: string;
@@ -10,7 +9,6 @@ interface ProfileSidebarProps {
 }
 
 const ProfileSidebar = ({ activeTab, setActiveTab }: ProfileSidebarProps) => {
-  const router = useRouter();
 
   const menuItems = [
     {
@@ -39,7 +37,7 @@ const ProfileSidebar = ({ activeTab, setActiveTab }: ProfileSidebarProps) => {
         mode="inline"
         items={menuItems}
         className="border-none"
-        defaultSelectedKeys={["profile"]}
+        defaultSelectedKeys={[activeTab]}
       />
     </div>
   );

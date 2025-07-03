@@ -1,5 +1,5 @@
 import { CoursesResponse } from "@/types/courseType";
-import { Card, Tag, Space, Progress, Button, Avatar, Typography } from "antd";
+import { Card, Tag, Space, Progress, Button, Avatar, Typography, Image } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
@@ -23,9 +23,10 @@ export default function CourseCard({
       className="rounded-lg shadow-sm"
       cover={
         <div className="relative h-40 overflow-hidden">
-          <img
+          <Image
             src={material.imageUrl}
             alt={material.title}
+            preview={false}
             className="object-cover w-full h-full"
           />
         </div>

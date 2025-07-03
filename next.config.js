@@ -1,8 +1,7 @@
-import type { NextConfig } from "next";
-import path from "path";
+const path = require("path");
 
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   devIndicators: false,
 
   webpack(config) {
@@ -13,9 +12,10 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
+
   sassOptions: {
     includePaths: [path.resolve(__dirname, "./src/styles")],
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

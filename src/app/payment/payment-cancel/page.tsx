@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Result, Button, Card } from "antd";
+import { Button, Card } from "antd";
 import { 
   CloseCircleOutlined, 
   HomeOutlined, 
@@ -33,7 +33,7 @@ const PaymentCancel = () => {
                 Payment Canceled
               </h1>
               <p className="text-xl text-gray-600 mb-6 leading-relaxed">
-                Your transaction was not completed. Don't worry, no charges were made to your account.
+                Your transaction was not completed. Don&apos;t worry, no charges were made to your account.
               </p>
               
               <div className="grid md:grid-cols-2 gap-4 mb-8 text-left">

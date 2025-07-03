@@ -12,7 +12,7 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: login,
     onSuccess: (data) => {
-      data.userInfo ? setStorageData("user", data.userInfo) : null;
+      if (data.userInfo) setStorageData("user", data.userInfo);
       setStorageData("accessToken", data.accessToken);
       setStorageData("refreshToken", data.refreshToken);
       dispatch(setUser(data.userInfo));

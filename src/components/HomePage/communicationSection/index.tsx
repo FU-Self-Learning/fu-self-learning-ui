@@ -3,11 +3,11 @@
 
 import { Carousel } from 'antd';
 import CardCommunication from './CardCommunication';
-import linhtran from "@p/svgs/linhtran.svg"
-import fort from "@p/svgs/Fort.svg"
-import Ethan from "@p/svgs/Ethan.svg"
-import ThuyT from "@p/svgs/ThuyT.svg"
-import Ellip from "@p/svgs/Ellip.svg"
+import linhtran from "@/assets/svgs/linhtran.svg"
+import fort from "@/assets/svgs/Fort.svg"
+import Ethan from "@/assets/svgs/Ethan.svg"
+import ThuyT from "@/assets/svgs/ThuyT.svg"
+import Ellip from "@/assets/svgs/Ellip.svg"
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useRef } from 'react';
 import { CarouselRef } from 'antd/es/carousel';

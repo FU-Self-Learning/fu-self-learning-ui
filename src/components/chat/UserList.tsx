@@ -23,7 +23,7 @@ interface UserListProps {
   currentUserId: number;
 }
 
-const UserList: React.FC<UserListProps> = ({ currentUserId }) => {
+const UserList: React.FC<UserListProps> = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

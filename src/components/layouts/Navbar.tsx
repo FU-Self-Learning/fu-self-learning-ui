@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { UserOutlined } from "@ant-design/icons";
 import Image from "next/image";
-import Login from "@p/svgs/logo.svg";
+import Login from "@/assets/svgs/logo.svg";
 import { logout } from "@/providers/auth/reducer/authSlice";
 import { getStorageData } from "@/shared/store";
 import { useHasMounted } from "@/hooks/useHasMounted";

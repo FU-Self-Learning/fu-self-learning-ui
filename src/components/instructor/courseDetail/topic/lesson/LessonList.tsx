@@ -22,7 +22,7 @@ export const LessonList = ({ lessons, onEdit, onDelete, isAdding }: LessonListPr
   if (lessons.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
-        No lessons added yet. Click "Add Lesson" to get started.
+        No lessons added yet. Click &quot;Add Lesson&quot; to get started.
       </div>
     );
   }

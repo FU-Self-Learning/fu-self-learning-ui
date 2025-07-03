@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Spin, Steps, message } from "antd";
-import { useRouter } from "next/navigation";
+import { Spin, Steps } from "antd";
 import { CourseDocument } from "@/components/instructor/createForm/CourseDocument";
 import { CourseInformation } from "@/components/instructor/createForm/CourseInformation";
 import { CourseThumbnail } from "@/components/instructor/createForm/CourseThumbnail";
@@ -28,7 +27,6 @@ const steps = [
 export default function CreateCourse() {
   const [current, setCurrent] = useState(0);
   const [formData, setFormData] = useState<Partial<CreateCourseRequest>>();
-  const router = useRouter();
   const { data: categories, isLoading: isLoadingCategories } = useCategories();
   const { mutate: createCourse, isPending: isLoadingCreateCourse } =
     useCreateCourse();

@@ -118,7 +118,7 @@ const PaymentSuccess = () => {
                 Thank you for choosing our platform! 🚀
               </p>
               <p className="text-sm text-gray-500">
-                We're excited to be part of your learning journey. Happy studying!
+                We&apos;re excited to be part of your learning journey. Happy studying!
               </p>
             </div>
           </div>

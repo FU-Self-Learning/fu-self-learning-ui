@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, Avatar, Button, Dropdown, Modal, message } from "antd";
+import { Card, Avatar, Button, Dropdown, Modal, message, Image } from "antd";
 import { UserOutlined, MessageOutlined, LikeOutlined, HeartFilled, MoreOutlined } from "@ant-design/icons";
 import { PostResponse } from "@/types/postType";
 import TimeAgoText from "./TimeAgoText";
@@ -105,10 +105,11 @@ const PostList = ({ posts }: PostListProps) => {
                                 }`}
                         >
                             {post.images.map((imgUrl: string, imgIndex: number) => (
-                                <img
+                                <Image
                                     key={imgIndex}
                                     src={imgUrl}
                                     alt={`Post image ${imgIndex + 1}`}
+                                    preview={false}
                                     className="w-full h-64 object-cover rounded"
                                 />
                             ))}

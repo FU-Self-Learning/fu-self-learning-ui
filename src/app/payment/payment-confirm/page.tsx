@@ -1,7 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useCourseDetail } from "@/hooks/course/useCourseDetail";
-import { Spin, Card, Button, Badge, Avatar, Divider, message } from "antd";
+import { Spin, Card, Button, Badge, Divider, message } from "antd";
 import {
   BookOutlined,
   ClockCircleOutlined,
@@ -13,6 +13,7 @@ import {
 } from "@ant-design/icons";
 import { createOrder } from "@/shared/api/order.api";
 import { useState } from "react";
+import { Suspense } from "react";
 
 const PaymentConfirm = () => {
   const searchParams = useSearchParams();
@@ -32,8 +33,12 @@ const PaymentConfirm = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full opacity-20 animate-pulse"></div>
           </div>
           <div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">Loading Course</h3>
-            <p className="text-gray-600">Please wait while we fetch the course details...</p>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              Loading Course
+            </h3>
+            <p className="text-gray-600">
+              Please wait while we fetch the course details...
+            </p>
           </div>
         </div>
       </div>
@@ -48,9 +53,12 @@ const PaymentConfirm = () => {
             <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center">
               <BookOutlined className="text-4xl text-gray-400" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">Course Not Found</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">
+              Course Not Found
+            </h2>
             <p className="text-gray-600 text-lg leading-relaxed">
-              We couldn't find the course you're looking for. It may have been removed or the link is incorrect.
+              We couldn&apos;t find the course you&apos;re looking for. It may
+              have been removed or the link is incorrect.
             </p>
           </div>
         </Card>
@@ -103,7 +111,8 @@ const PaymentConfirm = () => {
             Complete Your Enrollment
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Review your course selection and proceed with the payment to start your learning journey
+            Review your course selection and proceed with the payment to start
+            your learning journey
           </p>
         </div>
       </div>
@@ -118,7 +127,7 @@ const PaymentConfirm = () => {
                 <div className="absolute inset-0 bg-black/10"></div>
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
                 <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-white/10 rounded-full"></div>
-                
+
                 <div className="relative z-10">
                   <div className="flex items-start gap-6">
                     <div className="flex-1">
@@ -130,14 +139,17 @@ const PaymentConfirm = () => {
                           <div className="flex items-center gap-2 bg-white/20 rounded-full px-3 py-1">
                             <UserOutlined className="text-blue-200" />
                             <span className="text-sm font-medium">
-                              {courseDetail.instructor?.username || "Unknown Instructor"}
+                              {courseDetail.instructor?.username ||
+                                "Unknown Instructor"}
                             </span>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="flex items-center gap-1 bg-yellow-500/20 rounded-full px-3 py-1">
                             <StarFilled className="text-yellow-400 text-sm" />
-                            <span className="text-sm font-medium text-yellow-100">4.8 (2.1k reviews)</span>
+                            <span className="text-sm font-medium text-yellow-100">
+                              4.8 (2.1k reviews)
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -169,8 +181,12 @@ const PaymentConfirm = () => {
                           <PlayCircleOutlined className="text-white text-xl" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-gray-800 text-lg">Total Lessons</h4>
-                          <p className="text-blue-600 text-sm">Complete curriculum</p>
+                          <h4 className="font-bold text-gray-800 text-lg">
+                            Total Lessons
+                          </h4>
+                          <p className="text-blue-600 text-sm">
+                            Complete curriculum
+                          </p>
                         </div>
                       </div>
                       <p className="text-3xl font-bold text-blue-700">
@@ -186,8 +202,12 @@ const PaymentConfirm = () => {
                           <ClockCircleOutlined className="text-white text-xl" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-gray-800 text-lg">Course Duration</h4>
-                          <p className="text-green-600 text-sm">Total learning time</p>
+                          <h4 className="font-bold text-gray-800 text-lg">
+                            Course Duration
+                          </h4>
+                          <p className="text-green-600 text-sm">
+                            Total learning time
+                          </p>
                         </div>
                       </div>
                       <p className="text-3xl font-bold text-green-700">
@@ -208,7 +228,9 @@ const PaymentConfirm = () => {
                   <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
                     <CreditCardOutlined className="text-white text-2xl" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">Order Summary</h3>
+                  <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                    Order Summary
+                  </h3>
                   <p className="text-gray-600">Review your purchase details</p>
                   <Divider className="my-4" />
                 </div>
@@ -216,7 +238,9 @@ const PaymentConfirm = () => {
                 <div className="space-y-6 mb-8">
                   <div className="bg-gray-50 rounded-lg p-4">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-600 font-medium">Course Price:</span>
+                      <span className="text-gray-600 font-medium">
+                        Course Price:
+                      </span>
                       <span className="font-bold text-gray-800 text-lg">
                         {isFree ? (
                           <Badge count="FREE" className="bg-green-500" />
@@ -228,7 +252,9 @@ const PaymentConfirm = () => {
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-medium">Platform Fee:</span>
+                    <span className="text-gray-600 font-medium">
+                      Platform Fee:
+                    </span>
                     <Badge count="FREE" className="bg-blue-500" />
                   </div>
 
@@ -236,7 +262,9 @@ const PaymentConfirm = () => {
 
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
                     <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-gray-800">Total Amount:</span>
+                      <span className="text-xl font-bold text-gray-800">
+                        Total Amount:
+                      </span>
                       <span className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                         {isFree ? "FREE" : formatPrice(courseDetail.price)}
                       </span>
@@ -259,7 +287,7 @@ const PaymentConfirm = () => {
                       Processing Payment...
                     </span>
                   ) : isFree ? (
-                    "Enroll Now - It's Free!"
+                    "Enroll Now - It&apos;s Free!"
                   ) : (
                     "Complete Purchase"
                   )}
@@ -280,4 +308,10 @@ const PaymentConfirm = () => {
   );
 };
 
-export default PaymentConfirm;
+export default function PaymentConfirmPage() {
+  return (
+    <Suspense fallback={<Spin />}>
+      <PaymentConfirm />
+    </Suspense>
+  );
+}

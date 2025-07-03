@@ -53,6 +53,7 @@ export const LessonForm = ({ lesson, isEditing = false, onSave, onCancel }: Less
       });
       onSuccess?.("ok");
     } catch (error) {
+      console.log(error);
       message.error("Upload failed");
     }
   };

@@ -231,7 +231,7 @@ const DoExam = () => {
         QUESTIONS_PER_PAGE={QUESTIONS_PER_PAGE}
         pageIndex={pageIndex}
         answers={answers}
-        questions={questions}
+        questions={questions as any}
         markedQuestions={markedQuestions}
       />
 
@@ -311,7 +311,7 @@ const DoExam = () => {
                   ) : (
                     <Checkbox.Group
                       onChange={(checkedValues) => handleMultipleChange(question.id, checkedValues)}
-                      value={answers[question.id] || []}
+                      value={answers[question.id] as string[] || []}
                       className="flex flex-col gap-3"
                     >
                       {question.options.map((opt) => (

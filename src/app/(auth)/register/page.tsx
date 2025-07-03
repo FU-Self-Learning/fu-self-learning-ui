@@ -5,7 +5,7 @@ import { RegisterForm } from "@/components/register/RegisterForm";
 import { Typography, Button, Divider } from "antd";
 import { useState } from "react";
 import Image from "next/image";
-import GoogleIcon from "@p/svgs/google.svg"
+import GoogleIcon from "@/assets/svgs/google.svg"
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { BannerPublic } from "@/components/common/BannerPublic";

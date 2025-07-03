@@ -1,4 +1,5 @@
 // components/CourseCard.tsx
+import { Image } from "antd";
 import React from "react";
 
 interface CourseCardProps {
@@ -18,7 +19,8 @@ const CourseCard: React.FC<CourseCardProps> = ({
 }) => {
   return (
     <div className="flex border shadow-md px-6 py-10 hover:shadow-lg transition bg-white w-full min-h-0">
-      <img
+      <Image
+        preview={false}
         src={imageSrc}
         alt={title}
         className="w-24 h-24 object-contain mr-4 flex-shrink-0"

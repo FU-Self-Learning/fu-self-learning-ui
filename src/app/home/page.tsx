@@ -1,15 +1,13 @@
 import Image from "next/image"
-import Banner from "@p/svgs/banner.svg"
-// import ProductSection from "@/components/HomePage/productSection/index"
-import BenefitSection from "@/components/HomePage/benefitSection/index"
-import PopularQuestion from "@/components/HomePage/popularQuestion/index"
+import BenefitSection from "@/components/homePage/benefitSection/index"
+import PopularQuestion from "@/components/homePage/popularQuestion/index"
 
 export default function HomePage() {
     return (
         <>
             <div className="relative w-full h-screen">
                 <Image
-                    src={Banner}
+                    src='/svgs/banner.svg'
                     alt="image"
                     fill
                     className="object-cover"

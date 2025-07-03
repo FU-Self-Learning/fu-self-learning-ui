@@ -85,6 +85,7 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
       setIsChanged(true);
       onSuccess?.("ok");
     } catch (error) {
+      console.log(error);
       message.error("Upload failed");
     }
   };
@@ -105,6 +106,7 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
       setIsChanged(true);
       onSuccess?.("ok");
     } catch (error) {
+      console.log(error);
       message.error("Upload failed");
     }
   };
@@ -125,6 +127,7 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
       setIsChanged(true);
       onSuccess?.("ok");
     } catch (error) {
+      console.log(error);
       message.error("Upload failed");
     }
   };
