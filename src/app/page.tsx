@@ -8,7 +8,7 @@ import Image from "next/image"
 
 export default function HomePage() {
     const router = useRouter()
-    
+    const aaa = 123;
     return (
         <>
             <div className="relative w-full h-screen">
