@@ -2,13 +2,22 @@ import { Button, Collapse, Divider, Empty, Space } from "antd";
 import { LockOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { LessonInTopic, TopicResponse } from "@/types/topicType";
 import { formatDuration } from "@/utils/convertTime";
+import { useRouter } from "next/navigation";
+
 
 interface CourseDetailContentProps {
   sections: TopicResponse[];
   onLessonSelect: (lesson: LessonInTopic) => void;
+  courseId: string;
 }
 
-const CourseDetailContent = ({ sections, onLessonSelect }: CourseDetailContentProps) => {
+const CourseDetailContent = ({ sections, onLessonSelect, courseId }: CourseDetailContentProps) => {
+  const router = useRouter();
+  const handleEnroll = () => {
+    const target = `/payment/payment-confirm?courseId=${courseId}`;
+    router.push(target);
+  };
+
   const collapseItems = sections.sort((a, b) => a.id - b.id).map((section) => ({
     key: section.id.toString(),
     label: (
@@ -47,8 +56,8 @@ const CourseDetailContent = ({ sections, onLessonSelect }: CourseDetailContentPr
     <div className="bg-white rounded-lg shadow-sm border p-4 h-fit">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-medium">Course content</h2>
-        <Button type="primary" icon={<LockOutlined />}>
-          Enroll Now
+        <Button type="primary" icon={<LockOutlined />} onClick={handleEnroll}>
+          Enroll
         </Button>
       </div>
       <Divider size="small" />

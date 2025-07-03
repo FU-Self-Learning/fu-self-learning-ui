@@ -11,6 +11,7 @@ import CustomAvartar from "@/components/profile/CustomAvatar";
 import ProfileForm from "@/components/profile/ProfileForm";
 import ProfileSidebar from "@/components/profile/ProfileSidebar";
 import ChangePassForm from "@/components/profile/ChangePassForm";
+import InstructorRequestForm from "@/components/profile/InstructorRequestForm";
 const Profile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const { data } = useProfile();
@@ -38,10 +39,15 @@ const Profile = () => {
   };
 
   const renderBody = () => {
-    if (activeTab === "profile") {
-      return renderProfileInfo();
-    } else if (activeTab === "password") {
-      return <ChangePassForm />;
+    switch (activeTab) {
+      case "profile":
+        return renderProfileInfo();
+      case "password":
+        return <ChangePassForm />;
+      case "instructorRequest":
+        return <InstructorRequestForm />;
+      default:
+        return null;
     }
   };
 

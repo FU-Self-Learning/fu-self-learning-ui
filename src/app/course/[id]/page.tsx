@@ -48,6 +48,7 @@ const CourseDetail = () => {
       <CourseDetailContent 
         sections={topics || []} 
         onLessonSelect={setSelectedLesson}
+        courseId={id}
       />
     </div>
   );

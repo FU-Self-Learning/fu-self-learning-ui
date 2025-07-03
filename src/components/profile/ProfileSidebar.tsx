@@ -25,6 +25,12 @@ const ProfileSidebar = ({ activeTab, setActiveTab }: ProfileSidebarProps) => {
       label: "Change Password",
       onClick: () => setActiveTab("password"),
     },
+    {
+      key: "instructorRequest",
+      icon: <UserOutlined />,
+      label: "Become an Instructor",
+      onClick: () => setActiveTab("instructorRequest"),
+    },
   ];
 
   return (

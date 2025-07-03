@@ -27,11 +27,13 @@ export interface CourseDetailResponse {
     id: string;
     title: string;
     description: string;
+    imageUrl?: string;
     videoIntroUrl: string;
     createdAt: string;
     totalLessons: number;
     totalDuration: number;
     instructor: InstructorCourse;
+    price: number;
     topics: TopicCourse[];
     categories: CategoryCourse[];
 }
