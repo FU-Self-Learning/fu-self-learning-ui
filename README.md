@@ -1,5 +1,5 @@
 # FU Self Learning UI
-HHE
+HHE2
 A modern web application built with Next.js, TypeScript, and Ant Design for the FU Self Learning platform.
 
 ## 🚀 Features
