@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Modal, Typography } from "antd";
+import { Modal, Typography } from 'antd';
 
 interface DeleteTopicModalProps {
   isOpen: boolean;
@@ -17,12 +17,12 @@ export const DeleteTopicModal = ({
 }: DeleteTopicModalProps) => {
   return (
     <Modal
-      title="Delete Topic"
+      title='Delete Topic'
       open={isOpen}
       onOk={onConfirm}
       onCancel={onClose}
-      okText="Delete"
-      cancelText="Cancel"
+      okText='Delete'
+      cancelText='Cancel'
       okButtonProps={{ danger: true, loading: isLoading }}
     >
       <Typography.Text>
@@ -30,4 +30,4 @@ export const DeleteTopicModal = ({
       </Typography.Text>
     </Modal>
   );
-}; 
+};

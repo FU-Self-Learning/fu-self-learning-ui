@@ -1,25 +1,24 @@
-
 interface IProps {
-    flipY?: boolean
-    color?: string
+  flipY?: boolean;
+  color?: string;
 }
-export default function OceanWave({ flipY = false, color = "#0A092D" }: IProps) {
-    return (
-        <div className={`h-[0.1px] ${flipY ? "-scale-y-100" : ""}`}>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 800 80"
-                className="w-full mb-1"
-                style={{
-                    filter: "drop-shadow( 0px 3px rgba(0, 0, 0, 0.4))",
-                }}
-            >
-                <path
-                    fill={color}
-                    // fill="#0A092D"
-                    fillOpacity="1"
-                    transform="scale(1, -1) translate(0, -47)"
-                    d="M0,40 
+export default function OceanWave({ flipY = false, color = '#0A092D' }: IProps) {
+  return (
+    <div className={`h-[0.1px] ${flipY ? '-scale-y-100' : ''}`}>
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        viewBox='0 0 800 80'
+        className='w-full mb-1'
+        style={{
+          filter: 'drop-shadow( 0px 3px rgba(0, 0, 0, 0.4))',
+        }}
+      >
+        <path
+          fill={color}
+          // fill="#0A092D"
+          fillOpacity='1'
+          transform='scale(1, -1) translate(0, -47)'
+          d='M0,40 
      Q10,42 20,41 
      Q30,39 40,40 
      Q50,42 60,41 
@@ -60,9 +59,9 @@ export default function OceanWave({ flipY = false, color = "#0A092D" }: IProps) 
      Q750,40 760,41 
      Q770,42 780,40 
      Q790,39 800,41 
-     V80 H0 Z"
-                />
-            </svg>
-        </div >
-    )
+     V80 H0 Z'
+        />
+      </svg>
+    </div>
+  );
 }

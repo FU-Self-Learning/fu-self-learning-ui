@@ -1,6 +1,6 @@
-import { Empty } from "antd";
-import { PlayCircleOutlined } from "@ant-design/icons";
-import { useRef, useState } from "react";
+import { Empty } from 'antd';
+import { PlayCircleOutlined } from '@ant-design/icons';
+import { useRef, useState } from 'react';
 
 interface VideoPlayerWithOverlayProps {
   src?: string;
@@ -13,7 +13,7 @@ interface VideoPlayerWithOverlayProps {
 const VideoPlayerWithOverlay = ({
   src,
   poster,
-  className = "",
+  className = '',
   rounded = true,
   height,
 }: VideoPlayerWithOverlayProps) => {
@@ -23,7 +23,7 @@ const VideoPlayerWithOverlay = ({
   const handlePlay = () => {
     if (videoRef.current) {
       videoRef.current.play();
-      videoRef.current.setAttribute("controls", "true");
+      videoRef.current.setAttribute('controls', 'true');
       setIsPlaying(true);
     }
   };
@@ -32,10 +32,10 @@ const VideoPlayerWithOverlay = ({
     return (
       <div
         className={`flex items-center justify-center text-gray-400 bg-gray-100 w-full ${height} ${
-          rounded ? "rounded-lg" : ""
+          rounded ? 'rounded-lg' : ''
         } mb-4 ${className}`}
       >
-        <Empty description="No video intro available" />
+        <Empty description='No video intro available' />
       </div>
     );
   }
@@ -43,24 +43,22 @@ const VideoPlayerWithOverlay = ({
   return (
     <div
       className={`relative w-full ${height} ${
-        rounded ? "rounded-lg" : ""
+        rounded ? 'rounded-lg' : ''
       } overflow-hidden mb-4 ${className}`}
     >
       <video
         ref={videoRef}
         src={src}
         poster={poster ?? src}
-        className="w-full h-full object-cover"
+        className='w-full h-full object-cover'
       />
       {!isPlaying && (
         <div
-          className="absolute inset-0 flex items-center justify-center bg-gray-300 cursor-pointer transition-all duration-200 hover:bg-opacity-80"
+          className='absolute inset-0 flex items-center justify-center bg-gray-300 cursor-pointer transition-all duration-200 hover:bg-opacity-80'
           onClick={handlePlay}
         >
-          <div className="flex items-center justify-center w-20 h-20 rounded-full bg-opacity-20 hover:bg-opacity-30 transition">
-            <PlayCircleOutlined
-              className="text-5xl drop-shadow"
-            />
+          <div className='flex items-center justify-center w-20 h-20 rounded-full bg-opacity-20 hover:bg-opacity-30 transition'>
+            <PlayCircleOutlined className='text-5xl drop-shadow' />
           </div>
         </div>
       )}

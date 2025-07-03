@@ -9,4 +9,4 @@ export interface Lesson {
 export interface CreateLessonData {
   title: string;
   description: string;
-} 
+}

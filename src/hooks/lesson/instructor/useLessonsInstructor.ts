@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { getLessonsInstructor } from "@/shared/api/lesson.api";
+import { useQuery } from '@tanstack/react-query';
+import { getLessonsInstructor } from '@/shared/api/lesson.api';
 
 export const useLessonsInstructor = (topicId: string) => {
   return useQuery({
-    queryKey: ["lessonsInstructor", topicId],
+    queryKey: ['lessonsInstructor', topicId],
     queryFn: () => getLessonsInstructor(topicId),
     enabled: !!topicId,
   });

@@ -1,11 +1,11 @@
-import React from "react";
-import { Input, Avatar, Button, Card, Typography, Spin, message } from "antd";
-import { CloseCircleOutlined, SearchOutlined } from "@ant-design/icons";
-import { motion } from "framer-motion";
-import { useUsersSocial } from "@/hooks/user/useUsersSocial";
-import { useFollow } from "@/hooks/follow/useFollow";
-import { useFollowers } from "@/hooks/follow/useFollowers";
-import { useUnfollow } from "@/hooks/follow/useUnfollow";
+import React from 'react';
+import { Input, Avatar, Button, Card, Typography, Spin, message } from 'antd';
+import { CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { motion } from 'framer-motion';
+import { useUsersSocial } from '@/hooks/user/useUsersSocial';
+import { useFollow } from '@/hooks/follow/useFollow';
+import { useFollowers } from '@/hooks/follow/useFollowers';
+import { useUnfollow } from '@/hooks/follow/useUnfollow';
 
 interface SearchSocialPageProps {
   handleCloseSearch: () => void;
@@ -34,75 +34,73 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
 
   React.useEffect(() => {
     if (usersError) {
-      message.error("Failed to load users: " + usersFetchError?.message);
+      message.error('Failed to load users: ' + usersFetchError?.message);
     }
     if (followersError) {
-      message.error(
-        "Failed to load followers: " + followersFetchError?.message
-      );
+      message.error('Failed to load followers: ' + followersFetchError?.message);
     }
   }, [usersError, usersFetchError, followersError, followersFetchError]);
 
   const handleFollow = (id: number) => {
     // Set loading state for this specific user
-    setLoadingStates(prev => ({
+    setLoadingStates((prev) => ({
       ...prev,
-      [id]: { ...prev[id], follow: true }
+      [id]: { ...prev[id], follow: true },
     }));
-    
+
     follow(id, {
       onSuccess: () => {
         // Clear loading state on success
-        setLoadingStates(prev => ({
+        setLoadingStates((prev) => ({
           ...prev,
-          [id]: { ...prev[id], follow: false }
+          [id]: { ...prev[id], follow: false },
         }));
       },
       onError: () => {
         // Clear loading state on error
-        setLoadingStates(prev => ({
+        setLoadingStates((prev) => ({
           ...prev,
-          [id]: { ...prev[id], follow: false }
+          [id]: { ...prev[id], follow: false },
         }));
-      }
+      },
     });
   };
 
   const handleUnfollow = (id: number) => {
     // Set loading state for this specific user
-    setLoadingStates(prev => ({
+    setLoadingStates((prev) => ({
       ...prev,
-      [id]: { ...prev[id], unfollow: true }
+      [id]: { ...prev[id], unfollow: true },
     }));
-    
+
     unfollow(id, {
       onSuccess: () => {
         // Clear loading state on success
-        setLoadingStates(prev => ({
+        setLoadingStates((prev) => ({
           ...prev,
-          [id]: { ...prev[id], unfollow: false }
+          [id]: { ...prev[id], unfollow: false },
         }));
       },
       onError: () => {
         // Clear loading state on error
-        setLoadingStates(prev => ({
+        setLoadingStates((prev) => ({
           ...prev,
-          [id]: { ...prev[id], unfollow: false }
+          [id]: { ...prev[id], unfollow: false },
         }));
-      }
+      },
     });
   };
 
   if (usersLoading || followersLoading) {
     return (
-      <div className="flex justify-center items-center h-full">
-        <Spin size="large" />
+      <div className='flex justify-center items-center h-full'>
+        <Spin size='large' />
       </div>
     );
   }
 
   if (usersError || followersError) {
-    return <div className="text-red-500">Error loading data.</div>;
+    return <div className='text-red-500'>Error loading data.</div>;
   }
 
   // Create a set of follower IDs for quick lookup
@@ -113,71 +111,65 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-96 bg-white rounded-2xl shadow-lg p-6 h-[calc(100vh-2rem)] overflow-y-auto"
+      className='w-96 bg-white rounded-2xl shadow-lg p-6 h-[calc(100vh-2rem)] overflow-y-auto'
     >
-      <div className="mb-6">
-        <div className="flex flex-row justify-between items-center  !h-full ">
-          <Typography.Title
-            level={4}
-            className=" !text-center !text-gray-800 !text-2xl !font-bold"
-          >
+      <div className='mb-6'>
+        <div className='flex flex-row justify-between items-center  !h-full '>
+          <Typography.Title level={4} className=' !text-center !text-gray-800 !text-2xl !font-bold'>
             Search
           </Typography.Title>
-          <CloseCircleOutlined
-            className="text-3xl !text-black"
-            onClick={handleCloseSearch}
-          />
+          <CloseCircleOutlined className='text-3xl !text-black' onClick={handleCloseSearch} />
         </div>
         <Input
-          size="large"
-          placeholder="Search users..."
-          prefix={<SearchOutlined className="text-gray-400" />}
-          className="!rounded-xl !border-gray-200 hover:!border-blue-400 focus:!border-blue-400 !shadow-sm"
+          size='large'
+          placeholder='Search users...'
+          prefix={<SearchOutlined className='text-gray-400' />}
+          className='!rounded-xl !border-gray-200 hover:!border-blue-400 focus:!border-blue-400 !shadow-sm'
         />
       </div>
 
-      <div className="space-y-4">
+      <div className='space-y-4'>
         {users?.map((item, index) => {
           const isCurrentlyFollowing = followedUserIds.has(item.id);
-          const userLoadingState = loadingStates[Number(item.id)] || { follow: false, unfollow: false };
-          
+          const userLoadingState = loadingStates[Number(item.id)] || {
+            follow: false,
+            unfollow: false,
+          };
+
           return (
             <Card
               styles={{ body: { padding: 10 } }}
               key={index}
-              className="!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] cursor-pointer !mb-2"
+              className='!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] cursor-pointer !mb-2'
             >
-              <div className="flex items-center gap-4">
+              <div className='flex items-center gap-4'>
                 <Avatar
                   size={48}
                   src={item.avatarUrl}
-                  className="!flex !items-center !justify-center"
+                  className='!flex !items-center !justify-center'
                 />
-                <div className="flex-1 min-w-0">
-                  <Typography.Text
-                    strong
-                    className="block text-gray-800 text-lg truncate"
-                  >
+                <div className='flex-1 min-w-0'>
+                  <Typography.Text strong className='block text-gray-800 text-lg truncate'>
                     {item.username}
                   </Typography.Text>
-                  <Typography.Text className="text-sm text-gray-500 block">
+                  <Typography.Text className='text-sm text-gray-500 block'>
                     {item.email}
                   </Typography.Text>
                 </div>
                 {isCurrentlyFollowing ? (
                   <Button
-                    type="default"
+                    type='default'
                     danger
-                    className="!rounded-full !px-4"
+                    className='!rounded-full !px-4'
                     onClick={() => handleUnfollow(Number(item.id))}
                     loading={userLoadingState.unfollow}
                   >
-                    UnFollow    
+                    UnFollow
                   </Button>
                 ) : (
                   <Button
-                    type="primary"
-                    className="!bg-blue-500 hover:!bg-blue-600 !rounded-full !px-4"
+                    type='primary'
+                    className='!bg-blue-500 hover:!bg-blue-600 !rounded-full !px-4'
                     onClick={() => handleFollow(Number(item.id))}
                     loading={userLoadingState.follow}
                   >

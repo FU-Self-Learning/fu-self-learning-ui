@@ -1,4 +1,4 @@
-import { UserInfo } from "@/providers/auth/types/authType";
+import { UserInfo } from '@/providers/auth/types/authType';
 
 export interface CommentResponse {
   id: number;

@@ -1,5 +1,5 @@
-import { APP_URL } from "../constants/apiConstants";
-import api from "./index";
+import { APP_URL } from '../constants/apiConstants';
+import api from './index';
 
 export const createOrder = async (courseId: number, amount: number, token: string) => {
   const response = await api.post(
@@ -9,7 +9,7 @@ export const createOrder = async (courseId: number, amount: number, token: strin
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   return response.data;
 };

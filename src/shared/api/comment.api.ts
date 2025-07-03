@@ -1,13 +1,11 @@
-import { CommentResponse } from "@/types/commentType";
-import { APP_URL } from "../constants/apiConstants";
-import api from "./index";
+import { CommentResponse } from '@/types/commentType';
+import { APP_URL } from '../constants/apiConstants';
+import api from './index';
 
-export const getCommentsByPostId = async (
-  postId: number
-): Promise<CommentResponse[]> => {
+export const getCommentsByPostId = async (postId: number): Promise<CommentResponse[]> => {
   const response = await api.get(`${APP_URL}/commentsPost/${postId}`, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     },
   });
   return response.data;
@@ -16,7 +14,7 @@ export const getCommentsByPostId = async (
 export const createComment = async (
   postId: number,
   content: string,
-  parentId?: null | number
+  parentId?: null | number,
 ): Promise<CommentResponse> => {
   try {
     const response = await api.post(
@@ -28,13 +26,13 @@ export const createComment = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
-      }
+      },
     );
     return response.data;
   } catch (error) {
-    console.error("Error creating comment:", error);
+    console.error('Error creating comment:', error);
     throw error;
   }
 };

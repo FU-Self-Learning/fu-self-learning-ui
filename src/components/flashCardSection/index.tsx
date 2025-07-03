@@ -1,10 +1,12 @@
-"use client";
-import { useState, useCallback, useEffect } from "react";
-import FlashCard from "./FlashCard";
-import FlashCardControls from "./FlashCardControls";
-import { useFlashcard } from "@/hooks/useFlashcard";
+'use client';
+import { useState, useCallback, useEffect } from 'react';
+import FlashCard from './FlashCard';
+import FlashCardControls from './FlashCardControls';
+import { useFlashcard } from '@/hooks/useFlashcard';
 
-interface SectionProps { mode: string; }
+interface SectionProps {
+  mode: string;
+}
 
 export default function FlashCardSection({ mode }: SectionProps) {
   const { flashcards, loading, error } = useFlashcard();
@@ -22,16 +24,16 @@ export default function FlashCardSection({ mode }: SectionProps) {
   const card = shuffledCards[questionIdx];
 
   const next = useCallback(() => {
-    setQuestionIdx(i => (i + 1) % total);
+    setQuestionIdx((i) => (i + 1) % total);
     setFlipped(false);
   }, [total]);
 
   const prev = useCallback(() => {
-    setQuestionIdx(i => (i - 1 + total) % total);
+    setQuestionIdx((i) => (i - 1 + total) % total);
     setFlipped(false);
   }, [total]);
 
-  const flip = useCallback(() => setFlipped(f => !f), []);
+  const flip = useCallback(() => setFlipped((f) => !f), []);
 
   const shuffle = useCallback(() => {
     const newShuffled = [...shuffledCards];
@@ -53,32 +55,32 @@ export default function FlashCardSection({ mode }: SectionProps) {
   }, []);
 
   if (loading) {
-    return <div className="container mx-auto px-4 py-8">Loading flashcards...</div>;
+    return <div className='container mx-auto px-4 py-8'>Loading flashcards...</div>;
   }
 
   if (error) {
-    return <div className="container mx-auto px-4 py-8 text-red-500">Error: {error}</div>;
+    return <div className='container mx-auto px-4 py-8 text-red-500'>Error: {error}</div>;
   }
 
   if (!flashcards || flashcards.length === 0) {
-    return <div className="container mx-auto px-4 py-8">No flashcards available.</div>;
+    return <div className='container mx-auto px-4 py-8'>No flashcards available.</div>;
   }
 
   if (!card) {
-    return <div className="container mx-auto px-4 py-8">Loading card data...</div>;
+    return <div className='container mx-auto px-4 py-8'>Loading card data...</div>;
   }
 
   return (
-    <section className="space-y-6">
+    <section className='space-y-6'>
       {/* Flashcard mode */}
-      {mode === "Flashcards" && (
+      {mode === 'Flashcards' && (
         <>
-          <FlashCard 
-            data={card} 
-            flipped={flipped} 
-            onFlip={flip} 
-            index={questionIdx + 1} 
-            total={flashcards.length} 
+          <FlashCard
+            data={card}
+            flipped={flipped}
+            onFlip={flip}
+            index={questionIdx + 1}
+            total={flashcards.length}
           />
 
           <FlashCardControls
@@ -89,29 +91,29 @@ export default function FlashCardSection({ mode }: SectionProps) {
             onFullscreen={handleFullscreen}
             showExtras
           />
-          <div className="text-center text-sm text-gray-400">
-            Created by <span className="font-medium text-gray-500">hongphuc</span>
+          <div className='text-center text-sm text-gray-400'>
+            Created by <span className='font-medium text-gray-500'>hongphuc</span>
           </div>
         </>
       )}
 
       {/* Learn mode */}
-      {mode === "Learn" && (
-        <div className="grid gap-6">
+      {mode === 'Learn' && (
+        <div className='grid gap-6'>
           {shuffledCards.map((c, i) => (
             <div
               key={i}
-              className="rounded-2xl border border-gray-200 bg-white p-6 shadow transition hover:shadow-md"
+              className='rounded-2xl border border-gray-200 bg-white p-6 shadow transition hover:shadow-md'
             >
-              <div className="flex justify-between items-start gap-6">
+              <div className='flex justify-between items-start gap-6'>
                 {/* Front */}
-                <div className="flex-1 text-center space-y-2">
-                  <div className="text-2xl font-semibold text-gray-800">{c.front_text}</div>
+                <div className='flex-1 text-center space-y-2'>
+                  <div className='text-2xl font-semibold text-gray-800'>{c.front_text}</div>
                 </div>
 
                 {/* Back */}
-                <div className="flex-1 text-center space-y-2">
-                  <div className="text-2xl font-semibold text-blue-600">{c.back_text}</div>
+                <div className='flex-1 text-center space-y-2'>
+                  <div className='text-2xl font-semibold text-blue-600'>{c.back_text}</div>
                 </div>
               </div>
             </div>

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Form, Typography } from "antd";
-import { useRouter } from "next/navigation";
-import { useForgotPassword } from "@/hooks/auth/useForgotPassword";
-import { motion, AnimatePresence } from "framer-motion";
-import { ForgotPasswordForm } from "@/components/forgot-pass/ForgotPasswordForm";
-import { BannerPublic } from "@/components/common/BannerPublic";
+import { Form, Typography } from 'antd';
+import { useRouter } from 'next/navigation';
+import { useForgotPassword } from '@/hooks/auth/useForgotPassword';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ForgotPasswordForm } from '@/components/forgot-pass/ForgotPasswordForm';
+import { BannerPublic } from '@/components/common/BannerPublic';
 
 const ForgotPassword = () => {
   const router = useRouter();
@@ -15,36 +15,29 @@ const ForgotPassword = () => {
   const handleSubmit = (values: { email: string }) => {
     forgotPassword(values, {
       onSuccess: () => {
-        router.push("/login");
+        router.push('/login');
       },
     });
   };
 
   return (
-    <div className="flex justify-center min-h-[90vh]  bg-gray-200 bg-cover bg-center">
-      <div className="flex justify-center bg-white items-center py-2 px-2 h-full w-[1100px] my-auto mx-auto rounded-3xl">
+    <div className='flex justify-center min-h-[90vh]  bg-gray-200 bg-cover bg-center'>
+      <div className='flex justify-center bg-white items-center py-2 px-2 h-full w-[1100px] my-auto mx-auto rounded-3xl'>
         <BannerPublic />
-        <div className="h-full lg:w-1/2 flex flex-col items-center justify-center ">
-          <div className="w-full max-w-md bg-white px-8 py-4 rounded-2xl">
-            <Typography.Title
-              level={3}
-              className="block text-center mb-6 text-gray-500"
-            >
+        <div className='h-full lg:w-1/2 flex flex-col items-center justify-center '>
+          <div className='w-full max-w-md bg-white px-8 py-4 rounded-2xl'>
+            <Typography.Title level={3} className='block text-center mb-6 text-gray-500'>
               Forgot Password
             </Typography.Title>
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode='wait'>
               <motion.div
-                key="login"
+                key='login'
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.3 }}
               >
-                <ForgotPasswordForm
-                  form={form}
-                  handleSubmit={handleSubmit}
-                  isPending={isPending}
-                />
+                <ForgotPasswordForm form={form} handleSubmit={handleSubmit} isPending={isPending} />
               </motion.div>
             </AnimatePresence>
           </div>

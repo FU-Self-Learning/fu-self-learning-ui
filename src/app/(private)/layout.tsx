@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import { ReactNode, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { getStorageData } from "@/shared/store";
+import { ReactNode, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { getStorageData } from '@/shared/store';
 
 interface PrivateRouteProps {
   children: ReactNode;
@@ -13,7 +13,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const token = getStorageData("accessToken");
+    const token = getStorageData('accessToken');
     setAuthenticated(!!token);
   }, []);
 
@@ -22,7 +22,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   }
 
   if (!authenticated) {
-    router.push("/login");
+    router.push('/login');
     return null;
   }
 

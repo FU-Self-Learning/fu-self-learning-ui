@@ -1,62 +1,55 @@
-import { Image, Table } from "antd";
+import { Image, Table } from 'antd';
 
 const columns = [
   {
-    title: "Rank",
-    dataIndex: "rank",
-    key: "rank",
+    title: 'Rank',
+    dataIndex: 'rank',
+    key: 'rank',
   },
   {
-    title: "User name",
-    dataIndex: "username",
-    key: "username",
+    title: 'User name',
+    dataIndex: 'username',
+    key: 'username',
     render: (text: string, record: { avatar: string }) => (
-      <div className="flex items-center gap-2">
-        <Image
-          preview={false}
-          src={record.avatar}
-          alt="avatar"
-          className="w-8 h-8 rounded-full"
-        />
+      <div className='flex items-center gap-2'>
+        <Image preview={false} src={record.avatar} alt='avatar' className='w-8 h-8 rounded-full' />
         <span>{text}</span>
       </div>
     ),
   },
   {
-    title: "Followers",
-    dataIndex: "followers",
-    key: "followers",
+    title: 'Followers',
+    dataIndex: 'followers',
+    key: 'followers',
   },
   {
-    title: "Points",
-    dataIndex: "points",
-    key: "points",
+    title: 'Points',
+    dataIndex: 'points',
+    key: 'points',
   },
   {
-    title: "Reward",
-    dataIndex: "reward",
-    key: "reward",
-    render: (value: number) => (
-      <span className="text-cyan-300 font-semibold">{value} 💎</span>
-    ),
+    title: 'Reward',
+    dataIndex: 'reward',
+    key: 'reward',
+    render: (value: number) => <span className='text-cyan-300 font-semibold'>{value} 💎</span>,
   },
 ];
 
 const data = [
   {
-    key: "1",
+    key: '1',
     rank: 4,
     username: "Henrietta O'Connell",
-    avatar: "/avatar4.png",
+    avatar: '/avatar4.png',
     followers: 12241,
     points: 2114424,
     reward: 1000,
   },
   {
-    key: "2",
+    key: '2',
     rank: 5,
-    username: "Darrel Bins",
-    avatar: "/avatar5.png",
+    username: 'Darrel Bins',
+    avatar: '/avatar5.png',
     followers: 12241,
     points: 2114424,
     reward: 1000,
@@ -69,7 +62,7 @@ export default function LeaderboardTable() {
       columns={columns}
       dataSource={data}
       pagination={false}
-      className="bg-[#1e1e2f] text-white rounded-xl mt-8"
+      className='bg-[#1e1e2f] text-white rounded-xl mt-8'
     />
   );
 }

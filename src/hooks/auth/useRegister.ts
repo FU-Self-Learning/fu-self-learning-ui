@@ -1,13 +1,13 @@
-import { register } from "@/shared/api/auth.api";
-import { extractErrorMessage } from "@/utils/ErrorHandle";
-import { useMutation } from "@tanstack/react-query";
-import { message } from "antd";
+import { register } from '@/shared/api/auth.api';
+import { extractErrorMessage } from '@/utils/ErrorHandle';
+import { useMutation } from '@tanstack/react-query';
+import { message } from 'antd';
 
 export const useRegister = () => {
   return useMutation({
     mutationFn: register,
     onSuccess: () => {
-      message.success("Register Successfully");
+      message.success('Register Successfully');
     },
     onError: (error) => {
       const msg = extractErrorMessage(error);

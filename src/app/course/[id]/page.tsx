@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useParams } from "next/navigation";
+import { useParams } from 'next/navigation';
 import {
   CourseDetailHeader,
   CourseDetailTabs,
   CourseDetailContent,
-} from "@/components/course/courseDetail";
-import { useCourseDetail } from "@/hooks/course/useCourseDetail";
-import { Spin } from "antd";
-import { useTopics } from "@/hooks/topic/useTopics";
-import { useState } from "react";
-import { LessonInTopic } from "@/types/topicType";
+} from '@/components/course/courseDetail';
+import { useCourseDetail } from '@/hooks/course/useCourseDetail';
+import { Spin } from 'antd';
+import { useTopics } from '@/hooks/topic/useTopics';
+import { useState } from 'react';
+import { LessonInTopic } from '@/types/topicType';
 
 const CourseDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,8 +20,8 @@ const CourseDetail = () => {
   const { data: topics, isLoading: isLoadingTopics } = useTopics(id);
 
   if (isLoading || !courseDetail || isLoadingTopics)
-    return <Spin className="flex justify-center items-center h-screen" />;
-  
+    return <Spin className='flex justify-center items-center h-screen' />;
+
   const stats = {
     totalLessons: courseDetail.totalLessons,
     totalDuration: courseDetail.totalDuration,
@@ -30,8 +30,8 @@ const CourseDetail = () => {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div className="lg:col-span-2">
+    <div className='max-w-screen-xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-6'>
+      <div className='lg:col-span-2'>
         <CourseDetailHeader
           videoIntroUrl={selectedLesson ? selectedLesson.videoUrl : courseDetail.videoIntroUrl}
           title={courseDetail.title}
@@ -45,8 +45,8 @@ const CourseDetail = () => {
           reviews={[]}
         />
       </div>
-      <CourseDetailContent 
-        sections={topics || []} 
+      <CourseDetailContent
+        sections={topics || []}
         onLessonSelect={setSelectedLesson}
         courseId={id}
       />

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Menu } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { Menu } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 interface ProfileSidebarProps {
   activeTab: string;
@@ -9,38 +9,37 @@ interface ProfileSidebarProps {
 }
 
 const ProfileSidebar = ({ activeTab, setActiveTab }: ProfileSidebarProps) => {
-
   const menuItems = [
     {
-      key: "profile",
+      key: 'profile',
       icon: <UserOutlined />,
-      label: "Profile Information",
-      onClick: () => setActiveTab("profile"),
+      label: 'Profile Information',
+      onClick: () => setActiveTab('profile'),
     },
     {
-      key: "password",
+      key: 'password',
       icon: <LockOutlined />,
-      label: "Change Password",
-      onClick: () => setActiveTab("password"),
+      label: 'Change Password',
+      onClick: () => setActiveTab('password'),
     },
     {
-      key: "instructorRequest",
+      key: 'instructorRequest',
       icon: <UserOutlined />,
-      label: "Become an Instructor",
-      onClick: () => setActiveTab("instructorRequest"),
+      label: 'Become an Instructor',
+      onClick: () => setActiveTab('instructorRequest'),
     },
   ];
 
   return (
-    <div className="w-64 bg-white rounded-2xl shadow-md p-4">
+    <div className='w-64 bg-white rounded-2xl shadow-md p-4'>
       <Menu
-        mode="inline"
+        mode='inline'
         items={menuItems}
-        className="border-none"
+        className='border-none'
         defaultSelectedKeys={[activeTab]}
       />
     </div>
   );
 };
 
-export default ProfileSidebar; 
+export default ProfileSidebar;

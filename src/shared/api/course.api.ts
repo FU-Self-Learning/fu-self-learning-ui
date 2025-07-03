@@ -1,20 +1,18 @@
-import { APP_URL } from "../constants/apiConstants";
-import api from "./index";
+import { APP_URL } from '../constants/apiConstants';
+import api from './index';
 import {
   CourseDetailResponse,
   CourseInstructorDetailResponse,
   CoursesResponse,
   CreateCourseRequest,
-} from "@/types/courseType";
+} from '@/types/courseType';
 
 export const getCourses = async (): Promise<CoursesResponse[]> => {
   const response = await api.get(`${APP_URL}/courses`);
   return response.data;
 };
 
-export const getCourseById = async (
-  id: string
-): Promise<CourseDetailResponse> => {
+export const getCourseById = async (id: string): Promise<CourseDetailResponse> => {
   const response = await api.get(`${APP_URL}/courses/${id}`);
   return response.data;
 };
@@ -22,7 +20,7 @@ export const getCourseById = async (
 export const createCourse = async (course: FormData) => {
   const response = await api.post(`${APP_URL}/courses`, course, {
     headers: {
-      "Content-Type": "multipart/form-data",
+      'Content-Type': 'multipart/form-data',
     },
   });
   return response.data;
@@ -45,7 +43,9 @@ export const getMyCourses = async () => {
   return response.data;
 };
 
-export const getCourseInstructorDetail = async (id: string): Promise<CourseInstructorDetailResponse> => {
+export const getCourseInstructorDetail = async (
+  id: string,
+): Promise<CourseInstructorDetailResponse> => {
   const response = await api.get(`${APP_URL}/courses/instructor/${id}`);
   return response.data;
 };

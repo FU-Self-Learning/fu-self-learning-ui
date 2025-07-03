@@ -1,15 +1,15 @@
-import { setUser } from "@/providers/auth/reducer/authSlice";
-import { fetchUserProfile, updateUserProfile, uploadAvatar } from "@/shared/api/user.api";
-import { getStorageData } from "@/shared/store";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/providers/store";
+import { setUser } from '@/providers/auth/reducer/authSlice';
+import { fetchUserProfile, updateUserProfile, uploadAvatar } from '@/shared/api/user.api';
+import { getStorageData } from '@/shared/store';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/providers/store';
 
 export const useProfile = () => {
   return useQuery({
-    queryKey: ["profile"],
+    queryKey: ['profile'],
     queryFn: fetchUserProfile,
-    enabled: !!getStorageData("accessToken"),
+    enabled: !!getStorageData('accessToken'),
   });
 };
 
@@ -19,7 +19,7 @@ export const useUpdateProfile = () => {
   return useMutation({
     mutationFn: updateUserProfile,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
       dispatch(setUser(data));
     },
   });
@@ -30,7 +30,7 @@ export const useUploadAvatar = () => {
   return useMutation({
     mutationFn: uploadAvatar,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
 };

@@ -1,18 +1,13 @@
-'use client'
+'use client';
 
 import '@ant-design/v5-patch-for-react-19';
-import { Switch } from 'antd'
-import { useTheme } from '@/hooks/useTheme'
+import { Switch } from 'antd';
+import { useTheme } from '@/hooks/useTheme';
 
 export default function DarkModeToggle() {
-  const { isDark, toggleTheme } = useTheme()
+  const { isDark, toggleTheme } = useTheme();
 
   return (
-    <Switch
-      checked={isDark}
-      onChange={toggleTheme}
-      checkedChildren="☀️"
-      unCheckedChildren="🌙"
-    />
-  )
+    <Switch checked={isDark} onChange={toggleTheme} checkedChildren='☀️' unCheckedChildren='🌙' />
+  );
 }

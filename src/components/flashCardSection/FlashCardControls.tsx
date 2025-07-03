@@ -1,13 +1,13 @@
-"use client";
-import React, { useEffect } from "react";
-import { Button, Tooltip } from "antd";
+'use client';
+import React, { useEffect } from 'react';
+import { Button, Tooltip } from 'antd';
 import {
   LeftOutlined,
   RightOutlined,
   ReloadOutlined,
   SwapOutlined,
   FullscreenOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
 interface ControlsProps {
   onPrev: () => void;
@@ -18,7 +18,7 @@ interface ControlsProps {
   showExtras?: boolean;
 }
 
-type ButtonShape = "circle" | "default" | "round";
+type ButtonShape = 'circle' | 'default' | 'round';
 
 export default function FlashCardControls({
   onPrev,
@@ -30,21 +30,21 @@ export default function FlashCardControls({
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       switch (e.key) {
-        case "ArrowLeft":
+        case 'ArrowLeft':
           onPrev();
           break;
-        case "ArrowRight":
+        case 'ArrowRight':
           onNext();
           break;
-        case " ":
-        case "Enter":
+        case ' ':
+        case 'Enter':
           e.preventDefault();
           onFlip();
           break;
       }
     };
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
   }, [onPrev, onNext, onFlip]);
 
   const actions: {
@@ -55,40 +55,40 @@ export default function FlashCardControls({
     shape?: ButtonShape;
   }[] = [
     {
-      title: "Shuffle",
+      title: 'Shuffle',
       icon: <SwapOutlined />,
       onClick: onShuffle,
-      label: "Shuffle",
+      label: 'Shuffle',
     },
     {
-      title: "Previous (←)",
+      title: 'Previous (←)',
       icon: <LeftOutlined />,
       onClick: onPrev,
-      shape: "circle",
+      shape: 'circle',
     },
     {
-      title: "Flip (Space)",
+      title: 'Flip (Space)',
       icon: <ReloadOutlined />,
       onClick: onFlip,
-      shape: "circle",
+      shape: 'circle',
     },
     {
-      title: "Next (→)",
+      title: 'Next (→)',
       icon: <RightOutlined />,
       onClick: onNext,
-      shape: "circle",
+      shape: 'circle',
     },
     {
-      title: "Fullscreen",
+      title: 'Fullscreen',
       icon: <FullscreenOutlined />,
       onClick: onFullscreen,
-      label: "Fullscreen",
+      label: 'Fullscreen',
     },
   ];
 
   return (
-    <div className="flex flex-col gap-4 items-center">
-      <div className="flex gap-4">
+    <div className='flex flex-col gap-4 items-center'>
+      <div className='flex gap-4'>
         {actions.map(({ title, icon, onClick, label, shape }, index) => (
           <Tooltip key={index} title={title}>
             <Button icon={icon} onClick={onClick} shape={shape}>

@@ -1,5 +1,5 @@
-import React from "react";
-import CourseNavbar from "@/components/course/CourseNavbar";
+import React from 'react';
+import CourseNavbar from '@/components/course/CourseNavbar';
 
 type CourseLayoutProps = {
   children: React.ReactNode;
@@ -7,11 +7,9 @@ type CourseLayoutProps = {
 
 export default function CourseLayout({ children }: CourseLayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className='min-h-screen bg-gray-50'>
       <CourseNavbar />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
-      </main>
+      <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>{children}</main>
     </div>
   );
 }

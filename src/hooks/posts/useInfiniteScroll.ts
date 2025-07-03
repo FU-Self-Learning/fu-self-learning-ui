@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 interface UseInfiniteScrollOptions {
   onLoadMore: () => void;
@@ -6,11 +6,7 @@ interface UseInfiniteScrollOptions {
   isLoading: boolean;
 }
 
-export const useInfiniteScroll = ({
-  onLoadMore,
-  hasMore,
-  isLoading,
-}: UseInfiniteScrollOptions) => {
+export const useInfiniteScroll = ({ onLoadMore, hasMore, isLoading }: UseInfiniteScrollOptions) => {
   const observer = useRef<IntersectionObserver>();
   const lastElementRef = useRef<HTMLDivElement>(null);
 

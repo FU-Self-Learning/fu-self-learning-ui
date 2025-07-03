@@ -34,11 +34,11 @@ export function useFlashcard(topicId: number = 1): UseFlashcardReturn {
       setLoading(true);
       setError(null);
       const response = await fetch(`http://localhost:4000/api/v1/flashcards/topic/${topicId}`);
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch flashcards');
       }
-      
+
       const data = await response.json();
       setFlashcards(data);
     } catch (err) {
@@ -56,6 +56,6 @@ export function useFlashcard(topicId: number = 1): UseFlashcardReturn {
     flashcards,
     loading,
     error,
-    refetch: fetchFlashcards
+    refetch: fetchFlashcards,
   };
-} 
+}

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button, Form, Input, Modal, Typography } from "antd";
+import { Button, Form, Input, Modal, Typography } from 'antd';
 
 interface AddTopicModalProps {
   isOpen: boolean;
@@ -9,12 +9,7 @@ interface AddTopicModalProps {
   isLoading: boolean;
 }
 
-export const AddTopicModal = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  isLoading,
-}: AddTopicModalProps) => {
+export const AddTopicModal = ({ isOpen, onClose, onSubmit, isLoading }: AddTopicModalProps) => {
   const [form] = Form.useForm();
 
   const handleSubmit = async () => {
@@ -26,44 +21,36 @@ export const AddTopicModal = ({
       form.resetFields();
       onClose();
     } catch (error) {
-      console.error("Validation failed:", error);
+      console.error('Validation failed:', error);
     }
   };
 
   return (
     <Modal
-      title="Add New Topic"
+      title='Add New Topic'
       open={isOpen}
       onCancel={onClose}
       width={800}
       footer={[
-        <Button key="cancel" onClick={onClose}>
+        <Button key='cancel' onClick={onClose}>
           Cancel
         </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          loading={isLoading}
-          onClick={handleSubmit}
-        >
+        <Button key='submit' type='primary' loading={isLoading} onClick={handleSubmit}>
           Add Topic
         </Button>,
       ]}
     >
-      <Form form={form} layout="vertical" className="mt-4">
+      <Form form={form} layout='vertical' className='mt-4'>
         <Form.Item
-          name="title"
+          name='title'
           label={<Typography.Text strong>Title (required)</Typography.Text>}
-          rules={[{ required: true, message: "Please enter the title" }]}
+          rules={[{ required: true, message: 'Please enter the title' }]}
         >
-          <Input placeholder="Enter topic title" />
+          <Input placeholder='Enter topic title' />
         </Form.Item>
 
-        <Form.Item
-          name="description"
-          label={<Typography.Text strong>Description</Typography.Text>}
-        >
-          <Input.TextArea rows={4} placeholder="Enter topic description" />
+        <Form.Item name='description' label={<Typography.Text strong>Description</Typography.Text>}>
+          <Input.TextArea rows={4} placeholder='Enter topic description' />
         </Form.Item>
       </Form>
     </Modal>

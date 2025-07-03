@@ -1,26 +1,17 @@
-"use client";
+'use client';
 
-import {
-  Button,
-  Form,
-  Image,
-  Input,
-  Space,
-  Typography,
-  Upload,
-  message,
-} from "antd";
+import { Button, Form, Image, Input, Space, Typography, Upload, message } from 'antd';
 import {
   InfoCircleOutlined,
   UploadOutlined,
   FileOutlined,
   ArrowLeftOutlined,
-} from "@ant-design/icons";
-import { useEffect, useState } from "react";
-import type { UploadFile, UploadProps } from "antd/es/upload/interface";
-import { RcFile } from "antd/lib/upload";
-import { CourseInstructorDetailResponse } from "@/types/courseType";
-import { useRouter } from "next/navigation";
+} from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
+import { RcFile } from 'antd/lib/upload';
+import { CourseInstructorDetailResponse } from '@/types/courseType';
+import { useRouter } from 'next/navigation';
 
 interface CourseDetailsTabProps {
   course: CourseInstructorDetailResponse;
@@ -64,14 +55,11 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
       await onSave(values);
       setIsChanged(false);
     } catch (error) {
-      console.error("Error saving:", error);
+      console.error('Error saving:', error);
     }
   };
 
-  const handleImageUpload: UploadProps["customRequest"] = async ({
-    file,
-    onSuccess,
-  }) => {
+  const handleImageUpload: UploadProps['customRequest'] = async ({ file, onSuccess }) => {
     try {
       const previewUrl = URL.createObjectURL(file as Blob);
 
@@ -83,17 +71,14 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
       });
 
       setIsChanged(true);
-      onSuccess?.("ok");
+      onSuccess?.('ok');
     } catch (error) {
       console.log(error);
-      message.error("Upload failed");
+      message.error('Upload failed');
     }
   };
 
-  const handleVideoUpload: UploadProps["customRequest"] = async ({
-    file,
-    onSuccess,
-  }) => {
+  const handleVideoUpload: UploadProps['customRequest'] = async ({ file, onSuccess }) => {
     try {
       const previewUrl = URL.createObjectURL(file as Blob);
 
@@ -104,17 +89,14 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
         originFileObj: file as RcFile,
       });
       setIsChanged(true);
-      onSuccess?.("ok");
+      onSuccess?.('ok');
     } catch (error) {
       console.log(error);
-      message.error("Upload failed");
+      message.error('Upload failed');
     }
   };
 
-  const handleDocumentUpload: UploadProps["customRequest"] = async ({
-    file,
-    onSuccess,
-  }) => {
+  const handleDocumentUpload: UploadProps['customRequest'] = async ({ file, onSuccess }) => {
     try {
       const previewUrl = URL.createObjectURL(file as Blob);
 
@@ -125,36 +107,32 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
         originFileObj: file as RcFile,
       });
       setIsChanged(true);
-      onSuccess?.("ok");
+      onSuccess?.('ok');
     } catch (error) {
       console.log(error);
-      message.error("Upload failed");
+      message.error('Upload failed');
     }
   };
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <Space className="flex items-center gap-2">
+      <div className='flex justify-between items-center mb-6'>
+        <Space className='flex items-center gap-2'>
           <Button
-            type="primary"
+            type='primary'
             icon={<ArrowLeftOutlined />}
-            className="mb-2 !bg-white !text-black"
+            className='mb-2 !bg-white !text-black'
             onClick={() => router.back()}
           />
           <Typography.Title level={3}>Course Details</Typography.Title>
         </Space>
-        <Button
-          type="primary"
-          onClick={() => form.submit()}
-          disabled={!isChanged}
-        >
+        <Button type='primary' onClick={() => form.submit()} disabled={!isChanged}>
           Save Changes
         </Button>
       </div>
       <Form
         form={form}
-        layout="vertical"
+        layout='vertical'
         initialValues={{
           title: course.title,
           description: course.description,
@@ -162,147 +140,116 @@ export const CourseDetailsTab = ({ course, onSave }: CourseDetailsTabProps) => {
         onValuesChange={handleValuesChange}
         onFinish={handleSave}
       >
-        <div className="space-y-6">
+        <div className='space-y-6'>
           <Form.Item
-            name="title"
+            name='title'
             label={
-              <Typography.Text strong className="flex items-center gap-1 mb-2">
+              <Typography.Text strong className='flex items-center gap-1 mb-2'>
                 Title (required) <InfoCircleOutlined />
               </Typography.Text>
             }
-            rules={[{ required: true, message: "Please enter the title" }]}
+            rules={[{ required: true, message: 'Please enter the title' }]}
           >
-            <Input maxLength={100} placeholder="Enter video title" />
+            <Input maxLength={100} placeholder='Enter video title' />
           </Form.Item>
 
           <Form.Item
-            name="description"
+            name='description'
             label={
-              <Typography.Text strong className="flex items-center gap-1 mb-2">
+              <Typography.Text strong className='flex items-center gap-1 mb-2'>
                 Description <InfoCircleOutlined />
               </Typography.Text>
             }
           >
-            <Input.TextArea rows={4} placeholder="Enter video description" />
+            <Input.TextArea rows={4} placeholder='Enter video description' />
           </Form.Item>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
             <Form.Item
-              name="imageUrl"
+              name='imageUrl'
               label={
-                <Typography.Text
-                  strong
-                  className="flex items-center gap-1 mb-2"
-                >
+                <Typography.Text strong className='flex items-center gap-1 mb-2'>
                   Course Image <InfoCircleOutlined />
                 </Typography.Text>
               }
             >
-              <div className="space-y-4">
-                <div className="w-full h-[200px] border border-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+              <div className='space-y-4'>
+                <div className='w-full h-[200px] border border-gray-200 rounded-lg overflow-hidden flex items-center justify-center'>
                   {imageFile?.url ? (
                     <Image
                       src={imageFile.url}
-                      alt="Course image"
-                      className="w-full h-full object-cover"
+                      alt='Course image'
+                      className='w-full h-full object-cover'
                       width={300}
                       height={200}
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                      <Typography.Text type="secondary">
-                        No image
-                      </Typography.Text>
+                    <div className='w-full h-full flex items-center justify-center bg-gray-50'>
+                      <Typography.Text type='secondary'>No image</Typography.Text>
                     </div>
                   )}
                 </div>
-                <Upload
-                  accept="image/*"
-                  showUploadList={false}
-                  customRequest={handleImageUpload}
-                >
+                <Upload accept='image/*' showUploadList={false} customRequest={handleImageUpload}>
                   <Button icon={<UploadOutlined />}>Upload Image</Button>
                 </Upload>
               </div>
             </Form.Item>
 
             <Form.Item
-              name="videoIntroUrl"
+              name='videoIntroUrl'
               label={
-                <Typography.Text
-                  strong
-                  className="flex items-center gap-1 mb-2"
-                >
+                <Typography.Text strong className='flex items-center gap-1 mb-2'>
                   Video Introduction <InfoCircleOutlined />
                 </Typography.Text>
               }
             >
-              <div className="space-y-4">
-                <div className="w-full h-[200px] border border-gray-200 rounded-lg overflow-hidden">
+              <div className='space-y-4'>
+                <div className='w-full h-[200px] border border-gray-200 rounded-lg overflow-hidden'>
                   {videoFile?.url ? (
-                    <video
-                      src={videoFile.url}
-                      controls
-                      className="w-full h-full object-cover"
-                    />
+                    <video src={videoFile.url} controls className='w-full h-full object-cover' />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                      <Typography.Text type="secondary">
-                        No video
-                      </Typography.Text>
+                    <div className='w-full h-full flex items-center justify-center bg-gray-50'>
+                      <Typography.Text type='secondary'>No video</Typography.Text>
                     </div>
                   )}
                 </div>
-                <Upload
-                  accept="video/*"
-                  showUploadList={false}
-                  customRequest={handleVideoUpload}
-                >
+                <Upload accept='video/*' showUploadList={false} customRequest={handleVideoUpload}>
                   <Button icon={<UploadOutlined />}>Upload Video</Button>
                 </Upload>
               </div>
             </Form.Item>
 
             <Form.Item
-              name="documentUrl"
+              name='documentUrl'
               label={
-                <Typography.Text
-                  strong
-                  className="flex items-center gap-1 mb-2"
-                >
+                <Typography.Text strong className='flex items-center gap-1 mb-2'>
                   Course Document <InfoCircleOutlined />
                 </Typography.Text>
               }
             >
-              <div className="space-y-4">
-                <div className="w-full h-[200px] border border-gray-200 rounded-lg overflow-hidden">
+              <div className='space-y-4'>
+                <div className='w-full h-[200px] border border-gray-200 rounded-lg overflow-hidden'>
                   {documentFile?.url ? (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                      <Space direction="vertical" align="center">
-                        <FileOutlined className="text-4xl" />
+                    <div className='w-full h-full flex items-center justify-center bg-gray-50'>
+                      <Space direction='vertical' align='center'>
+                        <FileOutlined className='text-4xl' />
                         <a
                           href={documentFile.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:underline"
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='text-blue-500 hover:underline'
                         >
                           View Document
                         </a>
                       </Space>
                     </div>
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                      <Typography.Text type="secondary">
-                        No document
-                      </Typography.Text>
+                    <div className='w-full h-full flex items-center justify-center bg-gray-50'>
+                      <Typography.Text type='secondary'>No document</Typography.Text>
                     </div>
                   )}
                 </div>
-                <Upload
-                  accept=".pdf"
-                  showUploadList={false}
-                  customRequest={handleDocumentUpload}
-                >
+                <Upload accept='.pdf' showUploadList={false} customRequest={handleDocumentUpload}>
                   <Button icon={<UploadOutlined />}>Upload PDF</Button>
                 </Upload>
               </div>

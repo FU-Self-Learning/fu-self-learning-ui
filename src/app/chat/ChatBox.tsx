@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { useSocket } from "@/hooks/useSocket";
-import { ChatMessage, ChatPayload } from "@/types/chat";
-import MessageList from "@/components/chat/MessageList";
-import MessageInput from "@/components/chat/MessageInput";
+import React, { useEffect, useState } from 'react';
+import { useSocket } from '@/hooks/useSocket';
+import { ChatMessage, ChatPayload } from '@/types/chat';
+import MessageList from '@/components/chat/MessageList';
+import MessageInput from '@/components/chat/MessageInput';
 
 interface ChatBoxProps {
   senderUserId: number;
@@ -56,22 +56,22 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
           createdAt: msg.createdAt,
           senderId: (msg.senderId ?? msg.senderUserId) as number,
           receiverId: (msg.receiverId ?? msg.receiverUserId) as number,
-        })
+        }),
       );
 
       setMessages(normalized);
     };
 
-    socket.emit("loadMessages", { senderUserId, receiverUserId });
+    socket.emit('loadMessages', { senderUserId, receiverUserId });
 
-    socket.on("messagesLoaded", handleMessagesLoaded);
-    socket.on("newMessage", handleIncomingMessage);
-    socket.on("messageSent", handleIncomingMessage);
+    socket.on('messagesLoaded', handleMessagesLoaded);
+    socket.on('newMessage', handleIncomingMessage);
+    socket.on('messageSent', handleIncomingMessage);
 
     return () => {
-      socket.off("messagesLoaded", handleMessagesLoaded);
-      socket.off("newMessage", handleIncomingMessage);
-      socket.off("messageSent", handleIncomingMessage);
+      socket.off('messagesLoaded', handleMessagesLoaded);
+      socket.off('newMessage', handleIncomingMessage);
+      socket.off('messageSent', handleIncomingMessage);
     };
   }, [!!socket, senderUserId, receiverUserId, socket]);
 
@@ -81,11 +81,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
       receiverUserId,
       message: msg,
     };
-    socket?.emit("sendMessage", payload);
+    socket?.emit('sendMessage', payload);
   };
 
   return (
-    <div className="flex flex-col h-full max-w-full mx-auto shadow-md rounded-2xl border border-gray-300 bg-white">
+    <div className='flex flex-col h-full max-w-full mx-auto shadow-md rounded-2xl border border-gray-300 bg-white'>
       <MessageList messages={messages} currentUserId={senderUserId} />
       <MessageInput onSend={sendMessage} />
     </div>

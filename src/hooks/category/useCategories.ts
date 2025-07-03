@@ -1,9 +1,9 @@
-import { getCategories } from "@/shared/api/category.api";
-import { useQuery } from "@tanstack/react-query";
+import { getCategories } from '@/shared/api/category.api';
+import { useQuery } from '@tanstack/react-query';
 
 export const useCategories = () => {
   return useQuery({
-    queryKey: ["categories"],
+    queryKey: ['categories'],
     queryFn: getCategories,
   });
 };

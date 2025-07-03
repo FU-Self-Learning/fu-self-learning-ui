@@ -1,10 +1,15 @@
-"use client"
+'use client';
 
 import React, { useState } from 'react';
 import { Button, Radio, Checkbox, Card, Divider, Typography, Alert } from 'antd';
-import { StarFilled, StarOutlined, ClockCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import {
+  StarFilled,
+  StarOutlined,
+  ClockCircleOutlined,
+  CheckCircleOutlined,
+} from '@ant-design/icons';
 import SidebarDoExam from './SidebarDoExam';
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
 const { Title, Text } = Typography;
 
@@ -210,9 +215,9 @@ const DoExam = () => {
   };
 
   const handleRemind = (questionId: number) => {
-    setMarkedQuestions(prev => {
+    setMarkedQuestions((prev) => {
       if (prev.includes(questionId)) {
-        return prev.filter(id => id !== questionId);
+        return prev.filter((id) => id !== questionId);
       }
       return [...prev, questionId];
     });
@@ -220,11 +225,11 @@ const DoExam = () => {
 
   const currentQuestions = questions.slice(
     pageIndex * QUESTIONS_PER_PAGE,
-    (pageIndex + 1) * QUESTIONS_PER_PAGE
+    (pageIndex + 1) * QUESTIONS_PER_PAGE,
   );
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className='flex min-h-screen bg-gray-50'>
       <SidebarDoExam
         percentComplete={percentComplete}
         setPageIndex={setPageIndex}
@@ -235,29 +240,29 @@ const DoExam = () => {
         markedQuestions={markedQuestions}
       />
 
-      <div className="flex-1 p-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
+      <div className='flex-1 p-8'>
+        <div className='max-w-4xl mx-auto'>
+          <div className='mb-8'>
             <Alert
               message={
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <ClockCircleOutlined className="text-xl" />
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center gap-4'>
+                    <ClockCircleOutlined className='text-xl' />
                     <Text strong>Time Remaining: 15:00</Text>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <CheckCircleOutlined className="text-xl" />
+                  <div className='flex items-center gap-4'>
+                    <CheckCircleOutlined className='text-xl' />
                     <Text strong>Progress: {percentComplete}%</Text>
                   </div>
                 </div>
               }
-              type="info"
+              type='info'
               showIcon={false}
-              className="!bg-blue-50 !border-blue-200"
+              className='!bg-blue-50 !border-blue-200'
             />
           </div>
 
-          <div className="flex flex-col gap-6">
+          <div className='flex flex-col gap-6'>
             {currentQuestions.map((question) => (
               <motion.div
                 key={question.id}
@@ -269,18 +274,21 @@ const DoExam = () => {
                   className={`shadow-md hover:shadow-lg transition-shadow duration-300
                     ${markedQuestions.includes(question.id) ? 'border-yellow-400 bg-yellow-50' : ''}`}
                 >
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="flex-1">
-                      <Title level={4} className="!mb-2">
+                  <div className='flex justify-between items-start mb-6'>
+                    <div className='flex-1'>
+                      <Title level={4} className='!mb-2'>
                         Question {question.id}
                       </Title>
-                      <Text className="text-lg">{question.question}</Text>
+                      <Text className='text-lg'>{question.question}</Text>
                     </div>
                     <Button
-                      type="text"
-                      icon={markedQuestions.includes(question.id) ?
-                        <StarFilled className="text-yellow-500" /> :
-                        <StarOutlined className="text-gray-400" />
+                      type='text'
+                      icon={
+                        markedQuestions.includes(question.id) ? (
+                          <StarFilled className='text-yellow-500' />
+                        ) : (
+                          <StarOutlined className='text-gray-400' />
+                        )
                       }
                       onClick={() => handleRemind(question.id)}
                       className={`!p-2 hover:!bg-yellow-50 !rounded-full transition-colors
@@ -288,22 +296,23 @@ const DoExam = () => {
                     />
                   </div>
 
-                  <Divider className="!my-4" />
+                  <Divider className='!my-4' />
 
                   {question.type === 'single' ? (
                     <Radio.Group
                       onChange={(e) => handleSingleChange(question.id, e.target.value)}
                       value={answers[question.id]}
-                      className="flex flex-col gap-3"
+                      className='flex flex-col gap-3'
                     >
                       {question.options.map((opt) => (
                         <div
                           key={opt.label}
                           onClick={() => handleSingleChange(question.id, opt.label)}
-                          className="w-full p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                          className='w-full p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors'
                         >
                           <Radio value={opt.label}>
-                            <span className="font-medium text-blue-600">{opt.label}:</span> {opt.text}
+                            <span className='font-medium text-blue-600'>{opt.label}:</span>{' '}
+                            {opt.text}
                           </Radio>
                         </div>
                       ))}
@@ -311,16 +320,16 @@ const DoExam = () => {
                   ) : (
                     <Checkbox.Group
                       onChange={(checkedValues) => handleMultipleChange(question.id, checkedValues)}
-                      value={answers[question.id] as string[] || []}
-                      className="flex flex-col gap-3"
+                      value={(answers[question.id] as string[]) || []}
+                      className='flex flex-col gap-3'
                     >
                       {question.options.map((opt) => (
                         <label
                           key={opt.label}
-                          className="w-full p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors flex items-center gap-2"
+                          className='w-full p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors flex items-center gap-2'
                         >
                           <Checkbox value={opt.label} />
-                          <span className="font-medium text-blue-600">{opt.label}:</span> {opt.text}
+                          <span className='font-medium text-blue-600'>{opt.label}:</span> {opt.text}
                         </label>
                       ))}
                     </Checkbox.Group>
@@ -330,18 +339,22 @@ const DoExam = () => {
             ))}
           </div>
 
-          <div className="mt-8 flex justify-between">
+          <div className='mt-8 flex justify-between'>
             <Button
-              size="large"
-              onClick={() => setPageIndex(prev => Math.max(0, prev - 1))}
+              size='large'
+              onClick={() => setPageIndex((prev) => Math.max(0, prev - 1))}
               disabled={pageIndex === 0}
             >
               Previous
             </Button>
             <Button
-              type="primary"
-              size="large"
-              onClick={() => setPageIndex(prev => Math.min(Math.ceil(totalQuestions / QUESTIONS_PER_PAGE) - 1, prev + 1))}
+              type='primary'
+              size='large'
+              onClick={() =>
+                setPageIndex((prev) =>
+                  Math.min(Math.ceil(totalQuestions / QUESTIONS_PER_PAGE) - 1, prev + 1),
+                )
+              }
               disabled={pageIndex === Math.ceil(totalQuestions / QUESTIONS_PER_PAGE) - 1}
             >
               Next

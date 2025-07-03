@@ -31,7 +31,7 @@ const UserList: React.FC<UserListProps> = () => {
   const searchParams = useSearchParams();
   const receiverUserIdFromParams = searchParams.get('user');
   const [selectedUserId, setSelectedUserId] = useState<number | null>(
-    receiverUserIdFromParams ? parseInt(receiverUserIdFromParams, 10) : null
+    receiverUserIdFromParams ? parseInt(receiverUserIdFromParams, 10) : null,
   );
 
   const fetchUsers = async () => {
@@ -39,7 +39,7 @@ const UserList: React.FC<UserListProps> = () => {
       setLoading(true);
       setError(null);
       const response = await api.get<FollowRelationship[]>(`${APP_URL}/follow/followers`);
-      const followerUsers = response.data.map(item => item.followingUser);
+      const followerUsers = response.data.map((item) => item.followingUser);
       setUsers(followerUsers);
       console.log('Fetched users data:', response.data);
       console.log('Mapped users:', followerUsers);
@@ -71,27 +71,22 @@ const UserList: React.FC<UserListProps> = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <Spin size="large" />
+      <div className='flex items-center justify-center h-full'>
+        <Spin size='large' />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="w-64 bg-white border-r border-gray-200 h-full p-4">
+      <div className='w-64 bg-white border-r border-gray-200 h-full p-4'>
         <Alert
-          message="Error"
+          message='Error'
           description={error}
-          type="error"
+          type='error'
           showIcon
           action={
-            <Button 
-              size="small" 
-              type="primary" 
-              icon={<ReloadOutlined />}
-              onClick={handleRetry}
-            >
+            <Button size='small' type='primary' icon={<ReloadOutlined />} onClick={handleRetry}>
               Retry
             </Button>
           }
@@ -101,20 +96,13 @@ const UserList: React.FC<UserListProps> = () => {
   }
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 h-full overflow-y-auto">
-      <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-gray-800">Chats</h2>
-        <Button 
-          type="text" 
-          icon={<ReloadOutlined />} 
-          onClick={handleRetry}
-          title="Refresh list"
-        />
+    <div className='w-64 bg-white border-r border-gray-200 h-full overflow-y-auto'>
+      <div className='p-4 border-b border-gray-200 flex justify-between items-center'>
+        <h2 className='text-lg font-semibold text-gray-800'>Chats</h2>
+        <Button type='text' icon={<ReloadOutlined />} onClick={handleRetry} title='Refresh list' />
       </div>
       {users.length === 0 ? (
-        <div className="p-4 text-center text-gray-500">
-          No users found
-        </div>
+        <div className='p-4 text-center text-gray-500'>No users found</div>
       ) : (
         <List
           dataSource={users}
@@ -130,15 +118,15 @@ const UserList: React.FC<UserListProps> = () => {
                   <Avatar
                     src={user.avatarUrl || undefined}
                     icon={<UserOutlined />}
-                    className="bg-blue-500"
+                    className='bg-blue-500'
                   />
                 }
                 title={
-                  <span className={
-                    user.id === selectedUserId
-                      ? 'text-gray-800 font-semibold' 
-                      : 'text-gray-600' 
-                  }>
+                  <span
+                    className={
+                      user.id === selectedUserId ? 'text-gray-800 font-semibold' : 'text-gray-600'
+                    }
+                  >
                     {user.username}
                   </span>
                 }
@@ -152,4 +140,4 @@ const UserList: React.FC<UserListProps> = () => {
   );
 };
 
-export default UserList; 
+export default UserList;

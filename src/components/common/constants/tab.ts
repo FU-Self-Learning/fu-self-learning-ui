@@ -1,3 +1,3 @@
-export const FLASHCARD_TABS = ["Flashcards", "Learn"] as const;
+export const FLASHCARD_TABS = ['Flashcards', 'Learn'] as const;
 
-export type FlashcardTab = typeof FLASHCARD_TABS[number];
+export type FlashcardTab = (typeof FLASHCARD_TABS)[number];

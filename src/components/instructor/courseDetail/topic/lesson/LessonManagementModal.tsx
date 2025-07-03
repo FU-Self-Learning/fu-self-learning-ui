@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { Button, Modal, message, Spin } from "antd";
-import { useState, useEffect, useCallback } from "react";
-import { useCreateManyLessons } from "@/hooks/lesson/instructor/useCreateManyLessons";
-import { useLessonsInstructor } from "@/hooks/lesson/instructor/useLessonsInstructor";
-import { LessonForm } from "./LessonForm";
-import { LessonList } from "./LessonList";
-import { LessonHeader } from "./LessonHeader";
-import { Lesson, CreateLessonData } from "./types";
+import { Button, Modal, message, Spin } from 'antd';
+import { useState, useEffect, useCallback } from 'react';
+import { useCreateManyLessons } from '@/hooks/lesson/instructor/useCreateManyLessons';
+import { useLessonsInstructor } from '@/hooks/lesson/instructor/useLessonsInstructor';
+import { LessonForm } from './LessonForm';
+import { LessonList } from './LessonList';
+import { LessonHeader } from './LessonHeader';
+import { Lesson, CreateLessonData } from './types';
 
 interface LessonManagementModalProps {
   isOpen: boolean;
@@ -27,8 +27,7 @@ export const LessonManagementModal = ({
   const [isAdding, setIsAdding] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  const { mutate: createManyLessons, isPending: isCreating } =
-    useCreateManyLessons(topicId);
+  const { mutate: createManyLessons, isPending: isCreating } = useCreateManyLessons(topicId);
 
   useEffect(() => {
     if (lessons) {
@@ -59,7 +58,7 @@ export const LessonManagementModal = ({
       setIsAdding(false);
       setEditingIndex(null);
     },
-    [currentLessons, editingIndex]
+    [currentLessons, editingIndex],
   );
 
   const handleCancelEdit = useCallback(() => {
@@ -72,7 +71,7 @@ export const LessonManagementModal = ({
       const updatedLessons = currentLessons.filter((_, i) => i !== index);
       setCurrentLessons(updatedLessons);
     },
-    [currentLessons]
+    [currentLessons],
   );
 
   const handleSave = useCallback(async () => {
@@ -80,7 +79,7 @@ export const LessonManagementModal = ({
       const newLessons = currentLessons.filter((lesson) => !lesson.id);
 
       if (newLessons.length === 0) {
-        message.info("No new lessons to save");
+        message.info('No new lessons to save');
         return;
       }
 
@@ -94,7 +93,7 @@ export const LessonManagementModal = ({
         .filter((file): file is File => file !== undefined);
 
       if (videoFiles.length !== lessonsData.length) {
-        message.error("Each lesson must have a video file");
+        message.error('Each lesson must have a video file');
         return;
       }
 
@@ -104,11 +103,11 @@ export const LessonManagementModal = ({
       });
 
       const updatedLessons = currentLessons.map((lesson) =>
-        lesson.id ? lesson : { ...lesson, id: "temp-" + Date.now() }
+        lesson.id ? lesson : { ...lesson, id: 'temp-' + Date.now() },
       );
       setCurrentLessons(updatedLessons);
     } catch (error) {
-      console.error("Error saving lessons:", error);
+      console.error('Error saving lessons:', error);
     }
   }, [currentLessons, createManyLessons]);
 
@@ -120,8 +119,7 @@ export const LessonManagementModal = ({
   }, [lessons, onClose]);
 
   const newLessonsCount = currentLessons.filter((lesson) => !lesson.id).length;
-  const editingLesson =
-    editingIndex !== null ? currentLessons[editingIndex] : undefined;
+  const editingLesson = editingIndex !== null ? currentLessons[editingIndex] : undefined;
 
   if (isLoading) {
     return (
@@ -132,8 +130,8 @@ export const LessonManagementModal = ({
         width={1000}
         footer={null}
       >
-        <div className="flex justify-center items-center py-8">
-          <Spin size="large" />
+        <div className='flex justify-center items-center py-8'>
+          <Spin size='large' />
         </div>
       </Modal>
     );
@@ -146,12 +144,12 @@ export const LessonManagementModal = ({
       onCancel={handleClose}
       width={1000}
       footer={[
-        <Button key="cancel" onClick={handleClose}>
+        <Button key='cancel' onClick={handleClose}>
           Cancel
         </Button>,
         <Button
-          key="save"
-          type="primary"
+          key='save'
+          type='primary'
           loading={isCreating}
           onClick={handleSave}
           disabled={newLessonsCount === 0}
@@ -160,7 +158,7 @@ export const LessonManagementModal = ({
         </Button>,
       ]}
     >
-      <div className="space-y-6">
+      <div className='space-y-6'>
         {isAdding && (
           <LessonForm
             lesson={editingLesson}

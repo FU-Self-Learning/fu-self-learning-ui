@@ -1,6 +1,6 @@
-import axios, { AxiosError, AxiosInstance } from "axios";
-import { APP_URL, EXPIRED_TOKEN } from "../constants/apiConstants";
-import { getStorageData, setStorageData } from "../store";
+import axios, { AxiosError, AxiosInstance } from 'axios';
+import { APP_URL, EXPIRED_TOKEN } from '../constants/apiConstants';
+import { getStorageData, setStorageData } from '../store';
 export class Api {
   instance: AxiosInstance;
   private isRefreshing = false;
@@ -11,7 +11,7 @@ export class Api {
   constructor() {
     this.instance = axios.create({
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       withCredentials: true,
     });
@@ -37,12 +37,12 @@ export class Api {
     try {
       const response = await axios.get(`${APP_URL}/refresh-token`, {
         headers: {
-          Authorization: `Bearer ${getStorageData("accessToken")}`,
+          Authorization: `Bearer ${getStorageData('accessToken')}`,
         },
       });
 
       const newToken = response.data.data.accessToken;
-      setStorageData("accessToken", newToken);
+      setStorageData('accessToken', newToken);
 
       return newToken;
     } catch (error) {
@@ -76,19 +76,19 @@ export class Api {
           })
             .then((token) => {
               if (error.config) {
-                error.config.headers!["Authorization"] = `Bearer ${token}`;
+                error.config.headers!['Authorization'] = `Bearer ${token}`;
                 return this.instance.request(error.config);
               }
-              return Promise.reject(new Error("No config found"));
+              return Promise.reject(new Error('No config found'));
             })
             .catch((err) => Promise.reject(err));
         }
-      }
+      },
     );
 
     this.instance.interceptors.request.use((config) => {
-      const token = getStorageData("accessToken");
-      if (token) config.headers!["Authorization"] = `Bearer ${token}`;
+      const token = getStorageData('accessToken');
+      if (token) config.headers!['Authorization'] = `Bearer ${token}`;
       return config;
     });
   }

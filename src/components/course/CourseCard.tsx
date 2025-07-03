@@ -1,16 +1,12 @@
-import { CoursesResponse } from "@/types/courseType";
-import { Card, Tag, Space, Progress, Button, Avatar, Typography, Image } from "antd";
-import { UserOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
-import { useRouter } from "next/navigation";
+import { CoursesResponse } from '@/types/courseType';
+import { Card, Tag, Space, Progress, Button, Avatar, Typography, Image } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
 
 const { Paragraph, Text } = Typography;
 
-export default function CourseCard({
-  material,
-}: {
-  material: CoursesResponse;
-}) {
+export default function CourseCard({ material }: { material: CoursesResponse }) {
   const router = useRouter();
 
   const handleStartLearning = () => {
@@ -20,41 +16,39 @@ export default function CourseCard({
   return (
     <Card
       hoverable
-      className="rounded-lg shadow-sm"
+      className='rounded-lg shadow-sm'
       cover={
-        <div className="relative h-40 overflow-hidden">
+        <div className='relative h-40 overflow-hidden'>
           <Image
             src={material.imageUrl}
             alt={material.title}
             preview={false}
-            className="object-cover w-full h-full"
+            className='object-cover w-full h-full'
           />
         </div>
       }
     >
-      <div className="flex items-center gap-2 mb-2">
+      <div className='flex items-center gap-2 mb-2'>
         <Avatar
           src={material.instructor.avatarUrl}
           icon={!material.instructor.avatarUrl && <UserOutlined />}
-          size="small"
+          size='small'
         />
-        <Text type="secondary" className="text-sm">
+        <Text type='secondary' className='text-sm'>
           {material.instructor.username}
         </Text>
       </div>
 
-      <h3 className="font-semibold text-base truncate mb-1">
-        {material.title}
-      </h3>
+      <h3 className='font-semibold text-base truncate mb-1'>{material.title}</h3>
 
-      <Paragraph type="secondary" ellipsis={{ rows: 2 }} className="text-sm">
+      <Paragraph type='secondary' ellipsis={{ rows: 2 }} className='text-sm'>
         {material.description}
       </Paragraph>
 
-      <div className="mb-2">
+      <div className='mb-2'>
         <Space wrap>
           {material.categories?.map((category) => (
-            <Tag key={category.id} color="default">
+            <Tag key={category.id} color='default'>
               {category.name}
             </Tag>
           ))}
@@ -62,16 +56,16 @@ export default function CourseCard({
       </div>
 
       {material.createdAt && (
-        <Text type="secondary" className="text-xs">
-          Created at: {dayjs(material.createdAt).format("DD MMM YYYY")}
+        <Text type='secondary' className='text-xs'>
+          Created at: {dayjs(material.createdAt).format('DD MMM YYYY')}
         </Text>
       )}
 
-      <div className="mt-2">
-        <Progress percent={30} size="small" />
+      <div className='mt-2'>
+        <Progress percent={30} size='small' />
       </div>
 
-      <Button block type="primary" className="mt-4" onClick={handleStartLearning}>
+      <Button block type='primary' className='mt-4' onClick={handleStartLearning}>
         Start Learning
       </Button>
     </Card>

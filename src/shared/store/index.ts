@@ -1,4 +1,4 @@
-const isClient = typeof window !== "undefined";
+const isClient = typeof window !== 'undefined';
 
 export const fromStoredData = (storageData: any) => {
   try {
@@ -9,7 +9,7 @@ export const fromStoredData = (storageData: any) => {
 };
 
 export const toStoredData = (data: any) => {
-  if (typeof data === "string") {
+  if (typeof data === 'string') {
     return data;
   }
   return JSON.stringify(data);

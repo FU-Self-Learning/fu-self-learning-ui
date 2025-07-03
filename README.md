@@ -1,4 +1,5 @@
 # FU Self Learning UI
+
 HHE2s
 A modern web application built with Next.js, TypeScript, and Ant Design for the FU Self Learning platform.
 
@@ -21,12 +22,14 @@ A modern web application built with Next.js, TypeScript, and Ant Design for the 
 ## 🛠️ Installation
 
 1. Clone the repository:
+
 ```bash
 git clone [repository-url]
 cd fu-self-learning-ui
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or

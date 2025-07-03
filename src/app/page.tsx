@@ -1,45 +1,42 @@
-"use client"
-import { useRouter } from "next/navigation";
-import BenefitSection from "@/components/homePage/benefitSection/index"
-import PopularQuestion from "@/components/homePage/popularQuestion/index"
-import MembershipSection from "@/components/homePage/membershipSection/index"
-import CommunicationSection from "@/components/homePage/communicationSection/index"
-import Image from "next/image"
+'use client';
+import { useRouter } from 'next/navigation';
+import BenefitSection from '@/components/homePage/benefitSection/index';
+import PopularQuestion from '@/components/homePage/popularQuestion/index';
+import MembershipSection from '@/components/homePage/membershipSection/index';
+import CommunicationSection from '@/components/homePage/communicationSection/index';
+import Image from 'next/image';
 
 export default function HomePage() {
-    const router = useRouter()
-    const aaa = 123;
-    return (
-        <>
-            <div className="relative w-full h-screen">
-                <Image
-                    src='/svgs/banner.svg'
-                    alt="image"
-                    fill
-                    className="object-cover w-full h-full"
-                />
-                <div className="absolute top-10 left-14 text-white flex flex-col items-start gap-4 max-w-xl">
-                    <h1 className="text-[80px] font-bold w-[600px]">
-                        Simple tools for learning and productivity.
-                    </h1>
-                    <p className="text-white text-xl leading-relaxed">
-                        Search millions of study sets or create your own. Improve your grades and productivity with studying tools like flashcards, notes, note-taking templates, practice tests, and study planners.
-                    </p>
-                    <div
-                        onClick={() => router.push("/login")}
-                        className="px-8 py-2 bg-[#4255ff] rounded-sm font-medium cursor-pointer">
-                        Get Started
-                    </div>
-                </div>
-            </div >
-            <div className="bg-[#F5F3EA]  flex w-full flex-col justify-center  items-center">
-                {/* <CourseListPage /> */}
-                <BenefitSection />
-                <MembershipSection />
-                <PopularQuestion />
-                <CommunicationSection />
-            </div>
+  const router = useRouter();
 
-        </>
-    )
+  return (
+    <>
+      <div className='relative w-full h-screen'>
+        <Image src='/svgs/banner.svg' alt='image' fill className='object-cover w-full h-full' />
+        <div className='absolute top-10 left-14 text-white flex flex-col items-start gap-4 max-w-xl'>
+          <h1 className='text-[80px] font-bold w-[600px]'>
+            Simple tools for learning and productivity.
+          </h1>
+          <p className='text-white text-xl leading-relaxed'>
+            Search millions of study sets or create your own. Improve your grades and productivity
+            with studying tools like flashcards, notes, note-taking templates, practice tests, and
+            study planners.
+          </p>
+          <div
+            onClick={() => router.push('/login')}
+            className='px-8 py-2 bg-[#4255ff] rounded-sm font-medium cursor-pointer'
+          >
+            Get Started
+          </div>
+        </div>
+      </div>
+      <div className='bg-[#F5F3EA]  flex w-full flex-col justify-center  items-center'>
+        {/* <CourseListPage /> */}
+        <BenefitSection />
+        <MembershipSection />
+        <PopularQuestion />
+        <CommunicationSection />
+      </div>
+    </>
+  );
 }
