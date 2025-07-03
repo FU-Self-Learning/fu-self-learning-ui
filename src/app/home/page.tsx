@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import BenefitSection from '@/components/homePage/benefitSection/index';
-import PopularQuestion from '@/components/homePage/popularQuestion/index';
+import BenefitSection from '@/components/homePage/benefitSection';
+import PopularQuestion from '@/components/homePage/popularQuestion';
 
 export default function HomePage() {
   return (

@@ -1,9 +1,9 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import BenefitSection from '@/components/homePage/benefitSection/index';
-import PopularQuestion from '@/components/homePage/popularQuestion/index';
-import MembershipSection from '@/components/homePage/membershipSection/index';
-import CommunicationSection from '@/components/homePage/communicationSection/index';
+import BenefitSection from '@/components/homePage/benefitSection';
+import PopularQuestion from '@/components/homePage/popularQuestion';
+import MembershipSection from '@/components/homePage/membershipSection';
+import CommunicationSection from '@/components/homePage/communicationSection';
 import Image from 'next/image';
 
 export default function HomePage() {
