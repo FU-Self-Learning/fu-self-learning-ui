@@ -10,6 +10,10 @@ const nextConfig = {
       issuer: /\.[jt]sx?$/,
       use: ['@svgr/webpack'],
     });
+
+    // ✅ Thêm alias @
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+
     return config;
   },
 
