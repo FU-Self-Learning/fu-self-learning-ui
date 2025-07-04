@@ -4,6 +4,11 @@ FROM node:18-alpine AS builder
 # Set working directory
 WORKDIR /app
 
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_SOCKET_URL
+ENV NEXT_PUBLIC_SOCKET_URL=$NEXT_PUBLIC_SOCKET_URL
+
 # Install dependencies
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -18,11 +23,6 @@ RUN npm run build
 FROM node:18-alpine AS runner
 
 WORKDIR /app
-
-ARG NEXT_PUBLIC_API_URL
-ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
-ARG NEXT_PUBLIC_SOCKET_URL
-ENV NEXT_PUBLIC_SOCKET_URL=$NEXT_PUBLIC_SOCKET_URL
 
 # Copy only necessary files from builder
 COPY --from=builder /app/.next .next
