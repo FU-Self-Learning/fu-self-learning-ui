@@ -13,7 +13,7 @@ import {
   Image,
 } from 'antd';
 import { UploadOutlined, MoreOutlined } from '@ant-design/icons';
-import Group from '@/assets/svgs/Group.svg';
+import Group from '@p/svgs/Group.svg';
 import TextArea from 'antd/es/input/TextArea';
 import { useCreatePost } from '@/hooks/posts/useCreatePost';
 

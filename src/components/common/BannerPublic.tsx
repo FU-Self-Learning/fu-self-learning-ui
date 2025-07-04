@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import LoginBanner from '@/assets/images/Login.png';
 import { Button } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
@@ -13,7 +12,7 @@ export const BannerPublic = () => {
 
   return (
     <div className='relative lg:w-1/2 h-[640px] w-[500px] m-2 rounded-3xl'>
-      <Image src={LoginBanner} alt='Login Banner' fill className='object-cover rounded-4xl' />
+      <Image src='/images/Login.png' alt='Login Banner' fill className='object-cover rounded-4xl' />
       <div className='absolute inset-0 w-1/2 hidden lg:flex items-center'>
         <div className='z-10 p-12 text-white h-full'>
           <div className='flex flex-col justify-between h-full'>

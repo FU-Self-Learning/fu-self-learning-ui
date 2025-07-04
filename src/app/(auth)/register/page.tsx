@@ -5,7 +5,6 @@ import { RegisterForm } from '@/components/register/RegisterForm';
 import { Typography, Button, Divider } from 'antd';
 import { useState } from 'react';
 import Image from 'next/image';
-import GoogleIcon from '@/assets/svgs/google.svg';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BannerPublic } from '@/components/common/BannerPublic';
@@ -31,7 +30,7 @@ export default function LoginPage() {
               Connect to Platform
             </Typography.Title>
             <Button
-              icon={<Image src={GoogleIcon} alt='Google Icon' width={20} height={20} />}
+              icon={<Image src='/svgs/google.svg' alt='Google Icon' width={20} height={20} />}
               block
               className='!rounded-3xl !w-full'
               style={{

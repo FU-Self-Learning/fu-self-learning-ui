@@ -1,5 +1,3 @@
-// import OceanWaveNavbar from "@/assetsSvgsComponents/OceanWaveNavbar";
-
 export default function Footer() {
   return (
     <>

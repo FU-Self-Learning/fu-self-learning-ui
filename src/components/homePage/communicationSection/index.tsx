@@ -2,11 +2,6 @@
 
 import { Carousel } from 'antd';
 import CardCommunication from './CardCommunication';
-import linhtran from '@/assets/svgs/linhtran.svg';
-import fort from '@/assets/svgs/Fort.svg';
-import Ethan from '@/assets/svgs/Ethan.svg';
-import ThuyT from '@/assets/svgs/ThuyT.svg';
-import Ellip from '@/assets/svgs/Ellip.svg';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { useRef } from 'react';
 import { CarouselRef } from 'antd/es/carousel';
@@ -15,21 +10,21 @@ const dataCommunicationFBack = [
   {
     name: 'Linh Tran',
     email: '@linhtran@gmail.com',
-    avt: fort,
+    avt: '/svgs/Fort.svg',
     content:
       'This platform helps me organize my study group effortlessly. I can share resources and track progress with ease.',
   },
   {
     name: 'Minh Nguyen',
     email: '@minhnguyen@gmail.com',
-    avt: linhtran,
+    avt: '/svgs/linhtran.svg',
     content:
       'User-friendly interface. I love the flashcard feature. It’s quick and easy to create and review my cards.',
   },
   {
     name: 'Trang Le',
     email: '@trangle@gmail.com',
-    avt: Ethan,
+    avt: '/svgs/Ethan.svg',
 
     content:
       'I use it for tutoring sessions. It saves me a lot of time organizing and sharing resources with my students.',
@@ -37,21 +32,21 @@ const dataCommunicationFBack = [
   {
     name: 'Huy Pham',
     email: '@huypham.@gmail.com',
-    avt: linhtran,
+    avt: '/svgs/linhtran.svg',
     content:
       'Tried the free version, loved it, and upgraded the next day! The extra features are definitely worth it.',
   },
   {
     name: 'Duy Vo',
     email: '@duyvo@gmail.com',
-    avt: ThuyT,
+    avt: '/svgs/ThuyT.svg',
     content:
       'Our team can study and collaborate from anywhere. Real-time sharing of ideas and resources is fantastic.',
   },
   {
     name: 'Mai Dang',
     email: '@maidang@gmail.com',
-    avt: Ellip,
+    avt: '/svgs/Ellip.svg',
     content:
       'Great experience overall. It’s a must-have for anyone looking to improve their study habits or productivity.',
   },

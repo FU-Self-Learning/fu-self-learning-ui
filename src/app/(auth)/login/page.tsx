@@ -1,7 +1,6 @@
 'use client';
 
 import { LoginForm } from '@/components/login/LoginForm';
-import GoogleIcon from '@/assets/svgs/google.svg';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -40,7 +39,7 @@ export default function LoginPage() {
               Connect to Platform
             </Typography.Title>
             <Button
-              icon={<Image src={GoogleIcon} alt='Google Icon' width={20} height={20} />}
+              icon={<Image src='/svgs/google.svg' alt='Google Icon' width={20} height={20} />}
               block
               className='!rounded-3xl !w-full'
               style={{

@@ -13,6 +13,7 @@ const nextConfig = {
 
     // ✅ Thêm alias @
     config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+    config.resolve.alias['@p'] = path.resolve(__dirname, 'public');
 
     return config;
   },
