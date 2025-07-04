@@ -16,7 +16,7 @@
 # next.js
 /.next/
 /out/
-.next/
+.next/cache/eslint
 
 # production
 /build
