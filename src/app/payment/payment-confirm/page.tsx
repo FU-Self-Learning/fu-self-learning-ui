@@ -19,7 +19,7 @@ const PaymentConfirm = () => {
   const searchParams = useSearchParams();
   const courseId = searchParams.get('courseId') || '';
   const [isProcessing, setIsProcessing] = useState(false);
-
+  console.log('courseId', courseId);
   const { data: courseDetail, isLoading } = useCourseDetail(courseId);
 
   if (isLoading) {
