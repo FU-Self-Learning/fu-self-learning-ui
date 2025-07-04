@@ -3,14 +3,6 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRef } from 'react';
-import fast_easy from '@/assets/svgs/fast_easy.svg';
-import lovely from '@/assets/svgs/lovely.svg';
-import effective from '@/assets/svgs/effective.svg';
-import managements from '@/assets/svgs/management.svg';
-import infinity from '@/assets/svgs/infinity.svg';
-import security from '@/assets/svgs/security.svg';
-import touch_real_time from '@/assets/svgs/touch_real_time.svg';
-import setting from '@/assets/svgs/setting.svg';
 import Section from '@/components/common/Section';
 import CardBenefit from './CardBenefit';
 
@@ -24,7 +16,7 @@ const benefitMore = [
     },
     icon: () => (
       <Image
-        src={managements}
+        src='/svgs/management.svg'
         alt='management'
         width={100}
         height={100}
@@ -41,7 +33,7 @@ const benefitMore = [
     },
     icon: () => (
       <Image
-        src={infinity}
+        src='/svgs/infinity.svg'
         alt='integration'
         width={100}
         height={100}
@@ -58,7 +50,7 @@ const benefitMore = [
     },
     icon: () => (
       <Image
-        src={touch_real_time}
+        src='/svgs/touch_real_time.svg'
         alt='collaboration'
         width={100}
         height={100}
@@ -75,7 +67,7 @@ const benefitMore = [
     },
     icon: () => (
       <Image
-        src={security}
+        src='/svgs/security.svg'
         alt='security'
         width={100}
         height={100}
@@ -92,7 +84,7 @@ const benefitMore = [
     },
     icon: () => (
       <Image
-        src={managements}
+        src='/svgs/management.svg'
         alt='cross-platform'
         width={100}
         height={100}
@@ -110,7 +102,7 @@ const benefitMore = [
     },
     icon: () => (
       <Image
-        src={setting}
+        src='/svgs/setting.svg'
         alt='customization'
         width={100}
         height={100}
@@ -122,19 +114,19 @@ const benefitMore = [
 
 const benefits = [
   {
-    image: fast_easy,
+    image: '/svgs/fast_easy.svg',
     title: 'Fast and Easy',
     description:
       'Fast and easy so you can spend more time creating great content. Easy because no one likes complexity.',
   },
   {
-    image: lovely,
+    image: '/svgs/lovely.svg',
     title: 'Efficient and Flexible',
     description:
       'Efficient and flexible to meet all your needs. Flexible so you can work your own way.',
   },
   {
-    image: effective,
+    image: '/svgs/effective.svg',
     title: 'Loved and Trusted',
     description:
       'Loved and trusted by millions of users around the world. Trusted so you know your data is safe.',
