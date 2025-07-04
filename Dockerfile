@@ -31,7 +31,6 @@ RUN ls -la public/svgs/ || echo "SVG directory not found"
 RUN ls -la public/SvgsComponents/ || echo "SvgsComponents directory not found"
 
 COPY .env.local .env.local
-COPY .env .env
 
 # Expose port
 EXPOSE 3000
