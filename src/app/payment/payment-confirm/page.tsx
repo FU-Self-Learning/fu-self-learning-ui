@@ -263,7 +263,7 @@ const PaymentConfirm = () => {
                       Processing Payment...
                     </span>
                   ) : isFree ? (
-                    'Enroll Now - It&apos;s Free!'
+                    "Enroll Now - It's Free!"
                   ) : (
                     'Complete Purchase'
                   )}
