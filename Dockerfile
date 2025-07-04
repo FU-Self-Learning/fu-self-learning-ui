@@ -21,10 +21,14 @@ WORKDIR /app
 
 # Copy only necessary files from builder
 COPY --from=builder /app/.next .next
-COPY --from=builder /app/public public
+COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules node_modules
 COPY --from=builder /app/package.json package.json
 COPY --from=builder /app/next.config.js ./next.config.js
+
+# Verify that SVG files are copied (for debugging)
+RUN ls -la public/svgs/ || echo "SVG directory not found"
+RUN ls -la public/SvgsComponents/ || echo "SvgsComponents directory not found"
 
 # Expose port
 EXPOSE 3000

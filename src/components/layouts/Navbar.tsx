@@ -8,7 +8,6 @@ import { motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import { UserOutlined } from '@ant-design/icons';
 import Image from 'next/image';
-import Login from '@/assets/svgs/logo.svg';
 import { logout } from '@/providers/auth/reducer/authSlice';
 import { getStorageData } from '@/shared/store';
 import { useHasMounted } from '@/hooks/useHasMounted';
@@ -110,8 +109,10 @@ export default function Navbar() {
             <span role='img' aria-label='music'>
               <Image
                 onClick={() => router.push('/')}
-                src={Login}
+                src='/svgs/logo.svg'
                 alt='logo'
+                width={10}
+                height={10}
                 className='!w-10 !h-10 !cursor-pointer'
               />
             </span>
