@@ -19,6 +19,11 @@ FROM node:18-alpine AS runner
 
 WORKDIR /app
 
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_SOCKET_URL
+ENV NEXT_PUBLIC_SOCKET_URL=$NEXT_PUBLIC_SOCKET_URL
+
 # Copy only necessary files from builder
 COPY --from=builder /app/.next .next
 COPY --from=builder /app/public ./public
