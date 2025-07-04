@@ -30,8 +30,6 @@ COPY --from=builder /app/next.config.js ./next.config.js
 RUN ls -la public/svgs/ || echo "SVG directory not found"
 RUN ls -la public/SvgsComponents/ || echo "SvgsComponents directory not found"
 
-COPY .env.local .env.local
-
 # Expose port
 EXPOSE 3000
 
