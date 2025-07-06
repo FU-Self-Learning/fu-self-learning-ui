@@ -26,6 +26,11 @@ export const createCourse = async (course: FormData) => {
   return response.data;
 };
 
+export const getCourseByCategory = async (categoryId: string): Promise<CoursesResponse[]> => {
+  const response = await api.get(`${APP_URL}/courses/category/${categoryId}`);
+  return response.data;
+};
+
 export const updateCourse = async (id: string, course: CreateCourseRequest) => {
   const response = await api.put(`${APP_URL}/courses/${id}`, course);
   return response.data;
@@ -44,8 +49,42 @@ export const getMyCourses = async () => {
 };
 
 export const getCourseInstructorDetail = async (
-  id: string,
+  courseId: string,
 ): Promise<CourseInstructorDetailResponse> => {
-  const response = await api.get(`${APP_URL}/courses/instructor/${id}`);
+  const response = await api.get(`${APP_URL}/courses/instructor/${courseId}`);
+  return response.data;
+};
+
+// ================================ PDF Course Generation ================================
+
+export interface GeneratedTopic {
+  title: string;
+  description: string;
+  lessons: GeneratedLesson[];
+}
+
+export interface GeneratedLesson {
+  title: string;
+  description: string;
+}
+
+export interface GeneratedCourseData {
+  course: {
+    title: string;
+    description: string;
+    categoryIds: number[];
+  };
+  topics: GeneratedTopic[];
+}
+
+export const generateCourseFromPDF = async (file: File): Promise<GeneratedCourseData> => {
+  const formData = new FormData();
+  formData.append('pdf', file);
+
+  const response = await api.post(`${APP_URL}/courses/generate-from-pdf`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };

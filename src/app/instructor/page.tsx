@@ -78,6 +78,7 @@ export default function InstructorDashboard() {
                     key='edit'
                     type='link'
                     size='large'
+                    className='!font-semibold !text-black hover:!text-blue-600'
                     onClick={() => router.push(`/instructor/course/${course.id}`)}
                   >
                     View Details
@@ -86,6 +87,7 @@ export default function InstructorDashboard() {
                     key='stats'
                     type='link'
                     size='large'
+                    className='!font-semibold !text-black hover:!text-blue-600'
                     onClick={() => router.push(`/instructor/course/stats/${course.id}`)}
                   >
                     Stats

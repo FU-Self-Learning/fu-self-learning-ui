@@ -73,7 +73,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
       socket.off('newMessage', handleIncomingMessage);
       socket.off('messageSent', handleIncomingMessage);
     };
-  }, [!!socket, senderUserId, receiverUserId, socket]);
+  }, [senderUserId, receiverUserId, socket]);
 
   const sendMessage = (msg: string) => {
     const payload: ChatPayload = {

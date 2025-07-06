@@ -51,6 +51,7 @@ const VideoPlayerWithOverlay = ({
         src={src}
         poster={poster ?? src}
         className='w-full h-full object-cover'
+        autoPlay={true}
       />
       {!isPlaying && (
         <div
