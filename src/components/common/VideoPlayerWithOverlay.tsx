@@ -8,6 +8,7 @@ interface VideoPlayerWithOverlayProps {
   className?: string;
   rounded?: boolean;
   height?: string;
+  isThumbnail?: boolean;
 }
 
 const VideoPlayerWithOverlay = ({
@@ -16,6 +17,7 @@ const VideoPlayerWithOverlay = ({
   className = '',
   rounded = true,
   height,
+  isThumbnail,
 }: VideoPlayerWithOverlayProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -51,7 +53,7 @@ const VideoPlayerWithOverlay = ({
         src={src}
         poster={poster ?? src}
         className='w-full h-full object-cover'
-        autoPlay={true}
+        autoPlay={isThumbnail ? false : true}
       />
       {!isPlaying && (
         <div

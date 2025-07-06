@@ -14,9 +14,16 @@ interface CourseDetailHeaderProps {
   title: string;
   category: string;
   stats: CourseStatsProps;
+  isThumbnail: boolean;
 }
 
-const CourseDetailHeader = ({ videoIntroUrl, title, category, stats }: CourseDetailHeaderProps) => {
+const CourseDetailHeader = ({
+  videoIntroUrl,
+  title,
+  category,
+  stats,
+  isThumbnail,
+}: CourseDetailHeaderProps) => {
   const router = useRouter();
   const { totalLessons, totalDuration, rating, reviewCount } = stats;
   return (
@@ -39,7 +46,7 @@ const CourseDetailHeader = ({ videoIntroUrl, title, category, stats }: CourseDet
           reviewCount={reviewCount}
         />
       </p>
-      <VideoPlayerWithOverlay src={videoIntroUrl} height='h-[400px]' />
+      <VideoPlayerWithOverlay src={videoIntroUrl} height='h-[400px]' isThumbnail={isThumbnail} />
     </>
   );
 };

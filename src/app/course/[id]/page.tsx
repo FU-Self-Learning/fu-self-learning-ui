@@ -37,6 +37,7 @@ const CourseDetail = () => {
           title={courseDetail.title}
           category={courseDetail.categories[0].name}
           stats={stats}
+          isThumbnail={selectedLesson ? false : true}
         />
         <CourseDetailTabs
           description={courseDetail.description}
