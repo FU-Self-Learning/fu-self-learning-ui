@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <>
-      <footer className='bg-black text-white px-6 py-10 '>
+      <footer className='bg-black text-white px-6 py-4'>
         <div className='max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
           <div className='col-span-2'>
             <h1 className='text-2xl font-bold'>Studee</h1>
@@ -26,8 +26,8 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className='mt-10 border-t border-gray-700 pt-6 text-sm flex justify-between flex-col md:flex-row'>
-          <div className='flex space-x-4 mb-4 md:mb-0'>
+        <div className='mt-2 border-t border-gray-700 pt-6 text-sm flex justify-between flex-col md:flex-row'>
+          <div className='flex space-x-4'>
             <a href='#' className='hover:underline'>
               Privacy Policy
             </a>

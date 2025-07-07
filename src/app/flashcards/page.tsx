@@ -8,14 +8,11 @@ import StudySetForm from '@/components/studySet/StudySetForm';
 import StudySetDetail from '@/components/studySet/StudySetDetail';
 import StudySetLearn from '@/components/studySet/StudySetLearn';
 import StudySetFilter from '@/components/studySet/StudySetFilter';
-// import { useAuth } from "@/context/AuthHydration";
 
 const { Title } = Typography;
 
 export default function FlashcardsPage() {
-  // const { user } = useAuth();
-  // const userId = user?.id;
-  const userId = 1; // TODO: replace with real user id
+  const userId = 1;
 
   const [showCreate, setShowCreate] = useState(false);
   const [filter, setFilter] = useState<any>({});
@@ -37,8 +34,13 @@ export default function FlashcardsPage() {
     setLearnMode(false);
   };
 
+  const handleExitDetail = () => {
+    setLearnMode(false);
+    setSelectedSetId(null);
+  };
+
   return (
-    <div className='max-w-screen-xl mx-auto p-4'>
+    <div className='max-w-screen-xl mx-auto p-4 min-h-[calc(100vh-100px)]'>
       <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6'>
         <div>
           <Title level={2} className='!mb-1'>
@@ -63,6 +65,7 @@ export default function FlashcardsPage() {
           id={selectedSetId}
           userId={userId}
           onLearn={(flashcards) => handleLearn(flashcards)}
+          onExit={handleExitDetail}
         />
       )}
       {learnMode && <StudySetLearn flashcards={learnFlashcards} onExit={handleExitLearn} />}

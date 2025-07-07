@@ -7,16 +7,23 @@ interface StudySetDetailProps {
   id: number;
   onLearn: (flashcards: any[]) => void;
   userId?: number;
+  onExit: () => void;
 }
 
-const StudySetDetail: React.FC<StudySetDetailProps> = ({ id, onLearn, userId }) => {
+const StudySetDetail: React.FC<StudySetDetailProps> = ({ id, onLearn, userId, onExit }) => {
   const { data, isLoading } = useStudySet(id);
-  const goBack = () => {};
+
   if (isLoading || !data) return null;
 
   return (
     <div>
-      <Button icon={<ArrowLeftOutlined />} onClick={goBack} className='mb-4' />
+      <Button
+        icon={<ArrowLeftOutlined />}
+        onClick={onExit}
+        className='mb-4'
+        type='text'
+        size='large'
+      />
       <Card className='max-w-2xl mx-auto mt-8'>
         <div className='flex items-center gap-2 mb-2'>
           <span className='text-lg font-semibold'>{data.name}</span>

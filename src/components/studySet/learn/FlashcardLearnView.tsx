@@ -1,8 +1,8 @@
-// FlashcardLearnView.tsx
 import React, { useState } from 'react';
 import { Card, Button, Progress, Typography, Space } from 'antd';
 import { LeftOutlined, RightOutlined, RetweetOutlined, CloseOutlined } from '@ant-design/icons';
-import ReactCardFlip from 'react-card-flip';
+import { motion } from 'framer-motion';
+import './flipcard.css';
 
 interface Props {
   flashcards: Array<{ id: number; front_text: string; back_text: string }>;
@@ -54,6 +54,7 @@ const FlashcardLearnView: React.FC<Props> = ({ flashcards, onExit }) => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    backfaceVisibility: 'hidden' as const,
   };
 
   return (
@@ -62,27 +63,32 @@ const FlashcardLearnView: React.FC<Props> = ({ flashcards, onExit }) => {
         <Progress percent={progress} showInfo size='small' strokeColor='#1890ff' />
       </div>
 
-      <ReactCardFlip isFlipped={flipped} flipDirection='horizontal'>
-        <Card
-          key='front'
-          hoverable
-          onClick={handleFlip}
-          className={`w-[${CARD_WIDTH}px] min-h-[${CARD_HEIGHT}px] rounded-lg shadow cursor-pointer transition-transform duration-300 bg-white ${CARD_FONT}`}
-          style={{ ...cardStyle }}
+      <div className='flip-container' onClick={handleFlip}>
+        <motion.div
+          className={`flipper ${flipped ? 'flipped' : ''}`}
+          animate={{ rotateY: flipped ? 180 : 0 }}
+          transition={{ duration: 0.6 }}
         >
-          {flashcards[index].front_text}
-        </Card>
-
-        <Card
-          key='back'
-          hoverable
-          onClick={handleFlip}
-          className={`w-[${CARD_WIDTH}px] min-h-[${CARD_HEIGHT}px] rounded-lg shadow cursor-pointer transition-transform duration-300 bg-blue-50 ${CARD_FONT}`}
-          style={{ ...cardStyle }}
-        >
-          {flashcards[index].back_text}
-        </Card>
-      </ReactCardFlip>
+          <motion.div className='front'>
+            <Card
+              hoverable
+              className={`rounded-lg shadow cursor-pointer transition-transform bg-white ${CARD_FONT}`}
+              style={{ ...cardStyle }}
+            >
+              {flashcards[index].front_text}
+            </Card>
+          </motion.div>
+          <motion.div className='back'>
+            <Card
+              hoverable
+              className={`rounded-lg shadow cursor-pointer transition-transform bg-blue-50 ${CARD_FONT}`}
+              style={{ ...cardStyle }}
+            >
+              {flashcards[index].back_text}
+            </Card>
+          </motion.div>
+        </motion.div>
+      </div>
 
       <Space className='mt-6 flex-wrap justify-center'>
         <Button icon={<LeftOutlined />} onClick={handlePrev} disabled={index === 0}>
