@@ -1,38 +1,50 @@
 'use client';
-import { useState } from 'react';
-import FlashCardSection from '@/components/flashCardSection';
-import FlashCardList from '@/components/flashCardSection/FlashCardList';
-import { FLASHCARD_TABS, FlashcardTab } from '@/components/common/constants/tab';
 
-export default function FlashCardsPage() {
-  const [activeTab, setActiveTab] = useState<FlashcardTab>(FLASHCARD_TABS[0]);
+import React, { useState } from 'react';
+import { Button, Card, Typography } from 'antd';
+import { PlusOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import FlashcardList from '@/components/flashcard/FlashcardList';
+import FlashcardFilter from '@/components/flashcard/FlashcardFilter';
+import FlashcardForm from '@/components/flashcard/FlashcardForm';
+import FlashcardGenerateModal from '@/components/flashcard/FlashcardGenerateModal';
+
+const { Title } = Typography;
+
+export default function FlashcardsPage() {
+  const [showCreate, setShowCreate] = useState(false);
+  const [showGenerate, setShowGenerate] = useState(false);
+  const [filter, setFilter] = useState<{ courseId?: number; topicId?: number; lessonId?: number }>(
+    {},
+  );
 
   return (
-    <main className='max-w-7xl mx-auto px-4 py-8 space-y-8'>
-      <nav className='flex justify-center gap-6 pb-2'>
-        {FLASHCARD_TABS.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`z-10 relative text-lg font-medium pb-2 transition-colors ${
-              activeTab === tab
-                ? 'text-blue-600 after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600'
-                : 'text-gray-500 hover:text-blue-500'
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
-      </nav>
-
-      <div className='max-w-5xl mx-auto'>
-        <FlashCardSection mode={activeTab} />
+    <div className='max-w-screen-xl mx-auto p-4'>
+      <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6'>
+        <div>
+          <Title level={2} className='!mb-1'>
+            Flashcards
+          </Title>
+          <p className='text-gray-500'>
+            Practice, review, and auto-generate flashcards for your learning journey.
+          </p>
+        </div>
+        <div className='flex gap-2'>
+          <Button type='primary' icon={<PlusOutlined />} onClick={() => setShowCreate(true)}>
+            Create Flashcard
+          </Button>
+          <Button icon={<ThunderboltOutlined />} onClick={() => setShowGenerate(true)}>
+            Auto-generate
+          </Button>
+        </div>
       </div>
-
-      <div className='mt-12'>
-        <h2 className='text-2xl font-bold mb-6'>All Flashcards</h2>
-        <FlashCardList />
-      </div>
-    </main>
+      <Card className='mb-6'>
+        <FlashcardFilter filter={filter} setFilter={setFilter} />
+      </Card>
+      <FlashcardList filter={filter} />
+      <>
+        <FlashcardForm open={showCreate} onClose={() => setShowCreate(false)} />
+        <FlashcardGenerateModal open={showGenerate} onClose={() => setShowGenerate(false)} />
+      </>
+    </div>
   );
 }
