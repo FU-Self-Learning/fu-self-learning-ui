@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Tag, Typography, Button, Space } from 'antd';
+import { Card, Tag, Typography, Button, Space, Skeleton } from 'antd';
 import { UserOutlined, LockOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { useStudySet } from '@/hooks/study-set/useStudySet';
 
@@ -13,7 +13,7 @@ interface StudySetDetailProps {
 const StudySetDetail: React.FC<StudySetDetailProps> = ({ id, onLearn, userId, onExit }) => {
   const { data, isLoading } = useStudySet(id);
 
-  if (isLoading || !data) return null;
+  if (isLoading || !data) return <Skeleton active />;
 
   return (
     <div>
@@ -46,9 +46,9 @@ const StudySetDetail: React.FC<StudySetDetailProps> = ({ id, onLearn, userId, on
           {data.description}
         </Typography.Paragraph>
         <div className='text-xs text-gray-400 mb-2'>
-          {data.user?.name && (
+          {data.user?.username && (
             <>
-              <UserOutlined /> {data.user.name}
+              <UserOutlined /> {data.user.username}
             </>
           )}
           <div>Created: {data.createdAt && new Date(data.createdAt).toLocaleDateString()}</div>

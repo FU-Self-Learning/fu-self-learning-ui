@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Space } from 'antd';
 import { AppstoreOutlined, ArrowLeftOutlined, IdcardOutlined } from '@ant-design/icons';
-import FlashcardLearnView from './learn/FlashcardLearnView';
-import StudySetListView from './learn/StudySetListView';
+import FlashcardLearnView from './FlashcardLearnView';
+import StudySetListView from './StudySetListView';
 
 interface Props {
   flashcards: Array<{ id: number; front_text: string; back_text: string }>;

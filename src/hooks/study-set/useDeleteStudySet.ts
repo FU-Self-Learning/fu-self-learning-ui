@@ -1,14 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '@/shared/api';
 import { message } from 'antd';
+import { deleteStudySet } from '@/shared/api/studyset.api';
 
 export const useDeleteStudySet = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (id: number) => {
-      const res = await api.delete(`/study-sets/${id}`);
-      return res.data;
-    },
+    mutationFn: deleteStudySet,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['study-sets'] });
       message.success('Study set deleted successfully!');
