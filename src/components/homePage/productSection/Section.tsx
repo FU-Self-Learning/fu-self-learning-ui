@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 interface SectionProps {
   children: React.ReactNode;
@@ -9,7 +9,8 @@ interface SectionProps {
   backgroundColor?: string;
 }
 
-const parent = {
+const parent: Variants = {
+  hidden: {},
   show: {
     transition: {
       staggerChildren: 0.02,
@@ -19,10 +20,11 @@ const parent = {
     },
   },
 };
-const child: { show: { y: number[]; opacity: number[]; transition: { type: string } } } = {
+const child: Variants = {
+  hidden: { y: 20, opacity: 0 },
   show: {
-    y: [20, 0],
-    opacity: [0, 1],
+    y: 0,
+    opacity: 1,
     transition: {
       type: 'spring',
     },
@@ -63,6 +65,7 @@ function Section({ children, title, subTitle, backgroundColor }: SectionProps) {
         {title && (
           <motion.h3
             variants={parent}
+            initial='hidden'
             whileInView='show'
             viewport={{
               once: true,
