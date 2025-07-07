@@ -31,7 +31,7 @@ const FlashcardDetail: React.FC<FlashcardDetailProps> = ({ id }) => {
         {data.back_text}
       </Typography.Paragraph>
       {data.generation_source && <Tag color='purple'>{data.generation_source}</Tag>}
-      <div className='text-xs text-gray-400 mt-2'>Created at: {data.createdAt}</div>
+      <div className='text-xs text-gray-400 mt-2'>Created at: {data.created_at}</div>
     </Card>
   );
 };
