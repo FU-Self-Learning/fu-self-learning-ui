@@ -4,6 +4,7 @@ import { UserOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/shared/api';
 import { APP_URL } from '@/shared/constants/apiConstants';
+import { useHasMounted } from '@/hooks/useHasMounted';
 
 interface User {
   id: number;
@@ -29,6 +30,7 @@ const UserList: React.FC<UserListProps> = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const hasMounted = useHasMounted();
   const receiverUserIdFromParams = searchParams.get('user');
   const [selectedUserId, setSelectedUserId] = useState<number | null>(
     receiverUserIdFromParams ? parseInt(receiverUserIdFromParams, 10) : null,
@@ -52,13 +54,17 @@ const UserList: React.FC<UserListProps> = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    if (hasMounted) {
+      fetchUsers();
+    }
+  }, [hasMounted]);
 
   useEffect(() => {
-    const userIdFromParams = searchParams.get('user');
-    setSelectedUserId(userIdFromParams ? parseInt(userIdFromParams, 10) : null);
-  }, [searchParams]);
+    if (hasMounted) {
+      const userIdFromParams = searchParams.get('user');
+      setSelectedUserId(userIdFromParams ? parseInt(userIdFromParams, 10) : null);
+    }
+  }, [searchParams, hasMounted]);
 
   const handleUserClick = (userId: number) => {
     setSelectedUserId(userId);
@@ -69,24 +75,37 @@ const UserList: React.FC<UserListProps> = () => {
     fetchUsers();
   };
 
+  if (!hasMounted) {
+    return (
+      <div className='w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full shadow-lg'>
+        <div className='flex items-center justify-center h-full'>
+          <Spin size='large' />
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
-      <div className='flex items-center justify-center h-full'>
-        <Spin size='large' />
+      <div className='w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full shadow-lg'>
+        <div className='flex items-center justify-center h-full'>
+          <Spin size='large' />
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className='w-64 bg-white border-r border-gray-200 h-full p-4'>
+      <div className='w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full shadow-lg p-4'>
         <Alert
           message='Error'
           description={error}
           type='error'
           showIcon
+          className='rounded-lg shadow-sm'
           action={
-            <Button size='small' type='primary' icon={<ReloadOutlined />} onClick={handleRetry}>
+            <Button size='small' type='primary' icon={<ReloadOutlined />} onClick={handleRetry} className='rounded-lg'>
               Retry
             </Button>
           }
@@ -96,20 +115,31 @@ const UserList: React.FC<UserListProps> = () => {
   }
 
   return (
-    <div className='w-64 bg-white border-r border-gray-200 h-full overflow-y-auto'>
-      <div className='p-4 border-b border-gray-200 flex justify-between items-center'>
+    <div className='w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full overflow-y-auto shadow-lg'>
+      <div className='p-4 border-b border-gray-200/70 flex justify-between items-center bg-gradient-to-r from-white to-slate-50'>
         <h2 className='text-lg font-semibold text-gray-800'>Chats</h2>
-        <Button type='text' icon={<ReloadOutlined />} onClick={handleRetry} title='Refresh list' />
+        <Button 
+          type='text' 
+          icon={<ReloadOutlined />} 
+          onClick={handleRetry} 
+          title='Refresh list'
+          className='hover:bg-gray-100 rounded-full'
+        />
       </div>
       {users.length === 0 ? (
-        <div className='p-4 text-center text-gray-500'>No users found</div>
+        <div className='p-6 text-center text-gray-500'>
+          <div className='w-12 h-12 bg-gray-100 rounded-full mx-auto mb-3 flex items-center justify-center'>
+            <UserOutlined className='text-gray-400' />
+          </div>
+          <p className='font-medium'>No users found</p>
+        </div>
       ) : (
         <List
           dataSource={users}
           renderItem={(user) => (
             <List.Item
-              className={`px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors ${
-                user.id === selectedUserId ? 'bg-gray-200' : ''
+              className={`px-4 py-3 hover:bg-blue-50/70 cursor-pointer transition-all duration-200 border-none ${
+                user.id === selectedUserId ? 'bg-blue-100/80 border-r-4 border-blue-500' : ''
               }`}
               onClick={() => handleUserClick(user.id)}
             >
@@ -118,19 +148,24 @@ const UserList: React.FC<UserListProps> = () => {
                   <Avatar
                     src={user.avatarUrl || undefined}
                     icon={<UserOutlined />}
-                    className='bg-blue-500'
+                    className='bg-gradient-to-r from-blue-500 to-blue-600 shadow-md'
+                    size={40}
                   />
                 }
                 title={
                   <span
-                    className={
-                      user.id === selectedUserId ? 'text-gray-800 font-semibold' : 'text-gray-600'
-                    }
+                    className={`font-medium transition-colors ${
+                      user.id === selectedUserId ? 'text-blue-700' : 'text-gray-700 hover:text-gray-900'
+                    }`}
                   >
                     {user.username}
                   </span>
                 }
-                description={user.email}
+                description={
+                  <span className='text-sm text-gray-500 truncate'>
+                    {user.email}
+                  </span>
+                }
               />
             </List.Item>
           )}
