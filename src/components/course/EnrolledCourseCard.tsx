@@ -21,10 +21,9 @@ export default function EnrolledCourseCard({ enrollment }: EnrolledCourseCardPro
     );
   }
 
-  const { course, progress = 0, isActive = true, completedAt, enrolledAt, updatedAt, certificateUrl } = enrollment;
+  const { course, progress = 0, completedAt, enrolledAt, certificateUrl } = enrollment;
 
   const getStatus = () => {
-    if (!isActive) return 'inactive';
     if (completedAt) return 'completed';
     if (progress > 0) return 'in_progress';
     return 'not_started';
@@ -40,8 +39,6 @@ export default function EnrolledCourseCard({ enrollment }: EnrolledCourseCardPro
         return 'processing';
       case 'not_started':
         return 'default';
-      case 'inactive':
-        return 'error';
       default:
         return 'default';
     }
@@ -55,8 +52,6 @@ export default function EnrolledCourseCard({ enrollment }: EnrolledCourseCardPro
         return 'In Progress';
       case 'not_started':
         return 'Not Started';
-      case 'inactive':
-        return 'Inactive';
       default:
         return 'Unknown';
     }
@@ -122,7 +117,7 @@ export default function EnrolledCourseCard({ enrollment }: EnrolledCourseCardPro
             
             <div className="flex items-center">
               <ClockCircleOutlined className="mr-1" />
-              <span>Updated: {formatDate(updatedAt)}</span>
+              <span>Enroll At: {formatDate(enrolledAt)}</span>
             </div>
           </div>
 

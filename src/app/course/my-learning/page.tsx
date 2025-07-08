@@ -7,7 +7,7 @@ import CourseHeader from '@/components/course/CourseHeader';
 import EnrolledCourseCard from '@/components/course/EnrolledCourseCard';
 import { useMyEnrolledCourses } from '@/hooks/enrollment/useEnrollment';
 
-const statusFilters = ['All Status', 'Not Started', 'In Progress', 'Completed', 'Inactive'];
+const statusFilters = ['All Status', 'Not Started', 'In Progress', 'Completed'];
 
 export default function MyLearningPage() {
   const [selectedStatus, setSelectedStatus] = useState('All Status');
@@ -29,7 +29,6 @@ export default function MyLearningPage() {
     : enrolledCourses;
 
   const getEnrollmentStatus = (enrollment: any) => {
-    if (!enrollment.isActive) return 'inactive';
     if (enrollment.completedAt) return 'completed';
     if (enrollment.progress > 0) return 'in_progress';
     return 'not_started';
@@ -42,7 +41,6 @@ export default function MyLearningPage() {
         if (selectedStatus === 'Not Started') return status === 'not_started';
         if (selectedStatus === 'In Progress') return status === 'in_progress';
         if (selectedStatus === 'Completed') return status === 'completed';
-        if (selectedStatus === 'Inactive') return status === 'inactive';
         return true;
       });
 
