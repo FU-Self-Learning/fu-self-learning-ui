@@ -1,9 +1,19 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/fu-self-learning/ui:latest', '.']
+    args:
+      - 'build'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_API_URL=https://fu-self-learning-api-22235821035.asia-southeast1.run.app/api/v1'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_SOCKET_URL=wss://fu-self-learning-api-22235821035.asia-southeast1.run.app/chat'
+      - '-t'
+      - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/fu-self-learning/ui:latest'
+      - '.'
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/fu-self-learning/ui:latest']
+    args:
+      - 'push'
+      - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/fu-self-learning/ui:latest'
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
