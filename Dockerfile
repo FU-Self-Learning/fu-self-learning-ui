@@ -4,6 +4,12 @@ FROM node:20-alpine AS builder
 # Set working directory
 WORKDIR /app
 
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_SOCKET_URL
+
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_SOCKET_URL=$NEXT_PUBLIC_SOCKET_URL
+
 # Install dependencies
 COPY package.json package-lock.json ./
 RUN npm ci
