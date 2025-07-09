@@ -15,6 +15,7 @@ import { LessonInTopic } from '@/types/topicType';
 const CourseDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [selectedLesson, setSelectedLesson] = useState<LessonInTopic | null>(null);
+  const [selectedLessonIndex, setSelectedLessonIndex] = useState<number | undefined>(undefined);
 
   const { data: courseDetail, isLoading } = useCourseDetail(id);
   const { data: topics, isLoading: isLoadingTopics } = useTopics(id);
@@ -29,6 +30,21 @@ const CourseDetail = () => {
     reviewCount: 0,
   };
 
+  const handleLessonSelect = (lesson: LessonInTopic) => {
+    setSelectedLesson(lesson);
+    
+    let lessonIndex = 0;
+    for (const topic of topics || []) {
+      for (const topicLesson of topic.lessons || []) {
+        if (topicLesson.id === lesson.id) {
+          setSelectedLessonIndex(lessonIndex);
+          return;
+        }
+        lessonIndex++;
+      }
+    }
+  };
+
   return (
     <div className='max-w-screen-xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-6'>
       <div className='lg:col-span-2'>
@@ -38,6 +54,8 @@ const CourseDetail = () => {
           category={courseDetail.categories[0].name}
           stats={stats}
           isThumbnail={selectedLesson ? false : true}
+          courseId={id}
+          selectedLessonIndex={selectedLessonIndex}
         />
         <CourseDetailTabs
           description={courseDetail.description}
@@ -48,7 +66,7 @@ const CourseDetail = () => {
       </div>
       <CourseDetailContent
         sections={topics || []}
-        onLessonSelect={setSelectedLesson}
+        onLessonSelect={handleLessonSelect}
         courseId={id}
       />
     </div>
