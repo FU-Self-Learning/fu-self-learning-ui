@@ -77,7 +77,6 @@ const CourseDetail = () => {
         if (topicLesson.id === lesson.id) {
           setSelectedLessonIndex(lessonIndex);
           
-          // Save video progress when selecting a lesson
           if (isAuthenticated && user?.id) {
             saveLastWatchedVideo({
               courseId: id,
@@ -144,7 +143,6 @@ const CourseDetail = () => {
           courseId={id}
           selectedLessonIndex={selectedLessonIndex}
           onVideoPlay={() => selectedLesson && handleLessonSelect(selectedLesson)}
-          lessonTitle={selectedLesson?.title}
         />
         <CourseDetailTabs
           description={courseDetail.description}
