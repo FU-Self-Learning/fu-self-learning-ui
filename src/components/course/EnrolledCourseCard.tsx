@@ -66,13 +66,13 @@ export default function EnrolledCourseCard({ enrollment }: EnrolledCourseCardPro
   };
 
   return (
-    <Link href={`/course/${course?.id || ''}`} className="block">
-      <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden">
-        <div className="relative">
+    <Link href={`/course/${course?.id || ''}`} className="block w-full">
+      <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden min-h-[420px] max-h-[420px] flex flex-col">
+        <div className="relative h-48">
           <img
             src={course?.thumbnail || '/images/banner.jpg'}
             alt={course?.title || 'Course'}
-            className="w-full h-48 object-cover"
+            className="w-full h-full object-cover"
           />
           <div className="absolute top-3 right-3">
             <Badge
@@ -91,12 +91,12 @@ export default function EnrolledCourseCard({ enrollment }: EnrolledCourseCardPro
           </div>
         </div>
 
-        <div className="p-4">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+        <div className="p-4 flex-1 flex flex-col h-[220px]">
+          <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 h-14">
             {course?.title || 'Untitled Course'}
           </h3>
           
-          <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+          <p className="text-gray-600 text-sm mb-3 line-clamp-2 h-10">
             {course?.description || 'No description available'}
           </p>
 
@@ -106,10 +106,12 @@ export default function EnrolledCourseCard({ enrollment }: EnrolledCourseCardPro
               alt={course.instructor?.username || 'Instructor'}
               className="w-6 h-6 rounded-full mr-2"
             />
-            <span className="text-sm text-gray-500">{course.instructor?.username || 'Unknown Instructor'}</span>
+            <span className="text-sm text-gray-500 truncate flex-1">
+              {course.instructor?.username || 'Unknown Instructor'}
+            </span>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+          <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
             <div className="flex items-center">
               <PlayCircleOutlined className="mr-1" />
               <span>{course?.totalLessons || 0} lessons</span>
@@ -117,33 +119,35 @@ export default function EnrolledCourseCard({ enrollment }: EnrolledCourseCardPro
             
             <div className="flex items-center">
               <ClockCircleOutlined className="mr-1" />
-              <span>Enroll At: {formatDate(enrolledAt)}</span>
+              <span className="truncate">Enroll At: {formatDate(enrolledAt)}</span>
             </div>
           </div>
 
-          {certificateUrl && completedAt && (
-            <div className="mb-2">
-              <a 
-                href={certificateUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-xs text-blue-600 hover:text-blue-800 underline"
-              >
-                📜 View Certificate
-              </a>
-            </div>
-          )}
+          <div className="mt-auto space-y-2">
+            {certificateUrl && completedAt && (
+              <div>
+                <a 
+                  href={certificateUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-xs text-blue-600 hover:text-blue-800 underline"
+                >
+                  📜 View Certificate
+                </a>
+              </div>
+            )}
 
-          {completedAt && (
-            <div className="text-xs text-green-600 mb-2">
-              Completed on: {formatDate(completedAt)}
-            </div>
-          )}
+            {completedAt && (
+              <div className="text-xs text-green-600">
+                Completed on: {formatDate(completedAt)}
+              </div>
+            )}
 
-          <div className="mt-3 text-center">
-            <span className="text-sm font-medium text-gray-700">
-              {formatProgress(progress)}% Complete
-            </span>
+            <div className="text-center">
+              <span className="text-sm font-medium text-gray-700">
+                {formatProgress(progress)}% Complete
+              </span>
+            </div>
           </div>
         </div>
       </div>
