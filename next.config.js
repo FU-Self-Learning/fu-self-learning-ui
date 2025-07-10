@@ -4,6 +4,10 @@ const path = require('path');
 const nextConfig = {
   devIndicators: false,
 
+  images: {
+    domains: ['res.cloudinary.com'],
+  },
+
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
