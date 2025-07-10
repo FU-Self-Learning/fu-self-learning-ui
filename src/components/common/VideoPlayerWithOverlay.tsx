@@ -55,19 +55,15 @@ const VideoPlayerWithOverlay = ({
       }
     };
 
-    const handlePause = () => {};
-
     const handleEnded = () => {
       setShowOverlay(true);
     };
 
     video.addEventListener('play', handlePlay);
-    video.addEventListener('pause', handlePause);
     video.addEventListener('ended', handleEnded);
 
     return () => {
       video.removeEventListener('play', handlePlay);
-      video.removeEventListener('pause', handlePause);
       video.removeEventListener('ended', handleEnded);
     };
   }, [hasInitialized, onVideoPlay]);

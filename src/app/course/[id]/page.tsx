@@ -32,7 +32,7 @@ const CourseDetail = () => {
   const { lastWatchedVideo, saveLastWatchedVideo, getLastWatchedVideoForCourse } = 
     useLastWatchedVideo(user?.id?.toString());
 
-  const checkLastWatched = useCallback(() => {
+  useEffect(() => {
     if (!isLoading && !isLoadingTopics && courseDetail && topics && isAuthenticated && user?.id) {
       const lessonId = searchParams.get('lessonId');
       if (!lessonId && !hasCheckedLastWatched) {
@@ -43,11 +43,18 @@ const CourseDetail = () => {
         setHasCheckedLastWatched(true);
       }
     }
-  }, [isLoading, isLoadingTopics, courseDetail, topics, id, user?.id, isAuthenticated, searchParams, getLastWatchedVideoForCourse, hasCheckedLastWatched]);
-
-  useEffect(() => {
-    checkLastWatched();
-  }, [checkLastWatched]);
+  }, [
+    isLoading, 
+    isLoadingTopics, 
+    courseDetail, 
+    topics, 
+    id, 
+    user?.id, 
+    isAuthenticated, 
+    searchParams, 
+    hasCheckedLastWatched,
+    getLastWatchedVideoForCourse,
+  ]);
 
   if (isLoading || !courseDetail || isLoadingTopics)
     return <Spin className='flex justify-center items-center h-screen' />;
