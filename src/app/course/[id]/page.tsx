@@ -55,7 +55,7 @@ const CourseDetail = () => {
 
   const handleLessonSelect = (lesson: LessonInTopic) => {
     setSelectedLesson(lesson);
-    setShowContinueModal(false); // Hide continue modal when manually selecting a lesson
+    setShowContinueModal(false); 
     
     let lessonIndex = 0;
     let topicId = '';
