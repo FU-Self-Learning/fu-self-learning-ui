@@ -49,3 +49,12 @@ export interface EnrollmentCheck {
   progress?: number;
   isActive?: boolean;
 }
+
+export interface LastWatchedVideo {
+  courseId: string;
+  lessonId: string;
+  videoId: string;
+  topicId: string;
+  courseTitle: string;
+  lessonTitle: string;
+}

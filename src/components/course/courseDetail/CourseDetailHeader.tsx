@@ -21,6 +21,8 @@ interface CourseDetailHeaderProps {
   isThumbnail: boolean;
   courseId: string;
   selectedLessonIndex?: number; 
+  onVideoPlay?: () => void;
+  lessonTitle?: string;
 }
 
 const CourseDetailHeader = ({
@@ -31,6 +33,8 @@ const CourseDetailHeader = ({
   isThumbnail,
   courseId,
   selectedLessonIndex,
+  onVideoPlay,
+  lessonTitle,
 }: CourseDetailHeaderProps) => {
   const router = useRouter();
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -84,7 +88,13 @@ const CourseDetailHeader = ({
       </p>
       
       {shouldShowVideo ? (
-        <VideoPlayerWithOverlay src={videoIntroUrl} height='h-[400px]' isThumbnail={isThumbnail} />
+        <VideoPlayerWithOverlay 
+          src={videoIntroUrl} 
+          height='h-[400px]' 
+          isThumbnail={isThumbnail} 
+          onVideoPlay={onVideoPlay}
+          lessonTitle={lessonTitle}
+        />
       ) : (
         <div className='relative w-full h-[400px] bg-gray-100 rounded-lg overflow-hidden mb-4 flex items-center justify-center'>
           <div className='text-center'>
