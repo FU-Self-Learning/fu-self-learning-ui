@@ -41,7 +41,7 @@ const CourseDetail = () => {
         }
       }
     }
-  }, [isLoading, isLoadingTopics, courseDetail, topics, id, user?.id, isAuthenticated, searchParams]);
+  }, [isLoading, isLoadingTopics, courseDetail, topics, id, user?.id, isAuthenticated, searchParams, getLastWatchedVideoForCourse]);
 
   if (isLoading || !courseDetail || isLoadingTopics)
     return <Spin className='flex justify-center items-center h-screen' />;

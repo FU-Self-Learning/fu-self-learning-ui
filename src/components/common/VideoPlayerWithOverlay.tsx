@@ -1,6 +1,6 @@
 import { Empty } from 'antd';
 import { PlayCircleOutlined } from '@ant-design/icons';
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 interface VideoPlayerWithOverlayProps {
   src?: string;
@@ -10,7 +10,6 @@ interface VideoPlayerWithOverlayProps {
   height?: string;
   isThumbnail?: boolean;
   onVideoPlay?: () => void;
-  lessonTitle?: string;
 }
 
 const VideoPlayerWithOverlay = ({
@@ -21,10 +20,8 @@ const VideoPlayerWithOverlay = ({
   height,
   isThumbnail,
   onVideoPlay,
-  lessonTitle,
 }: VideoPlayerWithOverlayProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [showOverlay, setShowOverlay] = useState(true);
   const [hasInitialized, setHasInitialized] = useState(false);
 
@@ -34,7 +31,6 @@ const VideoPlayerWithOverlay = ({
 
     video.pause();
     video.currentTime = 0;
-    setIsPlaying(false);
     setShowOverlay(true);
     setHasInitialized(false);
 
@@ -50,7 +46,6 @@ const VideoPlayerWithOverlay = ({
     if (!video) return;
 
     const handlePlay = () => {
-      setIsPlaying(true);
       setShowOverlay(false);
       video.setAttribute('controls', 'true');
 
@@ -60,12 +55,9 @@ const VideoPlayerWithOverlay = ({
       }
     };
 
-    const handlePause = () => {
-      setIsPlaying(false);
-    };
+    const handlePause = () => {};
 
     const handleEnded = () => {
-      setIsPlaying(false);
       setShowOverlay(true);
     };
 

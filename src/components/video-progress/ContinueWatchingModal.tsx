@@ -51,9 +51,9 @@ export const ContinueWatchingModal: React.FC<ContinueWatchingModalProps> = ({
 
         <div style={{ marginTop: '16px', color: '#666' }}>
           <Text>
-            • Click "Continue from Last Lesson" to resume from where you left off
+            &bull; Click &ldquo;Continue from Last Lesson&rdquo; to resume from where you left off
             <br />
-            • Click "Start from Beginning" to start the course from the first lesson
+            &bull; Click &ldquo;Start from Beginning&rdquo; to start the course from the first lesson
           </Text>
         </div>
       </div>
