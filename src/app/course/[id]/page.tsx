@@ -9,7 +9,7 @@ import {
 import { useCourseDetail } from '@/hooks/course/useCourseDetail';
 import { Spin } from 'antd';
 import { useTopics } from '@/hooks/topic/useTopics';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { LessonInTopic } from '@/types/topicType';
 import { useLastWatchedVideo } from '@/hooks/video-progress/useLastWatchedVideo';
 import ContinueWatchingModal from '@/components/video-progress/ContinueWatchingModal';
@@ -71,40 +71,27 @@ const CourseDetail = () => {
     setShowContinueModal(false); 
     
     let lessonIndex = 0;
-    let topicId = '';
     
     for (const topic of topics || []) {
       for (const topicLesson of topic.lessons || []) {
         if (topicLesson.id === lesson.id) {
           setSelectedLessonIndex(lessonIndex);
-          topicId = topic.id.toString();
+          
+          // Save video progress when selecting a lesson
+          if (isAuthenticated && user?.id) {
+            saveLastWatchedVideo({
+              courseId: id,
+              lessonId: lesson.id.toString(),
+              videoId: lesson.videoUrl || '',
+              topicId: topic.id.toString(),
+              courseTitle: courseDetail.title,
+              lessonTitle: lesson.title
+            });
+          }
           return;
         }
         lessonIndex++;
       }
-    }
-  };
-
-  const handleVideoPlay = () => {
-    if (selectedLesson && isAuthenticated && user?.id) {
-      let topicId = '';
-      for (const topic of topics || []) {
-        if (topic.lessons?.some(lesson => lesson.id === selectedLesson.id)) {
-          topicId = topic.id.toString();
-          break;
-        }
-      }
-
-      if (!topicId) return; 
-
-      saveLastWatchedVideo({
-        courseId: id,
-        lessonId: selectedLesson.id.toString(),
-        videoId: selectedLesson.videoUrl || '',
-        topicId: topicId,
-        courseTitle: courseDetail.title,
-        lessonTitle: selectedLesson.title
-      });
     }
   };
 
@@ -156,7 +143,7 @@ const CourseDetail = () => {
           isThumbnail={selectedLesson ? false : true}
           courseId={id}
           selectedLessonIndex={selectedLessonIndex}
-          onVideoPlay={handleVideoPlay}
+          onVideoPlay={() => selectedLesson && handleLessonSelect(selectedLesson)}
           lessonTitle={selectedLesson?.title}
         />
         <CourseDetailTabs
