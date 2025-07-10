@@ -9,7 +9,7 @@ import {
 import { useCourseDetail } from '@/hooks/course/useCourseDetail';
 import { Spin } from 'antd';
 import { useTopics } from '@/hooks/topic/useTopics';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { LessonInTopic } from '@/types/topicType';
 import { useLastWatchedVideo } from '@/hooks/video-progress/useLastWatchedVideo';
 import ContinueWatchingModal from '@/components/video-progress/ContinueWatchingModal';
@@ -22,6 +22,7 @@ const CourseDetail = () => {
   const [selectedLesson, setSelectedLesson] = useState<LessonInTopic | null>(null);
   const [selectedLessonIndex, setSelectedLessonIndex] = useState<number | undefined>(undefined);
   const [showContinueModal, setShowContinueModal] = useState(false);
+  const [hasCheckedLastWatched, setHasCheckedLastWatched] = useState(false);
   
   const user = useSelector(selectAuthUser);
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -31,17 +32,22 @@ const CourseDetail = () => {
   const { lastWatchedVideo, saveLastWatchedVideo, getLastWatchedVideoForCourse } = 
     useLastWatchedVideo(user?.id?.toString());
 
-  useEffect(() => {
+  const checkLastWatched = useCallback(() => {
     if (!isLoading && !isLoadingTopics && courseDetail && topics && isAuthenticated && user?.id) {
       const lessonId = searchParams.get('lessonId');
-      if (!lessonId) {
+      if (!lessonId && !hasCheckedLastWatched) {
         const lastWatched = getLastWatchedVideoForCourse(id);
         if (lastWatched) {
           setShowContinueModal(true);
         }
+        setHasCheckedLastWatched(true);
       }
     }
-  }, [isLoading, isLoadingTopics, courseDetail, topics, id, user?.id, isAuthenticated, searchParams, getLastWatchedVideoForCourse]);
+  }, [isLoading, isLoadingTopics, courseDetail, topics, id, user?.id, isAuthenticated, searchParams, getLastWatchedVideoForCourse, hasCheckedLastWatched]);
+
+  useEffect(() => {
+    checkLastWatched();
+  }, [checkLastWatched]);
 
   if (isLoading || !courseDetail || isLoadingTopics)
     return <Spin className='flex justify-center items-center h-screen' />;
