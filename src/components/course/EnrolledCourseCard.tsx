@@ -71,12 +71,16 @@ export default function EnrolledCourseCard({ enrollment }: EnrolledCourseCardPro
       <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden min-h-[420px] max-h-[420px] flex flex-col">
         <div className="relative h-48">
           <Image
-            src={course?.thumbnail || '/images/banner.jpg'}
+            src={course?.imageUrl || '/images/banner.jpg'}
             alt={course?.title || 'Course'}
             className="object-cover"
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             priority
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = '/images/banner.jpg';
+            }}
           />
           <div className="absolute top-3 right-3">
             <Badge
@@ -105,15 +109,6 @@ export default function EnrolledCourseCard({ enrollment }: EnrolledCourseCardPro
           </p>
 
           <div className="flex items-center mb-3">
-            <div className="relative w-6 h-6 mr-2">
-              <Image
-                src={course.instructor?.avatarUrl || '/images/default-avatar.png'}
-                alt={course.instructor?.username || 'Instructor'}
-                className="rounded-full"
-                fill
-                sizes="24px"
-              />
-            </div>
             <span className="text-sm text-gray-500 truncate flex-1">
               {course.instructor?.username || 'Unknown Instructor'}
             </span>

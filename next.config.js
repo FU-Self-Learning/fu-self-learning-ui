@@ -6,6 +6,12 @@ const nextConfig = {
 
   images: {
     domains: ['res.cloudinary.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.gstatic.com',
+      },
+    ],
   },
 
   webpack(config) {

@@ -15,7 +15,7 @@ export interface EnrolledCourse {
     id: string;
     title: string;
     description: string;
-    thumbnail?: string;
+    imageUrl?: string;
     instructor: {
       id: string;
       username: string;
