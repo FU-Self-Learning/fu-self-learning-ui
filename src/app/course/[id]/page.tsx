@@ -43,6 +43,35 @@ const CourseDetail = () => {
     return topics[0].lessons[0];
   }, [topics]);
 
+  const handleLessonSelect = useCallback((lesson: LessonInTopic) => {
+    setSelectedLesson(lesson);
+    setShowContinueModal(false); 
+    
+    let lessonIndex = 0;
+    
+    for (const topic of topics || []) {
+      for (const topicLesson of topic.lessons || []) {
+        if (topicLesson.id === lesson.id) {
+          setSelectedLessonIndex(lessonIndex);
+          setSelectedTopicId(topic.id.toString());
+          
+          if (isAuthenticated && user?.id && enrollmentCheck?.isEnrolled && courseDetail) {
+            saveLastWatchedVideo({
+              courseId: id,
+              lessonId: lesson.id.toString(),
+              videoId: lesson.videoUrl || '',
+              topicId: topic.id.toString(),
+              courseTitle: courseDetail.title,
+              lessonTitle: lesson.title
+            });
+          }
+          return;
+        }
+        lessonIndex++;
+      }
+    }
+  }, [topics, isAuthenticated, user?.id, enrollmentCheck?.isEnrolled, saveLastWatchedVideo, id, courseDetail]);
+
   useEffect(() => {
     if (!isLoading && !isLoadingTopics && courseDetail && topics) {
       const lessonId = searchParams.get('lessonId');
@@ -82,7 +111,8 @@ const CourseDetail = () => {
     hasCheckedLastWatched,
     findFirstLesson,
     getLastWatchedVideoForCourse,
-    id
+    id,
+    handleLessonSelect
   ]);
 
   if (isLoading || !courseDetail || isLoadingTopics)
@@ -93,36 +123,6 @@ const CourseDetail = () => {
     totalDuration: courseDetail.totalDuration,
     rating: 0,
     reviewCount: 0,
-  };
-
-  const handleLessonSelect = (lesson: LessonInTopic) => {
-    setSelectedLesson(lesson);
-    setShowContinueModal(false); 
-    
-    let lessonIndex = 0;
-    let currentTopicId = '';
-    
-    for (const topic of topics || []) {
-      for (const topicLesson of topic.lessons || []) {
-        if (topicLesson.id === lesson.id) {
-          setSelectedLessonIndex(lessonIndex);
-          setSelectedTopicId(topic.id.toString());
-          
-          if (isAuthenticated && user?.id && enrollmentCheck?.isEnrolled) {
-            saveLastWatchedVideo({
-              courseId: id,
-              lessonId: lesson.id.toString(),
-              videoId: lesson.videoUrl || '',
-              topicId: topic.id.toString(),
-              courseTitle: courseDetail.title,
-              lessonTitle: lesson.title
-            });
-          }
-          return;
-        }
-        lessonIndex++;
-      }
-    }
   };
 
   const handleContinueWatching = () => {

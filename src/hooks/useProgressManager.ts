@@ -124,8 +124,7 @@ export const useProgressManager = () => {
 
   const updateProgressManually = useCallback((
     courseId: string,
-    progress: number,
-    forceUpdate = false 
+    progress: number
   ) => {
     const clampedProgress = Math.min(Math.max(progress, 0), 100);
     

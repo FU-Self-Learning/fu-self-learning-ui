@@ -45,8 +45,7 @@ export const VideoPlayerWithProgress: React.FC<VideoPlayerWithProgressProps> = (
   topics,
   onVideoPlay,
   onLessonComplete,
-  autoUpdateProgress = true,
-  currentProgress = 0
+  autoUpdateProgress = true
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [showOverlay, setShowOverlay] = useState(initialShowOverlay);
