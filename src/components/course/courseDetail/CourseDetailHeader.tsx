@@ -1,5 +1,5 @@
 import { Button, Tag, message } from 'antd';
-import VideoPlayerWithOverlay from '@/components/common/VideoPlayerWithOverlay';
+import VideoPlayerWithProgress from '@/components/common/VideoPlayerWithProgress';
 import {
   ArrowLeftOutlined,
   BookOutlined,
@@ -12,6 +12,7 @@ import { formatDuration } from '@/utils/convertTime';
 import { useCheckEnrollment } from '@/hooks/enrollment';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '@/providers/auth/selector/authSelector';
+import { TopicResponse, LessonInTopic } from '@/types/topicType';
 
 interface CourseDetailHeaderProps {
   videoIntroUrl: string;
@@ -22,6 +23,11 @@ interface CourseDetailHeaderProps {
   courseId: string;
   selectedLessonIndex?: number; 
   onVideoPlay?: () => void;
+  currentLesson?: LessonInTopic;
+  topics?: TopicResponse[];
+  courseTitle?: string;
+  currentTopicId?: string;
+  currentProgress?: number; 
 }
 
 const CourseDetailHeader = ({
@@ -33,6 +39,11 @@ const CourseDetailHeader = ({
   courseId,
   selectedLessonIndex,
   onVideoPlay,
+  currentLesson,
+  topics,
+  courseTitle,
+  currentTopicId,
+  currentProgress = 0,
 }: CourseDetailHeaderProps) => {
   const router = useRouter();
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -86,11 +97,19 @@ const CourseDetailHeader = ({
       </p>
       
       {shouldShowVideo ? (
-        <VideoPlayerWithOverlay 
+        <VideoPlayerWithProgress 
           src={videoIntroUrl} 
           height='h-[400px]' 
           isThumbnail={isThumbnail} 
           onVideoPlay={onVideoPlay}
+          courseId={courseId}
+          lessonId={currentLesson?.id}
+          lessonTitle={currentLesson?.title}
+          topicId={currentTopicId}
+          courseTitle={courseTitle || title}
+          topics={topics}
+          autoUpdateProgress={!isThumbnail && isEnrolled}
+          currentProgress={currentProgress}
         />
       ) : (
         <div className='relative w-full h-[400px] bg-gray-100 rounded-lg overflow-hidden mb-4 flex items-center justify-center'>

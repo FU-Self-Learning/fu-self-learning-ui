@@ -13,6 +13,7 @@ import { PostResponse } from '@/types/postType';
 import TimeAgoText from './TimeAgoText';
 import PostCommentModal from './PostCommentModal';
 import { useDeletePost } from '@/hooks/posts/usePosts';
+import { isValidWebUrl } from '@/utils/urlValidation';
 
 interface PostListProps {
   posts: PostResponse[];
@@ -66,7 +67,7 @@ const PostList = ({ posts }: PostListProps) => {
             <div className='flex items-center gap-2'>
               <Avatar
                 icon={<UserOutlined />}
-                src={post.user?.avatarUrl || undefined}
+                src={isValidWebUrl(post.user?.avatarUrl) ? post.user?.avatarUrl : undefined}
                 className='mr-2'
               />
               <div>

@@ -2,9 +2,11 @@
 
 import React, { useEffect } from 'react';
 import { Avatar, Button, Card, Typography, Spin, message } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { useFollowers } from '@/hooks/follow/useFollowers';
 import { useUnfollow } from '@/hooks/follow/useUnfollow';
+import { isValidWebUrl } from '@/utils/urlValidation';
 
 const ListFollowingPage = () => {
   const { data: followers, isLoading, isError, error } = useFollowers();
@@ -58,7 +60,8 @@ const ListFollowingPage = () => {
             <div className='flex items-center gap-4'>
               <Avatar
                 size={48}
-                src={item.followingUser.avatarUrl}
+                src={isValidWebUrl(item.followingUser.avatarUrl) ? item.followingUser.avatarUrl : undefined}
+                icon={<UserOutlined />}
                 className='!flex !items-center !justify-center'
               />
               <div className='flex-1 min-w-0'>

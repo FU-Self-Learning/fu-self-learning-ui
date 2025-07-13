@@ -7,6 +7,7 @@ import { useCommentsByPostId } from '@/hooks/comments/useCommentsByPostId';
 import { useCreateComment } from '@/hooks/comments/useCreateComment';
 import { CommentResponse } from '@/types/commentType';
 import { useProfile } from '@/hooks/auth/useProfile';
+import { isValidWebUrl } from '@/utils/urlValidation';
 
 interface PostCommentModalProps {
   visible: boolean;
@@ -55,7 +56,7 @@ const PostCommentModal = ({ visible, onClose, post }: PostCommentModalProps) => 
             <div className='flex items-center gap-2'>
               <Avatar
                 icon={<UserOutlined />}
-                src={comment.user?.avatarUrl || undefined}
+                src={isValidWebUrl(comment.user?.avatarUrl) ? comment.user?.avatarUrl : undefined}
                 size='small'
               />
               <Typography.Text strong>{comment.user?.username || 'Unknown User'}</Typography.Text>
@@ -119,7 +120,7 @@ const PostCommentModal = ({ visible, onClose, post }: PostCommentModalProps) => 
           <div className='flex items-center mb-4 gap-2'>
             <Avatar
               icon={<UserOutlined />}
-              src={post.user?.avatarUrl || undefined}
+              src={isValidWebUrl(post.user?.avatarUrl) ? post.user?.avatarUrl : undefined}
               className='mr-2'
             />
             <div>
@@ -172,7 +173,11 @@ const PostCommentModal = ({ visible, onClose, post }: PostCommentModalProps) => 
         </div>
 
         <div className='flex items-center gap-2 border-t pt-4'>
-          <Avatar icon={<UserOutlined />} src={currentUserProfile?.avatarUrl} className='mr-2' />
+          <Avatar 
+            icon={<UserOutlined />} 
+            src={isValidWebUrl(currentUserProfile?.avatarUrl) ? currentUserProfile?.avatarUrl : undefined} 
+            className='mr-2' 
+          />
           <Input
             placeholder={
               replyingToUsername ? `Replying to @${replyingToUsername}...` : 'Write a comment...'

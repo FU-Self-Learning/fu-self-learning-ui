@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/shared/api';
 import { APP_URL } from '@/shared/constants/apiConstants';
 import { useHasMounted } from '@/hooks/useHasMounted';
+import { isValidWebUrl } from '@/utils/urlValidation';
 
 interface User {
   id: number;
@@ -146,7 +147,7 @@ const UserList: React.FC<UserListProps> = () => {
               <List.Item.Meta
                 avatar={
                   <Avatar
-                    src={user.avatarUrl || undefined}
+                    src={isValidWebUrl(user.avatarUrl) ? user.avatarUrl : undefined}
                     icon={<UserOutlined />}
                     className='bg-gradient-to-r from-blue-500 to-blue-600 shadow-md'
                     size={40}

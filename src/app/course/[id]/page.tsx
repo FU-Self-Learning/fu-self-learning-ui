@@ -9,18 +9,21 @@ import {
 import { useCourseDetail } from '@/hooks/course/useCourseDetail';
 import { Spin } from 'antd';
 import { useTopics } from '@/hooks/topic/useTopics';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { LessonInTopic } from '@/types/topicType';
 import { useLastWatchedVideo } from '@/hooks/video-progress/useLastWatchedVideo';
 import ContinueWatchingModal from '@/components/video-progress/ContinueWatchingModal';
+import ProgressSyncer from '@/components/common/ProgressSyncer';
 import { useSelector } from 'react-redux';
 import { selectAuthUser, selectIsAuthenticated } from '@/providers/auth/selector/authSelector';
+import { useCheckEnrollment } from '@/hooks/enrollment';
 
 const CourseDetail = () => {
   const { id } = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const [selectedLesson, setSelectedLesson] = useState<LessonInTopic | null>(null);
   const [selectedLessonIndex, setSelectedLessonIndex] = useState<number | undefined>(undefined);
+  const [selectedTopicId, setSelectedTopicId] = useState<string>('');
   const [showContinueModal, setShowContinueModal] = useState(false);
   const [hasCheckedLastWatched, setHasCheckedLastWatched] = useState(false);
   
@@ -29,31 +32,57 @@ const CourseDetail = () => {
   
   const { data: courseDetail, isLoading } = useCourseDetail(id);
   const { data: topics, isLoading: isLoadingTopics } = useTopics(id);
+  const { data: enrollmentCheck } = useCheckEnrollment(id);
   const { lastWatchedVideo, saveLastWatchedVideo, getLastWatchedVideoForCourse } = 
     useLastWatchedVideo(user?.id?.toString());
 
+  const findFirstLesson = useCallback(() => {
+    if (!topics || topics.length === 0 || !topics[0].lessons || topics[0].lessons.length === 0) {
+      return null;
+    }
+    return topics[0].lessons[0];
+  }, [topics]);
+
   useEffect(() => {
-    if (!isLoading && !isLoadingTopics && courseDetail && topics && isAuthenticated && user?.id) {
+    if (!isLoading && !isLoadingTopics && courseDetail && topics) {
       const lessonId = searchParams.get('lessonId');
-      if (!lessonId && !hasCheckedLastWatched) {
+      
+      if (lessonId || hasCheckedLastWatched) return;
+      
+      if (isAuthenticated && user?.id && enrollmentCheck?.isEnrolled) {
         const lastWatched = getLastWatchedVideoForCourse(id);
         if (lastWatched) {
           setShowContinueModal(true);
+        } else {
+          const firstLesson = findFirstLesson();
+          if (firstLesson) {
+            handleLessonSelect(firstLesson);
+          }
         }
-        setHasCheckedLastWatched(true);
+      } else {
+        const firstLesson = findFirstLesson();
+        if (firstLesson) {
+          setSelectedLesson(firstLesson);
+          setSelectedLessonIndex(0);
+          setSelectedTopicId(topics[0]?.id?.toString() || '');
+        }
       }
+      
+      setHasCheckedLastWatched(true);
     }
   }, [
     isLoading, 
     isLoadingTopics, 
     courseDetail, 
     topics, 
-    id, 
-    user?.id, 
     isAuthenticated, 
-    searchParams, 
+    user?.id, 
+    enrollmentCheck?.isEnrolled,
+    searchParams,
     hasCheckedLastWatched,
+    findFirstLesson,
     getLastWatchedVideoForCourse,
+    id
   ]);
 
   if (isLoading || !courseDetail || isLoadingTopics)
@@ -71,13 +100,15 @@ const CourseDetail = () => {
     setShowContinueModal(false); 
     
     let lessonIndex = 0;
+    let currentTopicId = '';
     
     for (const topic of topics || []) {
       for (const topicLesson of topic.lessons || []) {
         if (topicLesson.id === lesson.id) {
           setSelectedLessonIndex(lessonIndex);
+          setSelectedTopicId(topic.id.toString());
           
-          if (isAuthenticated && user?.id) {
+          if (isAuthenticated && user?.id && enrollmentCheck?.isEnrolled) {
             saveLastWatchedVideo({
               courseId: id,
               lessonId: lesson.id.toString(),
@@ -109,13 +140,6 @@ const CourseDetail = () => {
     }
   };
 
-  const findFirstLesson = () => {
-    if (!topics || topics.length === 0 || !topics[0].lessons || topics[0].lessons.length === 0) {
-      return null;
-    }
-    return topics[0].lessons[0];
-  };
-
   const handleStartFromBeginning = () => {
     const firstLesson = findFirstLesson();
     if (firstLesson) {
@@ -126,12 +150,16 @@ const CourseDetail = () => {
 
   return (
     <div className='max-w-screen-xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-6'>
-      <ContinueWatchingModal
-        lastWatchedVideo={lastWatchedVideo}
-        isOpen={showContinueModal}
-        onClose={handleStartFromBeginning}
-        onContinue={handleContinueWatching}
-      />
+      {isAuthenticated && enrollmentCheck?.isEnrolled && <ProgressSyncer courseId={id} />}
+      
+      {enrollmentCheck?.isEnrolled && (
+        <ContinueWatchingModal
+          lastWatchedVideo={lastWatchedVideo}
+          isOpen={showContinueModal}
+          onClose={handleStartFromBeginning}
+          onContinue={handleContinueWatching}
+        />
+      )}
       
       <div className='lg:col-span-2'>
         <CourseDetailHeader
@@ -143,6 +171,11 @@ const CourseDetail = () => {
           courseId={id}
           selectedLessonIndex={selectedLessonIndex}
           onVideoPlay={() => selectedLesson && handleLessonSelect(selectedLesson)}
+          currentLesson={selectedLesson || undefined}
+          topics={topics}
+          courseTitle={courseDetail.title}
+          currentTopicId={selectedTopicId}
+          currentProgress={enrollmentCheck?.progress || 0}
         />
         <CourseDetailTabs
           description={courseDetail.description}
