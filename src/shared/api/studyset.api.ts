@@ -16,8 +16,35 @@ export const createStudySet = async (data: any) => {
   return res.data;
 };
 
+export const createEmptyStudySet = async (data: any) => {
+  const res = await api.post(`${APP_URL}/study-sets/empty`, data);
+  return res.data;
+};
+
 export const updateStudySet = async (id: number, data: any) => {
   const res = await api.put(`${APP_URL}/study-sets/${id}`, data);
+  return res.data;
+};
+
+export const createManualFlashcards = async (studySetId: number, flashcards: any[]) => {
+  const res = await api.post(`${APP_URL}/study-sets/${studySetId}/manual`, {
+    flashcards: flashcards.map((card) => ({
+      front_text: card.front_text,
+      back_text: card.back_text,
+      generation_source: 'manual',
+    })),
+  });
+  return res.data;
+};
+
+export const replaceFlashcards = async (studySetId: number, flashcards: any[]) => {
+  const res = await api.put(`${APP_URL}/study-sets/${studySetId}/flashcards`, {
+    flashcards: flashcards.map((card) => ({
+      front_text: card.front_text,
+      back_text: card.back_text,
+      generation_source: 'manual',
+    })),
+  });
   return res.data;
 };
 

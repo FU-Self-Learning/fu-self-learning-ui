@@ -25,9 +25,32 @@ const StudySetForm: React.FC<StudySetFormProps> = ({ open, onClose }) => {
     });
   };
 
+  // State to track isPublic
+  const [isPublic, setIsPublic] = React.useState(true);
+
+  // Reset form when modal opens
+  React.useEffect(() => {
+    if (open) {
+      form.resetFields();
+      form.setFieldsValue({ isPublic: true });
+      setIsPublic(true);
+    }
+  }, [open, form]);
+
   return (
-    <Modal open={open} onCancel={onClose} title='Create Study Set' footer={null} destroyOnHidden>
-      <Form form={form} layout='vertical' onFinish={handleFinish}>
+    <Modal
+      open={open}
+      onCancel={onClose}
+      title='Create Study Set'
+      footer={null}
+      destroyOnHidden={true}
+    >
+      <Form
+        form={form}
+        layout='vertical'
+        onFinish={handleFinish}
+        initialValues={{ isPublic: true }}
+      >
         <Form.Item
           label='Name'
           name='name'
@@ -42,22 +65,23 @@ const StudySetForm: React.FC<StudySetFormProps> = ({ open, onClose }) => {
           <Select mode='tags' placeholder='Add tags' />
         </Form.Item>
         <Form.Item label='Public' name='isPublic' valuePropName='checked'>
-          <Switch />
+          <Switch
+            checked={isPublic}
+            onChange={(checked) => {
+              setIsPublic(checked);
+              form.setFieldsValue({ isPublic: checked });
+            }}
+          />
         </Form.Item>
-        <Form.Item
-          label='Type'
-          name='type'
-          rules={[{ required: true, message: 'Please select type' }]}
-        >
-          <Select placeholder='Select type'>
-            <Select.Option value='course'>Course</Select.Option>
-            <Select.Option value='multi-course'>Multi-course</Select.Option>
-            <Select.Option value='random'>Random</Select.Option>
-            <Select.Option value='custom'>Custom</Select.Option>
-          </Select>
-        </Form.Item>
-        {/* Tùy theo type, hiển thị các trường phù hợp (courseId, courseIds, limit, flashcardIds) */}
-        {/* ... */}
+        {!isPublic && (
+          <Form.Item
+            label='Password'
+            name='password'
+            rules={[{ required: true, message: 'Please enter password for private set' }]}
+          >
+            <Input.Password placeholder='Password' />
+          </Form.Item>
+        )}
         <div className='flex justify-end gap-2 mt-4'>
           <Button onClick={onClose}>Cancel</Button>
           <Button type='primary' htmlType='submit' loading={isPending}>

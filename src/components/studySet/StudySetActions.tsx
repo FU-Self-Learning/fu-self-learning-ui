@@ -1,12 +1,13 @@
 import React from 'react';
 import { Button, Space, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, ThunderboltOutlined, PlusOutlined } from '@ant-design/icons';
 
 interface StudySetActionsProps {
   item: any;
   onEdit: (id: number) => void;
   onGenerate: (id: number) => void;
   onDelete: (id: number) => void;
+  onAddFlashcards?: (id: number) => void;
 }
 
 const StudySetActions: React.FC<StudySetActionsProps> = ({
@@ -14,6 +15,7 @@ const StudySetActions: React.FC<StudySetActionsProps> = ({
   onEdit,
   onGenerate,
   onDelete,
+  onAddFlashcards,
 }) => (
   <Space>
     <Button
@@ -23,7 +25,20 @@ const StudySetActions: React.FC<StudySetActionsProps> = ({
         e.stopPropagation();
         onEdit(item.id);
       }}
+      title='Edit study set'
     />
+    {onAddFlashcards && (
+      <Button
+        icon={<PlusOutlined />}
+        size='small'
+        type='primary'
+        onClick={(e) => {
+          e.stopPropagation();
+          onAddFlashcards(item.id);
+        }}
+        title='Add flashcards'
+      />
+    )}
     <Button
       icon={<ThunderboltOutlined />}
       size='small'
@@ -31,6 +46,7 @@ const StudySetActions: React.FC<StudySetActionsProps> = ({
         e.stopPropagation();
         onGenerate(item.id);
       }}
+      title='Generate flashcards'
     />
     <Popconfirm
       title='Are you sure to delete this study set?'
@@ -41,7 +57,13 @@ const StudySetActions: React.FC<StudySetActionsProps> = ({
       okText='Yes'
       cancelText='No'
     >
-      <Button icon={<DeleteOutlined />} size='small' danger onClick={(e) => e.stopPropagation()} />
+      <Button
+        icon={<DeleteOutlined />}
+        size='small'
+        danger
+        onClick={(e) => e.stopPropagation()}
+        title='Delete study set'
+      />
     </Popconfirm>
   </Space>
 );
