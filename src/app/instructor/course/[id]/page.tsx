@@ -8,6 +8,7 @@ import { CourseDetailsTab } from '@/components/instructor/courseDetail/CourseDet
 import { CourseTopicsTab } from '@/components/instructor/courseDetail/topic/CourseTopicsTab';
 import { CourseCommentsTab } from '@/components/instructor/courseDetail/CourseCommentsTab';
 import { useState } from 'react';
+import { CourseExamsTab } from '@/components/instructor/courseDetail/CourseExamsTab';
 
 const { Content } = Layout;
 
@@ -22,7 +23,8 @@ export default function CourseDetailPage() {
   const items = [
     { key: '1', label: 'Details' },
     { key: '2', label: 'Topics' },
-    { key: '3', label: 'Comments' },
+    { key: '3', label: 'Exams' },
+    { key: '4', label: 'Comments' },
   ];
 
   const handleSave = async (values: any) => {
@@ -41,6 +43,8 @@ export default function CourseDetailPage() {
       case '2':
         return <CourseTopicsTab courseId={course.id} />;
       case '3':
+        return <CourseExamsTab courseId={course.id} />;
+      case '4':
         return <CourseCommentsTab courseId={course.id} />;
       default:
         return null;

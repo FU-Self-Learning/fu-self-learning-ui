@@ -7,13 +7,14 @@ import {
   BookOutlined,
   CheckCircleOutlined,
 } from '@ant-design/icons';
-import { isValidWebUrl } from '@/utils/urlValidation';
+import TestsSection from './TestsSection';
 
 interface CourseDetailTabsProps {
   description: string;
   learningPoints: string[];
   author: InstructorCourse;
   reviews: string[];
+  courseId: string;
 }
 
 interface AuthorCardProps {
@@ -22,7 +23,7 @@ interface AuthorCardProps {
 
 const AuthorCard = ({ author }: AuthorCardProps) => (
   <div className='flex items-center gap-4 bg-gray-50 p-4 rounded-lg shadow-sm'>
-    {isValidWebUrl(author.avatarUrl) ? (
+    {author.avatarUrl ? (
       <Image
         src={author.avatarUrl}
         alt={author.username}
@@ -110,12 +111,18 @@ const CourseDetailTabs = ({
   learningPoints,
   author,
   reviews,
+  courseId,
 }: CourseDetailTabsProps) => {
   const items = [
     {
       key: 'overview',
       label: 'Overview',
       children: <OverviewSection description={description} learningPoints={learningPoints} />,
+    },
+    {
+      key: 'tests',
+      label: 'Tests',
+      children: <TestsSection courseId={courseId} />,
     },
     {
       key: 'author',

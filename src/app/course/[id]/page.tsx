@@ -182,6 +182,7 @@ const CourseDetail = () => {
           learningPoints={courseDetail.topics.map((topic) => topic.title)}
           author={courseDetail.instructor}
           reviews={[]}
+          courseId={id}
         />
       </div>
       <CourseDetailContent
