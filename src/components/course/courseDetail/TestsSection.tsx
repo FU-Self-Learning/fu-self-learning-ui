@@ -24,6 +24,8 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   EyeOutlined,
+  ReloadOutlined,
+  ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import { useTests } from '@/hooks/test/useTests';
 import { useMyTestResults } from '@/hooks/test/useMyTestResults';
@@ -41,12 +43,19 @@ interface TestsSectionProps {
 interface TestCardProps {
   test: Test;
   onStartTest: (testId: number) => void;
+  onContinueTest: (testId: number, attemptId: number) => void;
   userResults?: TestResult[];
 }
 
-const TestCard = ({ test, onStartTest, userResults }: TestCardProps) => {
+const TestCard = ({ test, onStartTest, onContinueTest, userResults }: TestCardProps) => {
   const hasAttempted = userResults?.some((result) => result.testId === test.id);
   const lastAttempt = userResults?.find((result) => result.testId === test.id);
+  const isInProgress = lastAttempt && !lastAttempt.completedAt;
+
+  // Check if any test is in progress (not just this test)
+  const anyTestInProgress = userResults?.some((result) => !result.completedAt);
+  const isThisTestInProgress = isInProgress;
+  const shouldDisable = anyTestInProgress && !isThisTestInProgress;
 
   const getTypeColor = (type: string) => {
     switch (type) {
@@ -142,13 +151,33 @@ const TestCard = ({ test, onStartTest, userResults }: TestCardProps) => {
         <div className='ml-4'>
           <Button
             type='primary'
-            icon={<PlayCircleOutlined />}
-            onClick={() => onStartTest(test.id)}
+            icon={
+              isInProgress ? (
+                <ClockCircleOutlined />
+              ) : hasAttempted ? (
+                <ReloadOutlined />
+              ) : (
+                <PlayCircleOutlined />
+              )
+            }
+            onClick={() => {
+              if (isInProgress && lastAttempt) {
+                onContinueTest(test.id, lastAttempt.id);
+              } else {
+                onStartTest(test.id);
+              }
+            }}
+            disabled={shouldDisable}
             size='large'
-            className='bg-gradient-to-r from-blue-500 to-purple-500 border-0 rounded-lg'
+            className={`${shouldDisable ? '!bg-gray-400 !cursor-not-allowed' : 'bg-gradient-to-r from-blue-500 to-purple-500'} border-0 rounded-lg`}
           >
-            {hasAttempted ? 'Retake Test' : 'Start Test'}
+            {isInProgress ? 'Continue Test' : hasAttempted ? 'Retake Test' : 'Start Test'}
           </Button>
+          {shouldDisable && (
+            <div className='text-xs text-gray-500 mt-1 text-center'>
+              Complete current test first
+            </div>
+          )}
         </div>
       </div>
     </Card>
@@ -157,7 +186,9 @@ const TestCard = ({ test, onStartTest, userResults }: TestCardProps) => {
 
 const TestResultCard = ({ result }: { result: TestResult }) => {
   const [showDetails, setShowDetails] = useState(false);
-
+  const timeSpent = result.timeSpent
+    ? Math.floor(result.timeSpent / 60)
+    : Math.floor((Date.now() - new Date(result.startedAt).getTime()) / 60000);
   return (
     <>
       <Card className='!mb-4 hover:shadow-lg transition-shadow' style={{ borderRadius: '12px' }}>
@@ -271,9 +302,7 @@ const TestResultCard = ({ result }: { result: TestResult }) => {
               </div>
               <div>
                 <Text strong>Time Spent:</Text>
-                <div className='text-lg'>
-                  {result.timeSpent ? `${Math.floor(result.timeSpent / 60)} minutes` : 'N/A'}
-                </div>
+                <div className='text-lg'>{timeSpent ? `${timeSpent} minutes` : 'N/A'}</div>
               </div>
             </div>
           </div>
@@ -303,6 +332,33 @@ const TestsSection = ({ courseId }: TestsSectionProps) => {
   const startTestMutation = useStartTest();
 
   const handleStartTest = async (testId: number) => {
+    // Check if there's any test in progress
+    const testInProgress = myResults?.find((result) => !result.completedAt);
+
+    if (testInProgress) {
+      Modal.confirm({
+        title: 'Test In Progress',
+        icon: <ExclamationCircleOutlined />,
+        content: (
+          <div>
+            <p>
+              You have an unfinished test: <strong>{testInProgress.testTitle}</strong>
+            </p>
+            <p>You must complete or abandon your current test before starting a new one.</p>
+          </div>
+        ),
+        okText: 'Continue Current Test',
+        cancelText: 'Cancel',
+        onOk() {
+          handleContinueTest(testInProgress.testId, testInProgress.id);
+        },
+        onCancel() {
+          // Do nothing, just close modal
+        },
+      });
+      return;
+    }
+
     try {
       const response = await startTestMutation.mutateAsync({ testId });
 
@@ -319,6 +375,15 @@ const TestsSection = ({ courseId }: TestsSectionProps) => {
     } catch (error) {
       console.error('Failed to start test:', error);
     }
+  };
+
+  const handleContinueTest = (testId: number, attemptId: number) => {
+    // Save attempt ID to localStorage for reload recovery
+    if (isLocalStorageAvailable()) {
+      saveCurrentAttemptId(attemptId);
+    }
+
+    router.push(`/course/${courseId}/test/${testId}/attempt/${attemptId}`);
   };
 
   const tabItems = [
@@ -341,6 +406,7 @@ const TestsSection = ({ courseId }: TestsSectionProps) => {
                 key={test.id}
                 test={test}
                 onStartTest={handleStartTest}
+                onContinueTest={handleContinueTest}
                 userResults={myResults}
               />
             ))

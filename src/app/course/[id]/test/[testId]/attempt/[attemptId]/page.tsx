@@ -7,6 +7,7 @@ import { useTestById } from '@/hooks/test/useTestById';
 import { useSubmitAnswer } from '@/hooks/test/useSubmitAnswer';
 import { useCompleteTest } from '@/hooks/test/useCompleteTest';
 import { useTestProgress } from '@/hooks/test/useTestProgress';
+import { useHasMounted } from '@/hooks/useHasMounted';
 import {
   TestHeader,
   QuestionNavigator,
@@ -32,6 +33,7 @@ const TestAttemptPage = () => {
   const router = useRouter();
   const params = useParams();
   const { id: courseId, testId, attemptId } = params;
+  const hasMounted = useHasMounted();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, QuestionAnswer>>({});
@@ -40,33 +42,42 @@ const TestAttemptPage = () => {
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [isTestActive, setIsTestActive] = useState(true);
   const [isRestoringProgress, setIsRestoringProgress] = useState(false);
+  const [progressAttemptId, setProgressAttemptId] = useState<number | null>(null);
 
   const { data: test, isLoading } = useTestById(Number(testId));
 
-  // Get attemptId from localStorage for reload recovery
-  const storedAttemptId = isLocalStorageAvailable() ? getCurrentAttemptId() : null;
-  // const actualAttemptId = storedAttemptId || Number(attemptId);
-
-  // Use progress hook to restore state on reload
+  // Use progress hook to restore state on reload (only fetch once on initial load)
   const {
     data: progressData,
     isLoading: isProgressLoading,
     error: progressError,
-  } = useTestProgress(
-    storedAttemptId && storedAttemptId !== Number(attemptId) ? storedAttemptId : null,
-  );
+  } = useTestProgress(progressAttemptId);
+
+  // Check for progress restoration only once when component mounts
+  useEffect(() => {
+    if (hasMounted && progressAttemptId === null) {
+      const storedAttemptId = isLocalStorageAvailable() ? getCurrentAttemptId() : null;
+
+      // Only set if we have stored attemptId and it matches current URL
+      if (storedAttemptId && Number(storedAttemptId) === Number(attemptId)) {
+        setProgressAttemptId(storedAttemptId);
+      } else {
+        // Mark as checked but no restoration needed
+        setProgressAttemptId(-1);
+      }
+    }
+  }, [hasMounted, attemptId, progressAttemptId]);
 
   const submitAnswerMutation = useSubmitAnswer();
   const completeTestMutation = useCompleteTest();
 
-  // Save attemptId to localStorage when component mounts
+  // Save attemptId to localStorage when component mounts (only on client)
   useEffect(() => {
-    if (isLocalStorageAvailable() && attemptId) {
+    if (hasMounted && isLocalStorageAvailable() && attemptId) {
       saveCurrentAttemptId(Number(attemptId));
     }
-  }, [attemptId]);
+  }, [hasMounted, attemptId]);
 
-  // Handle progress restoration on reload
   useEffect(() => {
     if (progressData && !isRestoringProgress) {
       setIsRestoringProgress(true);
@@ -114,12 +125,12 @@ const TestAttemptPage = () => {
   }, [progressData, isRestoringProgress, router, courseId]);
 
   useEffect(() => {
-    if (progressError && storedAttemptId) {
+    if (progressError && progressAttemptId && progressAttemptId > 0) {
       console.warn('Failed to restore progress:', progressError);
       // Clear invalid attemptId from localStorage
       clearCurrentAttemptId();
     }
-  }, [progressError, storedAttemptId]);
+  }, [progressError, progressAttemptId]);
 
   // Initialize timer when test data is loaded
   useEffect(() => {
@@ -281,9 +292,9 @@ const TestAttemptPage = () => {
         <div className='text-center space-y-4'>
           <Spin size='large' />
           <div className='text-gray-600'>
-            {isProgressLoading
+            {hasMounted && isProgressLoading
               ? 'Restoring your progress...'
-              : isRestoringProgress
+              : hasMounted && isRestoringProgress
                 ? 'Setting up your test...'
                 : 'Loading test...'}
           </div>
