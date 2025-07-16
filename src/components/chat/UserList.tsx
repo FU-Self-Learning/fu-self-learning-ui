@@ -106,7 +106,13 @@ const UserList: React.FC<UserListProps> = () => {
           showIcon
           className='rounded-lg shadow-sm'
           action={
-            <Button size='small' type='primary' icon={<ReloadOutlined />} onClick={handleRetry} className='rounded-lg'>
+            <Button
+              size='small'
+              type='primary'
+              icon={<ReloadOutlined />}
+              onClick={handleRetry}
+              className='rounded-lg'
+            >
               Retry
             </Button>
           }
@@ -119,10 +125,10 @@ const UserList: React.FC<UserListProps> = () => {
     <div className='w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full overflow-y-auto shadow-lg'>
       <div className='p-4 border-b border-gray-200/70 flex justify-between items-center bg-gradient-to-r from-white to-slate-50'>
         <h2 className='text-lg font-semibold text-gray-800'>Chats</h2>
-        <Button 
-          type='text' 
-          icon={<ReloadOutlined />} 
-          onClick={handleRetry} 
+        <Button
+          type='text'
+          icon={<ReloadOutlined />}
+          onClick={handleRetry}
           title='Refresh list'
           className='hover:bg-gray-100 rounded-full'
         />
@@ -156,17 +162,15 @@ const UserList: React.FC<UserListProps> = () => {
                 title={
                   <span
                     className={`font-medium transition-colors ${
-                      user.id === selectedUserId ? 'text-blue-700' : 'text-gray-700 hover:text-gray-900'
+                      user.id === selectedUserId
+                        ? 'text-blue-700'
+                        : 'text-gray-700 hover:text-gray-900'
                     }`}
                   >
                     {user.username}
                   </span>
                 }
-                description={
-                  <span className='text-sm text-gray-500 truncate'>
-                    {user.email}
-                  </span>
-                }
+                description={<span className='text-sm text-gray-500 truncate'>{user.email}</span>}
               />
             </List.Item>
           )}

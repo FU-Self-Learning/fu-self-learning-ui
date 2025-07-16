@@ -14,7 +14,7 @@ interface UseProgressFromStorageProps {
 export const useProgressFromStorage = ({
   courseId,
   topics,
-  fallbackProgress = 0
+  fallbackProgress = 0,
 }: UseProgressFromStorageProps) => {
   const [calculatedProgress, setCalculatedProgress] = useState<number>(fallbackProgress);
   const user = useSelector(selectAuthUser);
@@ -27,13 +27,13 @@ export const useProgressFromStorage = ({
     }
 
     const lastWatchedVideo = getLastWatchedVideoForCourse(courseId);
-    
+
     let currentProgress = fallbackProgress;
     let progressData = null;
-    
+
     if (lastWatchedVideo && lastWatchedVideo.lessonId) {
       progressData = calculateCourseProgress(lastWatchedVideo.lessonId, topics);
-      
+
       if (progressData) {
         currentProgress = Math.max(progressData.progressPercentage, fallbackProgress);
       }
@@ -45,7 +45,9 @@ export const useProgressFromStorage = ({
       return;
     }
 
-    console.log(`📊 Course ${courseId} progress calculated: ${currentProgress}% (from localStorage: ${progressData?.progressPercentage || 'none'}, fallback: ${fallbackProgress}%)`);
+    console.log(
+      `📊 Course ${courseId} progress calculated: ${currentProgress}% (from localStorage: ${progressData?.progressPercentage || 'none'}, fallback: ${fallbackProgress}%)`,
+    );
     setCalculatedProgress(currentProgress);
   }, [courseId, topics, fallbackProgress, user?.id, getLastWatchedVideoForCourse]);
 

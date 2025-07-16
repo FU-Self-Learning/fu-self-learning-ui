@@ -34,7 +34,11 @@ export default function CourseCard({ material }: { material: CoursesResponse }) 
         <div className='flex-grow'>
           <div className='flex items-center gap-2 mb-2'>
             <Avatar
-              src={isValidWebUrl(material.instructor.avatarUrl) ? material.instructor.avatarUrl : undefined}
+              src={
+                isValidWebUrl(material.instructor.avatarUrl)
+                  ? material.instructor.avatarUrl
+                  : undefined
+              }
               icon={<UserOutlined />}
               size='small'
             />

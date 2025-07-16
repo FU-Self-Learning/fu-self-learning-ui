@@ -21,13 +21,13 @@ interface CourseDetailHeaderProps {
   stats: CourseStatsProps;
   isThumbnail: boolean;
   courseId: string;
-  selectedLessonIndex?: number; 
+  selectedLessonIndex?: number;
   onVideoPlay?: () => void;
   currentLesson?: LessonInTopic;
   topics?: TopicResponse[];
   courseTitle?: string;
   currentTopicId?: string;
-  currentProgress?: number; 
+  currentProgress?: number;
 }
 
 const CourseDetailHeader = ({
@@ -51,14 +51,14 @@ const CourseDetailHeader = ({
   const { totalLessons, totalDuration, rating, reviewCount } = stats;
 
   const isEnrolled = enrollmentCheck?.isEnrolled || false;
-  
+
   const canWatchVideo = () => {
     if (isThumbnail) return true;
-    
+
     if (isEnrolled) return true;
-    
+
     if (selectedLessonIndex !== undefined && selectedLessonIndex === 0) return true;
-    
+
     return false;
   };
 
@@ -95,12 +95,12 @@ const CourseDetailHeader = ({
           reviewCount={reviewCount}
         />
       </p>
-      
+
       {shouldShowVideo ? (
-        <VideoPlayerWithProgress 
-          src={videoIntroUrl} 
-          height='h-[400px]' 
-          isThumbnail={isThumbnail} 
+        <VideoPlayerWithProgress
+          src={videoIntroUrl}
+          height='h-[400px]'
+          isThumbnail={isThumbnail}
           onVideoPlay={onVideoPlay}
           courseId={courseId}
           lessonId={currentLesson?.id}
@@ -117,16 +117,11 @@ const CourseDetailHeader = ({
             <LockOutlined className='text-6xl text-gray-400 mb-4' />
             <h3 className='text-xl font-semibold text-gray-600 mb-2'>Video Locked</h3>
             <p className='text-gray-500 mb-4'>
-              {!isAuthenticated 
+              {!isAuthenticated
                 ? 'Please login and enroll to access this lesson'
-                : 'Please enroll in this course to access this lesson'
-              }
+                : 'Please enroll in this course to access this lesson'}
             </p>
-            <Button 
-              type='primary' 
-              size='large'
-              onClick={handleVideoAccess}
-            >
+            <Button type='primary' size='large' onClick={handleVideoAccess}>
               {!isAuthenticated ? 'Login to Enroll' : 'Enroll Now'}
             </Button>
           </div>

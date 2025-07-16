@@ -60,7 +60,11 @@ const ListFollowingPage = () => {
             <div className='flex items-center gap-4'>
               <Avatar
                 size={48}
-                src={isValidWebUrl(item.followingUser.avatarUrl) ? item.followingUser.avatarUrl : undefined}
+                src={
+                  isValidWebUrl(item.followingUser.avatarUrl)
+                    ? item.followingUser.avatarUrl
+                    : undefined
+                }
                 icon={<UserOutlined />}
                 className='!flex !items-center !justify-center'
               />

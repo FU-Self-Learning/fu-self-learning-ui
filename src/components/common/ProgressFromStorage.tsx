@@ -5,18 +5,18 @@ import { TopicResponse } from '@/types/topicType';
 interface ProgressFromStorageProps {
   courseId: string;
   topics?: TopicResponse[];
-  fallbackProgress?: number; 
+  fallbackProgress?: number;
 }
 
 export const ProgressFromStorage: React.FC<ProgressFromStorageProps> = ({
   courseId,
   topics,
-  fallbackProgress = 0
+  fallbackProgress = 0,
 }) => {
   const calculatedProgress = useProgressFromStorage({
     courseId,
     topics,
-    fallbackProgress
+    fallbackProgress,
   });
 
   return calculatedProgress;

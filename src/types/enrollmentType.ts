@@ -1,11 +1,11 @@
 export interface EnrolledCourse {
   id: number;
-  progress: number; 
+  progress: number;
   isActive: boolean;
-  completedAt?: string; 
+  completedAt?: string;
   certificateUrl?: string;
-  enrolledAt: string; 
-  updatedAt: string; 
+  enrolledAt: string;
+  updatedAt: string;
   user: {
     id: number;
     username: string;

@@ -9,7 +9,7 @@ export interface ProgressCalculationResult {
 
 export const calculateCourseProgress = (
   currentLessonId: string | number,
-  topics: TopicResponse[]
+  topics: TopicResponse[],
 ): ProgressCalculationResult | null => {
   if (!topics || topics.length === 0) {
     return null;
@@ -23,7 +23,7 @@ export const calculateCourseProgress = (
     if (topic.lessons) {
       for (const lesson of topic.lessons) {
         totalLessons++;
-        
+
         if (lesson.id.toString() === currentLessonId.toString()) {
           foundCurrentLesson = true;
         } else if (!foundCurrentLesson) {
@@ -45,16 +45,16 @@ export const calculateCourseProgress = (
     currentLessonIndex,
     totalLessons,
     progressPercentage,
-    isLastLesson
+    isLastLesson,
   };
 };
 
 export const calculateProgressAfterCompletion = (
   completedLessonId: string | number,
-  topics: TopicResponse[]
+  topics: TopicResponse[],
 ): number => {
   const result = calculateCourseProgress(completedLessonId, topics);
-  
+
   if (!result) {
     return 0;
   }
@@ -65,10 +65,7 @@ export const calculateProgressAfterCompletion = (
   return result.progressPercentage;
 };
 
-export const getNextLesson = (
-  currentLessonId: string | number,
-  topics: TopicResponse[]
-) => {
+export const getNextLesson = (currentLessonId: string | number, topics: TopicResponse[]) => {
   if (!topics || topics.length === 0) {
     return null;
   }
@@ -79,11 +76,11 @@ export const getNextLesson = (
     if (topic.lessons) {
       for (let i = 0; i < topic.lessons.length; i++) {
         const lesson = topic.lessons[i];
-        
+
         if (foundCurrent) {
           return lesson;
         }
-        
+
         if (lesson.id.toString() === currentLessonId.toString()) {
           foundCurrent = true;
           if (i + 1 < topic.lessons.length) {

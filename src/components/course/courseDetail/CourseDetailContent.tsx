@@ -17,7 +17,7 @@ const CourseDetailContent = ({ sections, onLessonSelect, courseId }: CourseDetai
   const router = useRouter();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const { data: enrollmentCheck, isLoading: isCheckingEnrollment } = useCheckEnrollment(courseId);
-  
+
   const handleEnroll = () => {
     if (!isAuthenticated) {
       router.push('/login');
@@ -68,9 +68,9 @@ const CourseDetailContent = ({ sections, onLessonSelect, courseId }: CourseDetai
       <div className='flex justify-between items-center mb-4'>
         <h2 className='text-lg font-medium'>Course content</h2>
         {!isEnrolled && (
-          <Button 
-            type='primary' 
-            icon={<LockOutlined />} 
+          <Button
+            type='primary'
+            icon={<LockOutlined />}
             onClick={handleEnroll}
             loading={isCheckingEnrollment}
           >
@@ -78,9 +78,9 @@ const CourseDetailContent = ({ sections, onLessonSelect, courseId }: CourseDetai
           </Button>
         )}
         {isEnrolled && (
-          <Button 
-            type='default' 
-            icon={<CheckCircleOutlined />} 
+          <Button
+            type='default'
+            icon={<CheckCircleOutlined />}
             disabled
             className='!text-green-600 !border-green-600'
           >

@@ -17,11 +17,7 @@ const MessageInput: React.FC<{ onSend: (msg: string) => void }> = ({ onSend }) =
 
   return (
     <div className='p-4 border-t border-gray-200/50 bg-white/90 backdrop-blur-sm'>
-      <form
-        autoComplete='off'
-        onSubmit={handleSubmit}
-        className='flex items-center gap-3'
-      >
+      <form autoComplete='off' onSubmit={handleSubmit} className='flex items-center gap-3'>
         <input type='text' name='fake-user' autoComplete='username' className='hidden' />
 
         <input
@@ -38,8 +34,8 @@ const MessageInput: React.FC<{ onSend: (msg: string) => void }> = ({ onSend }) =
           type='submit'
           disabled={!text.trim()}
           className={`px-6 py-3 rounded-2xl text-sm font-medium transition-all duration-200 shadow-lg hover:shadow-xl ${
-            text.trim() 
-              ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white transform hover:scale-105' 
+            text.trim()
+              ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white transform hover:scale-105'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
           }`}
         >
