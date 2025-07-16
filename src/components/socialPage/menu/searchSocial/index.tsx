@@ -1,11 +1,12 @@
 import React from 'react';
 import { Input, Avatar, Button, Card, Typography, Spin, message } from 'antd';
-import { CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { useUsersSocial } from '@/hooks/user/useUsersSocial';
 import { useFollow } from '@/hooks/follow/useFollow';
 import { useFollowers } from '@/hooks/follow/useFollowers';
 import { useUnfollow } from '@/hooks/follow/useUnfollow';
+import { isValidWebUrl } from '@/utils/urlValidation';
 
 interface SearchSocialPageProps {
   handleCloseSearch: () => void;
@@ -145,7 +146,8 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
               <div className='flex items-center gap-4'>
                 <Avatar
                   size={48}
-                  src={item.avatarUrl}
+                  src={isValidWebUrl(item.avatarUrl) ? item.avatarUrl : undefined}
+                  icon={<UserOutlined />}
                   className='!flex !items-center !justify-center'
                 />
                 <div className='flex-1 min-w-0'>

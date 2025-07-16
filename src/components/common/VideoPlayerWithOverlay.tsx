@@ -1,6 +1,6 @@
 import { Empty } from 'antd';
 import { PlayCircleOutlined } from '@ant-design/icons';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 interface VideoPlayerWithOverlayProps {
   src?: string;
@@ -9,6 +9,7 @@ interface VideoPlayerWithOverlayProps {
   rounded?: boolean;
   height?: string;
   isThumbnail?: boolean;
+  onVideoPlay?: () => void;
 }
 
 const VideoPlayerWithOverlay = ({
@@ -18,15 +19,70 @@ const VideoPlayerWithOverlay = ({
   rounded = true,
   height,
   isThumbnail,
+  onVideoPlay,
 }: VideoPlayerWithOverlayProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(true);
+  const [hasInitialized, setHasInitialized] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.pause();
+    video.currentTime = 0;
+    setShowOverlay(true);
+    setHasInitialized(false);
+
+    if (!isThumbnail) {
+      video.setAttribute('controls', 'true');
+    } else {
+      video.removeAttribute('controls');
+    }
+  }, [src, isThumbnail]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handlePlay = () => {
+      setShowOverlay(false);
+      video.setAttribute('controls', 'true');
+
+      if (!hasInitialized) {
+        onVideoPlay?.();
+        setHasInitialized(true);
+      }
+    };
+
+    const handleEnded = () => {
+      setShowOverlay(true);
+    };
+
+    video.addEventListener('play', handlePlay);
+    video.addEventListener('ended', handleEnded);
+
+    return () => {
+      video.removeEventListener('play', handlePlay);
+      video.removeEventListener('ended', handleEnded);
+    };
+  }, [hasInitialized, onVideoPlay]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || isThumbnail || hasInitialized) return;
+
+    video.play().catch(() => {
+      console.log('Autoplay prevented - waiting for user interaction');
+    });
+  }, [isThumbnail, hasInitialized]);
 
   const handlePlay = () => {
-    if (videoRef.current) {
-      videoRef.current.play();
-      videoRef.current.setAttribute('controls', 'true');
-      setIsPlaying(true);
+    const video = videoRef.current;
+    if (video) {
+      video.play().catch((error) => {
+        console.error('Error playing video:', error);
+      });
     }
   };
 
@@ -53,9 +109,9 @@ const VideoPlayerWithOverlay = ({
         src={src}
         poster={poster ?? src}
         className='w-full h-full object-cover'
-        autoPlay={isThumbnail ? false : true}
+        playsInline
       />
-      {!isPlaying && (
+      {showOverlay && (
         <div
           className='absolute inset-0 flex items-center justify-center bg-gray-300 cursor-pointer transition-all duration-200 hover:bg-opacity-80'
           onClick={handlePlay}

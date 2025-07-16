@@ -3,6 +3,7 @@ import { Card, Tag, Space, Progress, Button, Avatar, Typography, Image, Tooltip 
 import { UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
+import { isValidWebUrl } from '@/utils/urlValidation';
 
 const { Paragraph, Text } = Typography;
 const MAX_TAGS = 1;
@@ -33,8 +34,8 @@ export default function CourseCard({ material }: { material: CoursesResponse }) 
         <div className='flex-grow'>
           <div className='flex items-center gap-2 mb-2'>
             <Avatar
-              src={material.instructor.avatarUrl}
-              icon={!material.instructor.avatarUrl && <UserOutlined />}
+              src={isValidWebUrl(material.instructor.avatarUrl) ? material.instructor.avatarUrl : undefined}
+              icon={<UserOutlined />}
               size='small'
             />
             <Text type='secondary' className='text-sm'>

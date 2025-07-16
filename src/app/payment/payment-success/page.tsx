@@ -96,7 +96,7 @@ const PaymentSuccess = () => {
                   type='primary'
                   size='large'
                   icon={<UserOutlined />}
-                  href='/profile'
+                  href='/course/my-learning'
                   className='h-14 px-8 bg-gradient-to-r from-green-600 to-emerald-600 border-0 hover:from-green-700 hover:to-emerald-700 font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105'
                 >
                   Go to My Courses

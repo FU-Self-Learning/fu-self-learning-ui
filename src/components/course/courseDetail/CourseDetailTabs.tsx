@@ -8,6 +8,7 @@ import {
   CheckCircleOutlined,
 } from '@ant-design/icons';
 import TestsSection from './TestsSection';
+import { isValidWebUrl } from '@/utils/urlValidation';
 
 interface CourseDetailTabsProps {
   description: string;
@@ -23,7 +24,7 @@ interface AuthorCardProps {
 
 const AuthorCard = ({ author }: AuthorCardProps) => (
   <div className='flex items-center gap-4 bg-gray-50 p-4 rounded-lg shadow-sm'>
-    {author.avatarUrl ? (
+    {isValidWebUrl(author.avatarUrl) ? (
       <Image
         src={author.avatarUrl}
         alt={author.username}

@@ -1,8 +1,11 @@
 import { Button, Collapse, Divider, Empty, Space } from 'antd';
-import { LockOutlined, PlayCircleOutlined } from '@ant-design/icons';
+import { LockOutlined, PlayCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { LessonInTopic, TopicResponse } from '@/types/topicType';
 import { formatDuration } from '@/utils/convertTime';
 import { useRouter } from 'next/navigation';
+import { useCheckEnrollment } from '@/hooks/enrollment';
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated } from '@/providers/auth/selector/authSelector';
 
 interface CourseDetailContentProps {
   sections: TopicResponse[];
@@ -12,10 +15,19 @@ interface CourseDetailContentProps {
 
 const CourseDetailContent = ({ sections, onLessonSelect, courseId }: CourseDetailContentProps) => {
   const router = useRouter();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const { data: enrollmentCheck, isLoading: isCheckingEnrollment } = useCheckEnrollment(courseId);
+  
   const handleEnroll = () => {
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
     const target = `/payment/payment-confirm?courseId=${courseId}`;
     router.push(target);
   };
+
+  const isEnrolled = enrollmentCheck?.isEnrolled || false;
 
   const collapseItems = sections
     .sort((a, b) => a.id - b.id)
@@ -55,9 +67,26 @@ const CourseDetailContent = ({ sections, onLessonSelect, courseId }: CourseDetai
     <div className='bg-white rounded-lg shadow-sm border p-4 h-fit'>
       <div className='flex justify-between items-center mb-4'>
         <h2 className='text-lg font-medium'>Course content</h2>
-        <Button type='primary' icon={<LockOutlined />} onClick={handleEnroll}>
-          Enroll
-        </Button>
+        {!isEnrolled && (
+          <Button 
+            type='primary' 
+            icon={<LockOutlined />} 
+            onClick={handleEnroll}
+            loading={isCheckingEnrollment}
+          >
+            {!isAuthenticated ? 'Login to Enroll' : 'Enroll'}
+          </Button>
+        )}
+        {isEnrolled && (
+          <Button 
+            type='default' 
+            icon={<CheckCircleOutlined />} 
+            disabled
+            className='!text-green-600 !border-green-600'
+          >
+            Enrolled
+          </Button>
+        )}
       </div>
       <Divider size='small' />
       <Collapse items={collapseItems} defaultActiveKey={['0']} ghost />

@@ -13,6 +13,7 @@ import {
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/navigation';
 import CreatePostModal from '@/components/socialPage/menu/postSocial';
+import { isValidWebUrl } from '@/utils/urlValidation';
 import SearchSocialPage from './searchSocial';
 import { useProfile } from '@/hooks/auth/useProfile';
 import './menu-social.css';
@@ -92,7 +93,7 @@ const MenuPage = () => {
           <div className='flex items-center gap-3'>
             <Avatar
               size={48}
-              src={data?.avatarUrl}
+              src={isValidWebUrl(data?.avatarUrl) ? data?.avatarUrl : undefined}
               icon={<UserOutlined />}
               className='!bg-blue-100 !text-blue-600 cursor-pointer hover:!bg-blue-200 transition-colors'
             />

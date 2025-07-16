@@ -1,6 +1,7 @@
 import { CameraFilled, LoadingOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Upload } from 'antd';
 import { UploadChangeParam } from 'antd/lib/upload';
+import { isValidWebUrl } from '@/utils/urlValidation';
 
 interface Props {
   avatar?: string;
@@ -21,7 +22,7 @@ const CustomAvartar = ({ avatar, isEdit, onAvatarChange, isUploading }: Props) =
     <div className='relative'>
       <Avatar
         className='relative md:!w-[180px] !w-[150px] md:!h-[180px] !h-[150px] !max-w-[900px]'
-        src={avatar}
+        src={isValidWebUrl(avatar) ? avatar : undefined}
         icon={<UserOutlined className='md:!text-[180px] !text-[150px]' />}
       />
 

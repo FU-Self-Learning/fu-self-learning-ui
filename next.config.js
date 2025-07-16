@@ -4,6 +4,16 @@ const path = require('path');
 const nextConfig = {
   devIndicators: false,
 
+  images: {
+    domains: ['res.cloudinary.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.gstatic.com',
+      },
+    ],
+  },
+
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
