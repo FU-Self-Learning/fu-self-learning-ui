@@ -7,12 +7,14 @@ import {
   BookOutlined,
   CheckCircleOutlined,
 } from '@ant-design/icons';
+import TestsSection from './TestsSection';
 
 interface CourseDetailTabsProps {
   description: string;
   learningPoints: string[];
   author: InstructorCourse;
   reviews: string[];
+  courseId: string;
 }
 
 interface AuthorCardProps {
@@ -109,12 +111,18 @@ const CourseDetailTabs = ({
   learningPoints,
   author,
   reviews,
+  courseId,
 }: CourseDetailTabsProps) => {
   const items = [
     {
       key: 'overview',
       label: 'Overview',
       children: <OverviewSection description={description} learningPoints={learningPoints} />,
+    },
+    {
+      key: 'tests',
+      label: 'Tests',
+      children: <TestsSection courseId={courseId} />,
     },
     {
       key: 'author',
