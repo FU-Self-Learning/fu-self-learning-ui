@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { RootState } from '@/providers/store';
 import ChatBox from '@/app/chat/ChatBox';
 import UserList from '@/components/chat/UserList';
+import GroupList from '@/components/chat/GroupList';
 import { Suspense } from 'react';
 import { Spin } from 'antd';
 import { useHasMounted } from '@/hooks/useHasMounted';
@@ -12,9 +13,10 @@ import { useHasMounted } from '@/hooks/useHasMounted';
 function ChatPageComponent() {
   const searchParams = useSearchParams();
   const userParam = searchParams.get('user');
+  const groupParam = searchParams.get('group');
   const receiverUserId = userParam ? parseInt(userParam, 10) : null;
+  const receiverGroupId = groupParam ? parseInt(groupParam, 10) : null;
   const hasMounted = useHasMounted();
-
   const currentUser = useSelector((state: RootState) => state.auth.user);
 
   if (!hasMounted || !currentUser) {
@@ -36,10 +38,13 @@ function ChatPageComponent() {
 
   return (
     <div className='flex h-[calc(100vh-6rem)] bg-gradient-to-br from-slate-50 to-blue-50'>
-      <UserList currentUserId={Number(currentUser.id)} />
+      {/* <UserList currentUserId={Number(currentUser.id)} /> */}
+      <GroupList currentUserId={Number(currentUser.id)} />
       <div className='flex-1 p-4'>
         {receiverUserId ? (
           <ChatBox senderUserId={Number(currentUser.id)} receiverUserId={receiverUserId} />
+        ) : receiverGroupId ? (
+          <ChatBox senderUserId={Number(currentUser.id)} receiverGroupId={receiverGroupId} />
         ) : (
           <div className='flex items-center justify-center h-full'>
             <div className='text-center p-8 bg-white/50 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20'>
@@ -48,8 +53,8 @@ function ChatPageComponent() {
                   <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' />
                 </svg>
               </div>
-              <h3 className='text-xl font-semibold text-gray-700 mb-2'>Select a user to start chatting</h3>
-              <p className='text-gray-500'>Choose someone from your contact list to begin a conversation</p>
+              <h3 className='text-xl font-semibold text-gray-700 mb-2'>Select a user or group to start chatting</h3>
+              <p className='text-gray-500'>Choose someone or a group from your contact list to begin a conversation</p>
             </div>
           </div>
         )}

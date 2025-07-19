@@ -2,13 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSocket } from '@/hooks/useSocket';
+import { useGroupChatSocket } from '@/hooks/useGroupChatSocket';
 import { ChatMessage, ChatPayload } from '@/types/chat';
 import MessageList from '@/components/chat/MessageList';
 import MessageInput from '@/components/chat/MessageInput';
 
 interface ChatBoxProps {
   senderUserId: number;
-  receiverUserId: number;
+  receiverUserId?: number;
+  receiverGroupId?: number;
 }
 interface RawMessage {
   id: number;
@@ -18,70 +20,117 @@ interface RawMessage {
   receiverId?: number;
   senderUserId?: number;
   receiverUserId?: number;
+  receiverGroupId?: number;
 }
 
-const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId }) => {
+const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receiverGroupId }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const socket = useSocket(senderUserId);
+
+  // Unified socket logic for both 1vs1 and group chat
+  const groupSocketObj = receiverGroupId
+    ? useGroupChatSocket(senderUserId, receiverGroupId)
+    : undefined;
+  const socket = receiverGroupId ? groupSocketObj?.socket : useSocket(senderUserId);
+  const isConnected = receiverGroupId ? groupSocketObj?.isConnected : true;
 
   useEffect(() => {
     if (!socket) return;
+    // Unified logic for both chat types
+    let handleIncomingMessage: (msg: RawMessage) => void;
+    let handleMessagesLoaded: (loaded: RawMessage[]) => void;
 
-    const handleIncomingMessage = (msg: RawMessage) => {
-      const sender = msg.senderId ?? msg.senderUserId;
-      const receiver = msg.receiverId ?? msg.receiverUserId;
-
-      const isFromCurrentChat =
-        (sender === senderUserId && receiver === receiverUserId) ||
-        (sender === receiverUserId && receiver === senderUserId);
-
-      if (!isFromCurrentChat) return;
-
-      const normalized: ChatMessage = {
-        id: msg.id,
-        message: msg.message,
-        createdAt: msg.createdAt,
-        senderId: sender,
-        receiverId: receiver,
-      };
-
-      setMessages((prev) => [...prev, normalized]);
-    };
-
-    const handleMessagesLoaded = (loaded: RawMessage[]) => {
-      const normalized = loaded.map(
-        (msg): ChatMessage => ({
+    if (receiverGroupId) {
+      // Group chat logic
+      handleIncomingMessage = (msg: RawMessage) => {
+        const group = msg.receiverGroupId;
+        if (group !== receiverGroupId) return;
+        const normalized: ChatMessage = {
           id: msg.id,
           message: msg.message,
           createdAt: msg.createdAt,
-          senderId: (msg.senderId ?? msg.senderUserId) as number,
-          receiverId: (msg.receiverId ?? msg.receiverUserId) as number,
-        }),
-      );
-
-      setMessages(normalized);
-    };
-
-    socket.emit('loadMessages', { senderUserId, receiverUserId });
-
-    socket.on('messagesLoaded', handleMessagesLoaded);
-    socket.on('newMessage', handleIncomingMessage);
-    socket.on('messageSent', handleIncomingMessage);
-
-    return () => {
-      socket.off('messagesLoaded', handleMessagesLoaded);
-      socket.off('newMessage', handleIncomingMessage);
-      socket.off('messageSent', handleIncomingMessage);
-    };
-  }, [senderUserId, receiverUserId, socket]);
+          senderId: msg.senderId ?? msg.senderUserId ?? 0,
+          receiverId: msg.receiverId ?? msg.receiverUserId ?? 0,
+        };
+        setMessages((prev) => [...prev, normalized]);
+      };
+      handleMessagesLoaded = (loaded: RawMessage[]) => {
+        const normalized = loaded
+          .filter((msg) => msg.receiverGroupId === receiverGroupId)
+          .map((msg): ChatMessage => ({
+            id: msg.id,
+            message: msg.message,
+            createdAt: msg.createdAt,
+            senderId: msg.senderId ?? msg.senderUserId ?? 0,
+            receiverId: msg.receiverId ?? msg.receiverUserId ?? 0,
+          }));
+        setMessages(normalized);
+      };
+      socket.emit('loadGroupMessages', { groupId: receiverGroupId });
+      socket.on('groupMessagesLoaded', handleMessagesLoaded);
+      socket.on('newGroupMessage', handleIncomingMessage);
+      socket.on('groupMessageSent', handleIncomingMessage);
+      return () => {
+        socket.off('groupMessagesLoaded', handleMessagesLoaded);
+        socket.off('newGroupMessage', handleIncomingMessage);
+        socket.off('groupMessageSent', handleIncomingMessage);
+      };
+    } else {
+      // 1vs1 chat logic
+      handleIncomingMessage = (msg: RawMessage) => {
+        const sender = msg.senderId ?? msg.senderUserId;
+        const receiver = msg.receiverId ?? msg.receiverUserId;
+        const isFromCurrentChat =
+          (sender === senderUserId && receiver === receiverUserId) ||
+          (sender === receiverUserId && receiver === senderUserId);
+        if (!isFromCurrentChat) return;
+        const normalized: ChatMessage = {
+          id: msg.id,
+          message: msg.message,
+          createdAt: msg.createdAt,
+          senderId: sender ?? 0,
+          receiverId: receiver ?? 0,
+        };
+        setMessages((prev) => [...prev, normalized]);
+      };
+      handleMessagesLoaded = (loaded: RawMessage[]) => {
+        const normalized = loaded.map(
+          (msg): ChatMessage => ({
+            id: msg.id,
+            message: msg.message,
+            createdAt: msg.createdAt,
+            senderId: (msg.senderId ?? msg.senderUserId ?? 0),
+            receiverId: (msg.receiverId ?? msg.receiverUserId ?? 0),
+          }),
+        );
+        setMessages(normalized);
+      };
+      socket.emit('loadMessages', { senderUserId, receiverUserId });
+      socket.on('messagesLoaded', handleMessagesLoaded);
+      socket.on('newMessage', handleIncomingMessage);
+      socket.on('messageSent', handleIncomingMessage);
+      return () => {
+        socket.off('messagesLoaded', handleMessagesLoaded);
+        socket.off('newMessage', handleIncomingMessage);
+        socket.off('messageSent', handleIncomingMessage);
+      };
+    }
+  }, [senderUserId, receiverUserId, receiverGroupId, socket]);
 
   const sendMessage = (msg: string) => {
-    const payload: ChatPayload = {
-      senderUserId,
-      receiverUserId,
-      message: msg,
-    };
-    socket?.emit('sendMessage', payload);
+    if (!socket || !isConnected) {
+      console.warn('[Socket] Cannot send message: socket not connected');
+      return;
+    }
+    if (receiverGroupId) {
+      socket.emit('sendGroupMessage', { groupId: Number(receiverGroupId), senderId: senderUserId, message: msg });
+    } else {
+      const payload: ChatPayload = {
+        senderUserId,
+        receiverUserId: receiverUserId ?? 0,
+        message: msg,
+      };
+      socket.emit('sendMessage', payload);
+    }
   };
 
   return (
