@@ -71,20 +71,27 @@ export function useGroupChatSocket(
     const socket = socketRef.current;
     if (!socket || !isConnectedRef.current) return;
     const groupIdNum = Number(groupId);
+    let joinedGroupListener: ((data: any) => void) | null = null;
     if (!isNaN(groupIdNum)) {
-      // Nếu có groupId mới, emit joinGroup và loadGroupMessages
+      // Emit joinGroup khi đổi group
       console.log('[Socket] Emitting joinGroup:', { groupId: groupIdNum });
       socket.emit('joinGroup', { groupId: groupIdNum });
-      console.log('[Socket] Emitting loadGroupMessages:', { groupId: groupIdNum });
-      socket.emit('loadGroupMessages', { groupId: groupIdNum });
+      // Chỉ emit loadGroupMessages sau khi nhận event joinedGroup từ server
+      joinedGroupListener = (data: any) => {
+        console.log('[Socket] joinedGroup', data);
+        console.log('[Socket] Emitting loadGroupMessages:', { groupId: groupIdNum });
+        socket.emit('loadGroupMessages', { groupId: groupIdNum });
+      };
+      socket.on('joinedGroup', joinedGroupListener);
     }
-    // Nếu cần, có thể emit leaveGroup cho group cũ (lưu groupId cũ bằng useRef nếu muốn)
-    // ...
-    // Cleanup khi groupId thay đổi: có thể emit leaveGroup ở đây nếu cần
+    // Cleanup khi groupId thay đổi: emit leaveGroup và remove listener
     return () => {
       if (!isNaN(groupIdNum)) {
         console.log('[Socket] Emitting leaveGroup:', { groupId: groupIdNum });
         socket.emit('leaveGroup', { groupId: groupIdNum });
+        if (joinedGroupListener) {
+          socket.off('joinedGroup', joinedGroupListener);
+        }
       }
     };
   }, [groupId]);

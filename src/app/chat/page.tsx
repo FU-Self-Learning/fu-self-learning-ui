@@ -38,7 +38,7 @@ function ChatPageComponent() {
 
   return (
     <div className='flex h-[calc(100vh-6rem)] bg-gradient-to-br from-slate-50 to-blue-50'>
-      {/* <UserList currentUserId={Number(currentUser.id)} /> */}
+      <UserList currentUserId={Number(currentUser.id)} />
       <GroupList currentUserId={Number(currentUser.id)} />
       <div className='flex-1 p-4'>
         {receiverUserId ? (

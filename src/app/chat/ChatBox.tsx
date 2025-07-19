@@ -21,26 +21,35 @@ interface RawMessage {
   senderUserId?: number;
   receiverUserId?: number;
   receiverGroupId?: number;
+  sender?: {
+    id: number;
+    username: string;
+    email: string;
+    phoneNumber?: string | null;
+    dob?: string | null;
+    avatarUrl?: string | null;
+    role?: string;
+    isActive?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+  };
 }
 
 const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receiverGroupId }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
-  // Unified socket logic for both 1vs1 and group chat
-  const groupSocketObj = receiverGroupId
-    ? useGroupChatSocket(senderUserId, receiverGroupId)
-    : undefined;
-  const socket = receiverGroupId ? groupSocketObj?.socket : useSocket(senderUserId);
+  const groupSocketObj = useGroupChatSocket(senderUserId, receiverGroupId);
+  const userSocketObj = useSocket(senderUserId);
+
+  const socket = receiverGroupId ? groupSocketObj?.socket : userSocketObj;
   const isConnected = receiverGroupId ? groupSocketObj?.isConnected : true;
 
   useEffect(() => {
     if (!socket) return;
-    // Unified logic for both chat types
     let handleIncomingMessage: (msg: RawMessage) => void;
     let handleMessagesLoaded: (loaded: RawMessage[]) => void;
 
     if (receiverGroupId) {
-      // Group chat logic
       handleIncomingMessage = (msg: RawMessage) => {
         const group = msg.receiverGroupId;
         if (group !== receiverGroupId) return;
@@ -50,19 +59,42 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receive
           createdAt: msg.createdAt,
           senderId: msg.senderId ?? msg.senderUserId ?? 0,
           receiverId: msg.receiverId ?? msg.receiverUserId ?? 0,
+          sender: msg.sender ? {
+            id: msg.sender.id,
+            username: msg.sender.username,
+            email: msg.sender.email,
+            phoneNumber: msg.sender.phoneNumber,
+            dob: msg.sender.dob,
+            avatarUrl: msg.sender.avatarUrl,
+            role: msg.sender.role,
+            isActive: msg.sender.isActive,
+            createdAt: msg.sender.createdAt,
+            updatedAt: msg.sender.updatedAt,
+          } : undefined,
         };
         setMessages((prev) => [...prev, normalized]);
       };
       handleMessagesLoaded = (loaded: RawMessage[]) => {
-        const normalized = loaded
-          .filter((msg) => msg.receiverGroupId === receiverGroupId)
-          .map((msg): ChatMessage => ({
-            id: msg.id,
-            message: msg.message,
-            createdAt: msg.createdAt,
-            senderId: msg.senderId ?? msg.senderUserId ?? 0,
-            receiverId: msg.receiverId ?? msg.receiverUserId ?? 0,
-          }));
+        console.log('[Socket][groupMessagesLoaded] data:', loaded);
+        const normalized = loaded.map((msg): ChatMessage => ({
+          id: msg.id,
+          message: msg.message,
+          createdAt: msg.createdAt,
+          senderId: msg.senderId ?? msg.senderUserId ?? 0,
+          receiverId: msg.receiverId ?? msg.receiverUserId ?? 0,
+          sender: msg.sender ? {
+            id: msg.sender.id,
+            username: msg.sender.username,
+            email: msg.sender.email,
+            phoneNumber: msg.sender.phoneNumber,
+            dob: msg.sender.dob,
+            avatarUrl: msg.sender.avatarUrl,
+            role: msg.sender.role,
+            isActive: msg.sender.isActive,
+            createdAt: msg.sender.createdAt,
+            updatedAt: msg.sender.updatedAt,
+          } : undefined,
+        }));
         setMessages(normalized);
       };
       socket.emit('loadGroupMessages', { groupId: receiverGroupId });
@@ -75,7 +107,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receive
         socket.off('groupMessageSent', handleIncomingMessage);
       };
     } else {
-      // 1vs1 chat logic
       handleIncomingMessage = (msg: RawMessage) => {
         const sender = msg.senderId ?? msg.senderUserId;
         const receiver = msg.receiverId ?? msg.receiverUserId;
