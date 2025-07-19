@@ -45,11 +45,13 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receive
   const isConnected = receiverGroupId ? groupSocketObj?.isConnected : true;
 
   useEffect(() => {
-    if (!socket) return;
+    if (!socket || (receiverGroupId && !isConnected)) return;
     let handleIncomingMessage: (msg: RawMessage) => void;
     let handleMessagesLoaded: (loaded: RawMessage[]) => void;
 
     if (receiverGroupId) {
+      socket.emit('joinGroup', { groupId: receiverGroupId });
+
       handleIncomingMessage = (msg: RawMessage) => {
         const group = msg.receiverGroupId;
         if (group !== receiverGroupId) return;
