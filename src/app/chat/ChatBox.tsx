@@ -21,6 +21,7 @@ interface RawMessage {
   senderUserId?: number;
   receiverUserId?: number;
   receiverGroupId?: number;
+  group?: { id: number };
   sender?: {
     id: number;
     username: string;
@@ -45,15 +46,15 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receive
   const isConnected = receiverGroupId ? groupSocketObj?.isConnected : true;
 
   useEffect(() => {
-    if (!socket || (receiverGroupId && !isConnected)) return;
+    if (!socket) return;
     let handleIncomingMessage: (msg: RawMessage) => void;
     let handleMessagesLoaded: (loaded: RawMessage[]) => void;
 
     if (receiverGroupId) {
-      socket.emit('joinGroup', { groupId: receiverGroupId });
+      
 
       handleIncomingMessage = (msg: RawMessage) => {
-        const group = msg.receiverGroupId;
+        const group = msg.receiverGroupId ?? msg.group?.id;
         if (group !== receiverGroupId) return;
         const normalized: ChatMessage = {
           id: msg.id,
@@ -99,10 +100,14 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receive
         }));
         setMessages(normalized);
       };
-      socket.emit('loadGroupMessages', { groupId: receiverGroupId });
+      
       socket.on('groupMessagesLoaded', handleMessagesLoaded);
       socket.on('newGroupMessage', handleIncomingMessage);
       socket.on('groupMessageSent', handleIncomingMessage);
+
+      // Sau khi đã gắn listener, yêu cầu server gửi lịch sử
+      socket.emit('loadGroupMessages', { groupId: receiverGroupId });
+
       return () => {
         socket.off('groupMessagesLoaded', handleMessagesLoaded);
         socket.off('newGroupMessage', handleIncomingMessage);

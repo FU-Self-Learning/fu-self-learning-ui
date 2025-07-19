@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import { Socket } from '@/types/socket.type';
 
@@ -11,7 +11,7 @@ export function useGroupChatSocket(
   onGroupMessageSent?: (msg: any) => void,
 ) {
   const socketRef = useRef<Socket | null>(null);
-  const isConnectedRef = useRef(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   // Dùng ref để giữ callback ổn định
   const onGroupMessageRef = useRef(onGroupMessage);
@@ -29,14 +29,14 @@ export function useGroupChatSocket(
       transports: ['websocket'],
     });
     socketRef.current = socket;
-    isConnectedRef.current = false;
+    setIsConnected(false);
 
     socket.on('connect', () => {
-      isConnectedRef.current = true;
+      setIsConnected(true);
       console.log('[Socket] Connected to group chat namespace');
     });
     socket.on('disconnect', () => {
-      isConnectedRef.current = false;
+      setIsConnected(false);
       console.log('[Socket] Disconnected (event)');
     });
 
@@ -61,7 +61,7 @@ export function useGroupChatSocket(
         socket.disconnect();
         console.log('[Socket] Disconnected socket');
       }
-      isConnectedRef.current = false;
+      setIsConnected(false);
       socketRef.current = null;
     };
   }, [userId]);
@@ -69,7 +69,7 @@ export function useGroupChatSocket(
   // Xử lý join/leave group khi groupId thay đổi
   useEffect(() => {
     const socket = socketRef.current;
-    if (!socket || !isConnectedRef.current) return;
+    if (!socket || !isConnected) return;
     const groupIdNum = Number(groupId);
     let joinedGroupListener: ((data: any) => void) | null = null;
     if (!isNaN(groupIdNum)) {
@@ -94,8 +94,8 @@ export function useGroupChatSocket(
         }
       }
     };
-  }, [groupId]);
+  }, [groupId, isConnected]);
 
   // Trả về cả socket và trạng thái kết nối
-  return { socket: socketRef.current, isConnected: isConnectedRef.current };
+  return { socket: socketRef.current, isConnected };
 }
