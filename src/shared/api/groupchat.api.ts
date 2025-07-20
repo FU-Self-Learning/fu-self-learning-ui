@@ -1,3 +1,4 @@
+
 import api from '.';
 import { APP_URL } from '../constants/apiConstants';
 import { Group } from '@/types/groupType';
@@ -24,6 +25,16 @@ export const fetchUserGroups = async (): Promise<Group[]> => {
     return response.data;
   } catch (error) {
     console.error('Error fetching user groups:', error);
+    throw error;
+  }
+};
+
+export const joinCommunityGroupChat = async (courseId: number): Promise<any> => {
+  try {
+    const response = await api.post(`${APP_URL}/group-chat/join-community`, { courseId });
+    return response.data;
+  } catch (error) {
+    console.error('Error joining community group chat:', error);
     throw error;
   }
 };

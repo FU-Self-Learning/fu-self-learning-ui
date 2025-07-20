@@ -1,6 +1,7 @@
 'use client';
-import React from 'react';
-import { Button, Card, Badge } from 'antd';
+import React, { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Button, Card, Badge, Modal, message } from 'antd';
 import {
   CheckCircleOutlined,
   HomeOutlined,
@@ -9,8 +10,39 @@ import {
   StarOutlined,
   RocketOutlined,
 } from '@ant-design/icons';
+import { joinCommunityGroupChat } from '@/shared/api/groupchat.api';
+
 
 const PaymentSuccess = () => {
+  const searchParams = useSearchParams();
+  const [courseId, setCourseId] = useState<number | null>(null);
+  const [modalVisible, setModalVisible] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  React.useEffect(() => {
+    const id = searchParams.get('courseId');
+    if (id) setCourseId(Number(id));
+  }, [searchParams]);
+
+
+  const handleJoinGroup = async () => {
+    if (!courseId) return;
+    setLoading(true);
+    try {
+      await joinCommunityGroupChat(courseId);
+      message.success('You have joined the community group chat!');
+      setModalVisible(false);
+    } catch (error) {
+      message.error('Failed to join group chat. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <div className='min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center px-4 py-8'>
       <div className='absolute inset-0 overflow-hidden pointer-events-none'>
@@ -25,6 +57,29 @@ const PaymentSuccess = () => {
 
       <div className='relative z-10 max-w-4xl w-full'>
         <Card className='shadow-2xl border-0 overflow-hidden bg-white/95 backdrop-blur-sm'>
+          {courseId !== null && (
+            <Modal
+              title='Join Community Group Chat'
+              open={modalVisible}
+              onCancel={handleCloseModal}
+              footer={null}
+              centered
+              maskClosable={false}
+            >
+              <div className='text-center p-4'>
+                <h2 className='text-xl font-bold mb-2'>Would you like to join the community group chat for this course?</h2>
+                <p className='text-gray-600 mb-6'>Connect with other learners, ask questions, and share your experience!</p>
+                <div className='flex justify-center gap-4'>
+                  <Button type='primary' loading={loading} onClick={handleJoinGroup}>
+                    Yes, Join Now
+                  </Button>
+                  <Button onClick={handleCloseModal} disabled={loading}>
+                    No, Thanks
+                  </Button>
+                </div>
+              </div>
+            </Modal>
+          )}
           <div className='text-center py-16 px-8'>
             <div className='relative mb-8'>
               <div className='w-32 h-32 mx-auto bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mb-6 animate-bounce shadow-lg'>

@@ -38,8 +38,10 @@ function ChatPageComponent() {
 
   return (
     <div className='flex h-[calc(100vh-6rem)] bg-gradient-to-br from-slate-50 to-blue-50'>
-      <UserList currentUserId={Number(currentUser.id)} />
-      <GroupList currentUserId={Number(currentUser.id)} />
+      <div className='flex flex-col w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full shadow-lg'>
+        <UserList currentUserId={Number(currentUser.id)} />
+        <GroupList currentUserId={Number(currentUser.id)} />
+      </div>
       <div className='flex-1 p-4'>
         {receiverUserId ? (
           <ChatBox senderUserId={Number(currentUser.id)} receiverUserId={receiverUserId} />

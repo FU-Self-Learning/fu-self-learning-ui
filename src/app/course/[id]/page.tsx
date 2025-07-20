@@ -44,17 +44,18 @@ const CourseDetail = () => {
   }, [topics]);
 
   const handleLessonSelect = useCallback((lesson: LessonInTopic) => {
+    if (selectedLesson && selectedLesson.id === lesson.id) {
+      setShowContinueModal(false);
+      return;
+    }
     setSelectedLesson(lesson);
-    setShowContinueModal(false); 
-    
+    setShowContinueModal(false);
     let lessonIndex = 0;
-    
     for (const topic of topics || []) {
       for (const topicLesson of topic.lessons || []) {
         if (topicLesson.id === lesson.id) {
           setSelectedLessonIndex(lessonIndex);
           setSelectedTopicId(topic.id.toString());
-          
           if (isAuthenticated && user?.id && enrollmentCheck?.isEnrolled && courseDetail) {
             saveLastWatchedVideo({
               courseId: id,
@@ -70,7 +71,7 @@ const CourseDetail = () => {
         lessonIndex++;
       }
     }
-  }, [topics, isAuthenticated, user?.id, enrollmentCheck?.isEnrolled, saveLastWatchedVideo, id, courseDetail]);
+  }, [topics, isAuthenticated, user?.id, enrollmentCheck?.isEnrolled, saveLastWatchedVideo, id, courseDetail, selectedLesson]);
 
   useEffect(() => {
     if (!isLoading && !isLoadingTopics && courseDetail && topics) {
