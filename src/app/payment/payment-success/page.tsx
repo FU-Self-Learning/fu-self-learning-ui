@@ -32,7 +32,7 @@ const PaymentSuccess = () => {
       await joinCommunityGroupChat(courseId);
       message.success('You have joined the community group chat!');
       setModalVisible(false);
-    } catch (error) {
+    } catch {
       message.error('Failed to join group chat. Please try again later.');
     } finally {
       setLoading(false);

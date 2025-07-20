@@ -13,12 +13,6 @@ interface User {
   avatarUrl: string | null;
 }
 
-interface FollowRelationship {
-  id: number;
-  createdAt: string;
-  updatedAt: string;
-  followingUser: User;
-}
 
 interface UserListProps {
   currentUserId: number;

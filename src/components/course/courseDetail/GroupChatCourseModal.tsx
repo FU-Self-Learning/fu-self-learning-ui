@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, List, Spin, Avatar, Progress, Checkbox, Button, Collapse, Alert } from 'antd';
+import { Modal, List, Spin, Avatar, Progress, Checkbox, Button, Alert } from 'antd';
 import { fetchFollowerUsers } from '@/shared/api/user.api';
-import { FollowRelationship } from '@/types/followType';
 import { createGroupChat } from '@/shared/api/groupchat.api';
 
 interface GroupChatCourseModalProps {
@@ -65,7 +64,7 @@ const GroupChatCourseModal: React.FC<GroupChatCourseModalProps> = ({ visible, on
       setUsers([]);
       setSelectedUserIds([]);
       setError(null);
-    } catch (error) {
+    } catch {
       setError('Failed to create group chat');
     }
   };

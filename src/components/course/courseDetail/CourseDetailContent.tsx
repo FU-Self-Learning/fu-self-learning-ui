@@ -2,7 +2,7 @@ import { Button, Collapse, Divider, Empty, Space } from 'antd';
 import { useState } from 'react';
 import GroupChatCourseModal from './GroupChatCourseModal';
 import { groupChatApi } from '@/shared/api/group-chat.api';
-import { LockOutlined, PlayCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { LockOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import { LessonInTopic, TopicResponse } from '@/types/topicType';
 import { formatDuration } from '@/utils/convertTime';
 import { useRouter } from 'next/navigation';
@@ -42,7 +42,7 @@ const CourseDetailContent = ({ sections, onLessonSelect, courseId }: CourseDetai
     try {
       const res = await groupChatApi.getMyEnrolledCourses();
       setCourses(res?.data || []);
-    } catch (err) {
+    } catch {
       setCourses([]);
     }
     setLoadingCourses(false);

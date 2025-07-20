@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, List, Spin, Button, Alert } from 'antd';
 import { UserOutlined, ReloadOutlined } from '@ant-design/icons';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserGroups } from '@/context/group/groupSlice';
 import { RootState, AppDispatch } from '@/providers/store';
@@ -13,7 +13,6 @@ interface GroupListProps {
 const GroupList: React.FC<GroupListProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { groups, loading, error } = useSelector((state: RootState) => state.group);
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
 
