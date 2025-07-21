@@ -48,3 +48,17 @@ export const getMyExams = async (): Promise<ExamResponse[]> => {
   const response = await api.get(`${APP_URL}/tests/my-exams`);
   return response.data;
 };
+
+export const generateQuestionsAI = async (topicId: number, topicTitle: string, count: number) => {
+  const response = await api.post(`${APP_URL}/ai/generate-questions`, {
+    topicId,
+    topicTitle,
+    count,
+  });
+  return response.data;
+};
+
+export const generateQuestionsByTopic = async (topicId: number, count: number) => {
+  const response = await api.post(`${APP_URL}/ai/generate-questions-by-topic`, { topicId, count });
+  return response.data;
+};
