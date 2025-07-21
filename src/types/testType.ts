@@ -4,7 +4,7 @@ export type AttemptStatus = 'in_progress' | 'completed' | 'timeout' | 'cancelled
 
 export interface QuizQuestion {
   id: number;
-  questionText: string;
+  question_text: string;
   correct_answer?: string[];
   choices: string[];
   topicId?: number;

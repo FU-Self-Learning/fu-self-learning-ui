@@ -60,7 +60,7 @@ const QuestionCard = ({
         </div>
         <div className='bg-gradient-to-r from-gray-50 to-blue-50 p-6 rounded-xl border border-gray-200'>
           <Text className='text-xl leading-relaxed text-gray-800 font-medium'>
-            {question.questionText}
+            {question.question_text}
           </Text>
         </div>
       </div>
