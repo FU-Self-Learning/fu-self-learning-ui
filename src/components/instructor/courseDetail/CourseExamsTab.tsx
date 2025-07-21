@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, Space, Typography, Empty, Spin, Input, Select } from 'antd';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
-import { useExams } from '@/hooks/exam/useExams';
+import { useInstructorExams, useExams } from '@/hooks/exam/useExams';
 import { ExamFilter } from '@/types/examType';
 import { ExamList } from './exam/ExamList';
+import { useSelector } from 'react-redux';
+import { selectAuthUser } from '@/providers/auth/selector/authSelector';
 
 const { Title } = Typography;
 const { Search } = Input;
@@ -19,7 +21,14 @@ export const CourseExamsTab: React.FC<CourseExamsTabProps> = ({ courseId }) => {
   const router = useRouter();
   const [filter, setFilter] = useState<ExamFilter>({ courseId: parseInt(courseId) });
 
-  const { data: exams, isLoading, error } = useExams(parseInt(courseId), filter);
+  const user = useSelector(selectAuthUser);
+  const isInstructor = user?.role === 'instructor';
+
+  const instructorExams = useInstructorExams(parseInt(courseId));
+  const studentExams = useExams(parseInt(courseId), filter);
+  const exams = isInstructor ? instructorExams.data : studentExams.data;
+  const isLoading = isInstructor ? instructorExams.isLoading : studentExams.isLoading;
+  const error = isInstructor ? instructorExams.error : studentExams.error;
 
   const handleFilterChange = (key: keyof ExamFilter, value: any) => {
     setFilter((prev) => ({ ...prev, [key]: value }));
@@ -85,7 +94,7 @@ export const CourseExamsTab: React.FC<CourseExamsTabProps> = ({ courseId }) => {
           <Spin size='large' />
         </div>
       ) : exams && exams.length > 0 ? (
-        <ExamList exams={exams} />
+        <ExamList exams={exams} courseId={courseId} />
       ) : (
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='No exams found' className='my-8'>
           <Button type='primary' onClick={handleCreateExam}>

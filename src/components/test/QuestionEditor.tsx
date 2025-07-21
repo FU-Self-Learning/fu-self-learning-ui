@@ -211,7 +211,11 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                           {String.fromCharCode(65 + cIndex)}
                         </div>
                         <Checkbox
-                          checked={question.correct_answer.includes(choice) && choice.trim() !== ''}
+                          checked={
+                            Array.isArray(question.correct_answer) &&
+                            question.correct_answer.includes(choice) &&
+                            choice.trim() !== ''
+                          }
                           onChange={(e) => toggleCorrectAnswer(qIndex, choice, e.target.checked)}
                           disabled={choice.trim() === ''}
                           className='mr-3'
@@ -237,11 +241,13 @@ const QuestionEditor: React.FC<QuestionEditorProps> = ({
                     </div>
                   ))}
                 </div>
-                {question.correct_answer.length === 0 && question.question_text && (
-                  <Text type='danger' className='text-sm block mt-2'>
-                    ⚠️ Please select at least one correct answer
-                  </Text>
-                )}
+                {(Array.isArray(question.correct_answer) ? question.correct_answer.length : 0) ===
+                  0 &&
+                  question.question_text && (
+                    <Text type='danger' className='text-sm block mt-2'>
+                      ⚠️ Please select at least one correct answer
+                    </Text>
+                  )}
               </div>
             </div>
           </Card>

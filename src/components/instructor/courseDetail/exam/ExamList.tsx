@@ -10,7 +10,9 @@ import {
 } from '@ant-design/icons';
 import { ExamResponse } from '@/types/examType';
 import { useDeleteExam } from '@/hooks/exam/useDeleteExam';
-import { useToggleExamStatus } from '@/hooks/exam/useUpdateExam';
+import { useToggleExamStatus } from '@/hooks/exam/useToggleExamStatus';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 // Simple date formatter utility
 const formatCreatedAt = (dateString: string) => {
   const date = new Date(dateString);
@@ -29,28 +31,38 @@ const { Text } = Typography;
 
 interface ExamListProps {
   exams: ExamResponse[];
+  courseId: string;
 }
 
-export const ExamList: React.FC<ExamListProps> = ({ exams }) => {
+export const ExamList: React.FC<ExamListProps> = ({ exams, courseId }) => {
   const deleteExamMutation = useDeleteExam();
-  const toggleStatusMutation = useToggleExamStatus();
+  // State để lưu examId đang toggle
+  const [togglingId, setTogglingId] = useState<number | null>(null);
+  const { toggle, isPending, data } = useToggleExamStatus();
+  const router = useRouter();
 
   const handleDeleteExam = (examId: number) => {
     deleteExamMutation.mutate(examId);
   };
 
-  const handleToggleStatus = (examId: number) => {
-    toggleStatusMutation.mutate(examId);
+  const handleToggleStatus = async (examId: number) => {
+    setTogglingId(examId);
+    try {
+      const result = await toggle(examId);
+      if (result && result.id === examId) {
+        setTogglingId(null);
+      }
+    } catch {
+      setTogglingId(null);
+    }
   };
 
   const handleEditExam = (examId: number) => {
-    // TODO: Implement edit functionality
-    console.log('Edit exam:', examId);
+    router.push(`/instructor/course/${courseId}/exam/${examId}/edit`);
   };
 
   const handleViewExam = (examId: number) => {
-    // TODO: Implement view functionality
-    console.log('View exam:', examId);
+    router.push(`/instructor/course/${courseId}/exam/${examId}`);
   };
 
   return (
@@ -90,7 +102,8 @@ export const ExamList: React.FC<ExamListProps> = ({ exams }) => {
                   type='text'
                   icon={exam.isActive ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
                   onClick={() => handleToggleStatus(exam.id)}
-                  loading={toggleStatusMutation.isPending}
+                  loading={togglingId === exam.id && (isPending || (data && data.id !== exam.id))}
+                  disabled={togglingId === exam.id && (isPending || (data && data.id !== exam.id))}
                 />
               </Tooltip>,
               <Popconfirm

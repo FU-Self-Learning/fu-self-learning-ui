@@ -38,7 +38,7 @@ export const deleteExam = async (examId: number): Promise<void> => {
   await api.delete(`${APP_URL}/tests/${examId}`);
 };
 
-export const toggleExamStatus = async (examId: number): Promise<ExamResponse> => {
+export const toggleExamStatus = async (examId: number) => {
   const response = await api.patch(`${APP_URL}/tests/${examId}/toggle-status`);
   return response.data;
 };
@@ -46,6 +46,11 @@ export const toggleExamStatus = async (examId: number): Promise<ExamResponse> =>
 // Get exams for instructor dashboard
 export const getMyExams = async (): Promise<ExamResponse[]> => {
   const response = await api.get(`${APP_URL}/tests/my-exams`);
+  return response.data;
+};
+
+export const getInstructorExamsByCourseId = async (courseId: number) => {
+  const response = await api.get(`${APP_URL}/tests/course/${courseId}/instructor`);
   return response.data;
 };
 
