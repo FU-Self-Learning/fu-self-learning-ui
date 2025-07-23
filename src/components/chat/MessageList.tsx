@@ -31,7 +31,7 @@ const MessageList: React.FC<Props> = ({ messages, currentUserId }) => {
   };
 
   return (
-    <div className='flex flex-col gap-4 p-6 overflow-y-auto flex-1 bg-gradient-to-b from-slate-50/50 to-white/80'>
+    <div className='flex flex-col gap-3 p-6 overflow-y-auto flex-1 bg-white rounded-2xl border border-blue-100'>
       {messages.length === 0 ? (
         <div className='flex items-center justify-center h-full'>
           <div className='text-center'>
@@ -59,15 +59,14 @@ const MessageList: React.FC<Props> = ({ messages, currentUserId }) => {
           return (
             <div key={msg.id} className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}>
               <div
-                className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm shadow-lg transition-all duration-200 hover:shadow-xl ${
-                  isOwn
-                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-md'
-                    : 'bg-white text-gray-800 border border-gray-200/50 rounded-bl-md'
-                }`}
+                className={`max-w-[70%] px-5 py-3 rounded-3xl shadow-sm border transition-all duration-150 whitespace-pre-line break-words ${isOwn
+                  ? 'bg-blue-500 text-white border-blue-300 rounded-br-md'
+                  : 'bg-blue-50 text-blue-900 border-blue-100 rounded-bl-md'
+                  }`}
               >
-                <div className='break-words'>{msg.message}</div>
+                <div className='text-base'>{msg.message}</div>
                 {msg.createdAt && (
-                  <div className={`text-xs mt-2 ${isOwn ? 'text-blue-100' : 'text-gray-500'}`}>
+                  <div className={`text-xs mt-1 ${isOwn ? 'text-blue-100' : 'text-blue-400'}`}>
                     {formatTimestamp(msg.createdAt)}
                   </div>
                 )}

@@ -8,36 +8,43 @@ import UserList from '@/components/chat/UserList';
 import { Suspense } from 'react';
 import { Spin } from 'antd';
 import { useHasMounted } from '@/hooks/useHasMounted';
+import React, { useState, useEffect } from 'react';
 
 function ChatPageComponent() {
+  const hasMounted = useHasMounted();
   const searchParams = useSearchParams();
   const userParam = searchParams.get('user');
   const receiverUserId = userParam ? parseInt(userParam, 10) : null;
-  const hasMounted = useHasMounted();
-
   const currentUser = useSelector((state: RootState) => state.auth.user);
 
+  const [userList, setUserList] = useState([]);
+  const [receiverUser, setReceiverUser] = useState(null);
+
+  const handleUserSelect = (user: any) => {
+    setReceiverUser(user);
+  };
+
+  const handleUserList = (users: any) => {
+    setUserList(users);
+  };
+
+  useEffect(() => {
+    if (receiverUserId && userList.length > 0) {
+      const found = userList.find((u: any) => u?.id === receiverUserId);
+      setReceiverUser(found || null);
+    }
+  }, [receiverUserId, userList]);
+
   if (!hasMounted || !currentUser) {
-    return (
-      <div className='flex h-[calc(100vh-6rem)] bg-gradient-to-br from-slate-50 to-blue-50'>
-        <div className='w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full shadow-lg'>
-          <div className='flex items-center justify-center h-full'>
-            <Spin size='large' />
-          </div>
-        </div>
-        <div className='flex-1 p-4'>
-          <div className='flex items-center justify-center h-full text-gray-500'>Loading...</div>
-        </div>
-      </div>
-    );
+    return <div className='p-6 text-center text-gray-500'>Loading...</div>;
   }
 
   return (
     <div className='flex h-[calc(100vh-6rem)] bg-gradient-to-br from-slate-50 to-blue-50'>
-      <UserList currentUserId={Number(currentUser.id)} />
+      <UserList currentUserId={Number(currentUser.id)} onUserSelect={handleUserSelect} selectedUserId={receiverUserId} onUserList={handleUserList} />
       <div className='flex-1 p-4'>
         {receiverUserId ? (
-          <ChatBox senderUserId={Number(currentUser.id)} receiverUserId={receiverUserId} />
+          <ChatBox senderUserId={Number(currentUser.id)} receiverUserId={receiverUserId} receiverUser={receiverUser} />
         ) : (
           <div className='flex items-center justify-center h-full'>
             <div className='text-center p-8 bg-white/50 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20'>
