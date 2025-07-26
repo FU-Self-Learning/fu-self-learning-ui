@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Button, Typography, Alert, Spin, Breadcrumb } from 'antd';
 import { ArrowLeftOutlined, HomeOutlined, BookOutlined } from '@ant-design/icons';
 import { useTestResultDetail } from '@/hooks/test/useTestResult';
-import { TestAnswersSummary, TestAnswersSection } from '@/components/test';
+import { TestAnswersSummary, TestAnswersSection, TestAIAnalysis } from '@/components/test';
 
 const { Title, Text } = Typography;
 
@@ -70,7 +70,7 @@ const TestAnswersPage = () => {
               ),
             },
             {
-              title: 'Detailed Answers',
+              title: <div className='ml-2 mt-1'>Detailed Answers</div>,
             },
           ]}
         />
@@ -85,6 +85,9 @@ const TestAnswersPage = () => {
           </Title>
           <Text className='text-center block text-gray-600'>{resultDetail.testTitle}</Text>
         </div>
+
+        {/* AI Analysis */}
+        <TestAIAnalysis resultDetail={resultDetail} />
 
         {/* Summary */}
         <TestAnswersSummary resultDetail={resultDetail} />

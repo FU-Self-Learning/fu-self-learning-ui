@@ -89,6 +89,24 @@ export const getTestResultDetail = async (attemptId: number): Promise<TestResult
   return response.data;
 };
 
+// Get AI explanation for answer
+export const getAnswerExplanation = async (data: {
+  questionText: string;
+  choices: string[];
+  correctAnswers: string[];
+  selectedAnswers: string[];
+  isCorrect: boolean;
+  topicContext?: string;
+}): Promise<{
+  explanation: string;
+  whyCorrect: string;
+  whyWrong?: string;
+  learningTip: string;
+}> => {
+  const response = await apiClient.post(APP_URL + '/tests/explain-answer', data);
+  return response.data;
+};
+
 // Cancel ongoing test attempt
 export const cancelTestAttempt = async (attemptId: number): Promise<void> => {
   await apiClient.post(APP_URL + `/tests/cancel/${attemptId}`);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Card, Tag, Typography, Row, Col, Statistic, Progress, Modal, Alert } from 'antd';
-import { EyeOutlined, FileTextOutlined } from '@ant-design/icons';
+import { EyeOutlined, FileTextOutlined, TrophyOutlined } from '@ant-design/icons';
 import { TestResult } from '@/types/testType';
 import { useRouter } from 'next/navigation';
 
@@ -79,11 +79,20 @@ const TestResultCard = ({ result, courseId }: TestResultCardProps) => {
 
           {result.status === 'completed' && (
             <div className='flex flex-col gap-2'>
+              <Button
+                type='primary'
+                icon={<TrophyOutlined />}
+                onClick={() =>
+                  router.push(`/course/${courseId}/test/${result.testId}/result/${result.id}`)
+                }
+              >
+                View Result
+              </Button>
               <Button icon={<EyeOutlined />} onClick={() => setShowDetails(true)}>
                 View Details
               </Button>
               <Button
-                type='primary'
+                type='default'
                 icon={<FileTextOutlined />}
                 onClick={() =>
                   router.push(

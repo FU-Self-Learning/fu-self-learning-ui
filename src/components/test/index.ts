@@ -9,3 +9,5 @@ export { default as TestResultSummary } from './TestResultSummary';
 export { default as TestAnswerItem } from './TestAnswerItem';
 export { default as TestAnswersSummary } from './TestAnswersSummary';
 export { default as TestAnswersSection } from './TestAnswersSection';
+export { default as AnswerExplanationModal } from './AnswerExplanationModal';
+export { default as TestAIAnalysis } from './TestAIAnalysis';

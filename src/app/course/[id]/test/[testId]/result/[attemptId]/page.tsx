@@ -21,6 +21,7 @@ import {
   ClockCircleOutlined,
   ReloadOutlined,
   FileTextOutlined,
+  RobotOutlined,
 } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { getTestResult } from '@/shared/api/test.api';
@@ -94,7 +95,7 @@ const TestResultPage = () => {
         </div>
 
         {/* Main Result Card */}
-        <Card className='shadow-xl border-0 mb-6'>
+        <Card className='shadow-xl border-0 !mb-6'>
           <Row gutter={24}>
             <Col span={6}>
               <div className='text-center'>
@@ -161,7 +162,7 @@ const TestResultPage = () => {
         </Card>
 
         {/* Action Buttons */}
-        <div className='flex justify-center gap-4 mb-6'>
+        <div className='flex justify-center gap-4 !mb-6'>
           <Button
             type='primary'
             size='large'
@@ -171,6 +172,15 @@ const TestResultPage = () => {
             }
           >
             View Detailed Answers
+          </Button>
+          <Button
+            size='large'
+            icon={<RobotOutlined />}
+            onClick={() =>
+              router.push(`/course/${courseId}/test/${testId}/result/${attemptId}/answers`)
+            }
+          >
+            AI Analysis
           </Button>
           <Button size='large' icon={<ReloadOutlined />} onClick={handleRetakeTest}>
             Retake Test
