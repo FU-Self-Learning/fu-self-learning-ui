@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { fetchFollowerUsers } from '@/shared/api/user.api';
 import { useHasMounted } from '@/hooks/useHasMounted';
 import { isValidWebUrl } from '@/utils/urlValidation';
+import { useProfile } from '@/hooks/auth/useProfile';
 
 interface User {
   id: number;
@@ -13,12 +14,23 @@ interface User {
   avatarUrl: string | null;
 }
 
+interface FollowRelationship {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  followingUser: User;
+}
 
 interface UserListProps {
   currentUserId: number;
+  onUserSelect?: (user: User) => void;
+  selectedUserId?: number | null;
+  onUserList?: (users: User[]) => void;
 }
 
-const UserList: React.FC<UserListProps> = () => {
+export type { User };
+
+const UserList: React.FC<UserListProps> = ({ currentUserId, onUserSelect, selectedUserId, onUserList }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,9 +38,11 @@ const UserList: React.FC<UserListProps> = () => {
   const searchParams = useSearchParams();
   const hasMounted = useHasMounted();
   const receiverUserIdFromParams = searchParams.get('user');
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(
+  const [selectedUserIdState, setSelectedUserIdState] = useState<number | null>(
     receiverUserIdFromParams ? parseInt(receiverUserIdFromParams, 10) : null,
   );
+
+  const { data } = useProfile();
 
   const fetchUsers = async () => {
     try {
@@ -58,13 +72,15 @@ const UserList: React.FC<UserListProps> = () => {
   useEffect(() => {
     if (hasMounted) {
       const userIdFromParams = searchParams.get('user');
-      setSelectedUserId(userIdFromParams ? parseInt(userIdFromParams, 10) : null);
+      setSelectedUserIdState(userIdFromParams ? parseInt(userIdFromParams, 10) : null);
     }
   }, [searchParams, hasMounted]);
 
   const handleUserClick = (userId: number) => {
-    setSelectedUserId(userId);
+    setSelectedUserIdState(userId);
     router.push(`/chat?user=${userId}`);
+    const user = users.find(u => u.id === userId);
+    if (onUserSelect && user) onUserSelect(user);
   };
 
   const handleRetry = () => {
@@ -111,16 +127,28 @@ const UserList: React.FC<UserListProps> = () => {
   }
 
   return (
-    <div className='w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full overflow-y-auto shadow-lg'>
-      <div className='p-4 border-b border-gray-200/70 flex justify-between items-center bg-gradient-to-r from-white to-slate-50'>
-        <h2 className='text-lg font-semibold text-gray-800'>Chats</h2>
-        <Button 
-          type='text' 
-          icon={<ReloadOutlined />} 
-          onClick={handleRetry} 
-          title='Refresh list'
-          className='hover:bg-gray-100 rounded-full'
-        />
+    <div className='w-72 bg-white border-r border-gray-200 h-full shadow-lg flex flex-col'>
+      <div className='flex items-center justify-between bg-white rounded-xl shadow p-4 m-4 mb-2'>
+        <div className='flex items-center gap-3'>
+          <img
+            src={data?.avatarUrl}
+            alt='User Avatar'
+            className='w-14 h-14 rounded-full object-cover border-2 border-blue-200'
+          />
+          <div>
+            <div className='font-bold text-base text-blue-700 leading-tight'>{data?.username}</div>
+            <div className='text-sm text-gray-500'>{data?.email}</div>
+          </div>
+        </div>
+        <button className='p-2 rounded-full hover:bg-gray-100 transition' title='Edit profile'>
+          <svg xmlns="http://www.w3.org/2000/svg" className='w-5 h-5 text-gray-400' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
+            <path strokeLinecap='round' strokeLinejoin='round' d='M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-1.414.828l-4 1a1 1 0 01-1.213-1.213l1-4a4 4 0 01.828-1.414z' />
+          </svg>
+        </button>
+      </div>
+      <div className='p-4 border-b border-blue-200 flex justify-between items-center bg-blue-50'>
+        <h2 className='text-lg font-bold text-blue-700'>Chats</h2>
+        <Button type='text' icon={<ReloadOutlined />} onClick={handleRetry} title='Refresh list' />
       </div>
       {users.length === 0 ? (
         <div className='p-6 text-center text-gray-500'>
@@ -134,34 +162,34 @@ const UserList: React.FC<UserListProps> = () => {
           dataSource={users}
           renderItem={(user) => (
             <List.Item
-              className={`px-4 py-3 hover:bg-blue-50/70 cursor-pointer transition-all duration-200 border-none ${
-                user.id === selectedUserId ? 'bg-blue-100/80 border-r-4 border-blue-500' : ''
-              }`}
+              className={`ml-2 px-4 py-3 rounded-lg my-1 cursor-pointer transition-colors flex items-center gap-2 border border-transparent hover:bg-blue-50 hover:border-blue-200 ${user.id === selectedUserIdState ? 'bg-blue-100 border-blue-400' : ''}`}
               onClick={() => handleUserClick(user.id)}
             >
               <List.Item.Meta
+                className='ml-2'
                 avatar={
-                  <Avatar
-                    src={isValidWebUrl(user.avatarUrl) ? user.avatarUrl : undefined}
-                    icon={<UserOutlined />}
-                    className='bg-gradient-to-r from-blue-500 to-blue-600 shadow-md'
-                    size={40}
-                  />
+                  <div className='relative'>
+                    <Avatar
+                      src={user.avatarUrl || undefined}
+                      icon={<UserOutlined />}
+                      className='bg-blue-500 border-2 border-white shadow'
+                      size={44}
+                    />
+                    <span className='absolute bottom-0 right-0 block w-3 h-3 bg-green-400 border-2 border-white rounded-full'></span>
+                  </div>
                 }
                 title={
                   <span
-                    className={`font-medium transition-colors ${
-                      user.id === selectedUserId ? 'text-blue-700' : 'text-gray-700 hover:text-gray-900'
-                    }`}
+                    className={
+                      user.id === selectedUserIdState
+                        ? 'text-blue-700 font-bold'
+                        : 'text-gray-700 font-medium'
+                    }
                   >
                     {user.username}
                   </span>
                 }
-                description={
-                  <span className='text-sm text-gray-500 truncate'>
-                    {user.email}
-                  </span>
-                }
+                description={<span className='text-xs text-gray-400'>{user.email}</span>}
               />
             </List.Item>
           )}

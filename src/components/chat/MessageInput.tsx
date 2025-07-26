@@ -16,37 +16,33 @@ const MessageInput: React.FC<{ onSend: (msg: string) => void }> = ({ onSend }) =
   };
 
   return (
-    <div className='p-4 border-t border-gray-200/50 bg-white/90 backdrop-blur-sm'>
-      <form
-        autoComplete='off'
-        onSubmit={handleSubmit}
-        className='flex items-center gap-3'
-      >
-        <input type='text' name='fake-user' autoComplete='username' className='hidden' />
+    <form
+      autoComplete='off'
+      onSubmit={handleSubmit}
+      className='flex items-center gap-3 p-4 bg-white w-full'
+    >
+      <input type='text' name='fake-user' autoComplete='username' className='hidden' />
 
-        <input
-          type='text'
-          name='chat-input'
-          id='chat-input'
-          autoComplete='off'
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder='Type a message...'
-          className='text-black flex-1 px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm placeholder-gray-400 shadow-md transition-all duration-200 bg-gray-50 hover:bg-white'
-        />
-        <button
-          type='submit'
-          disabled={!text.trim()}
-          className={`px-6 py-3 rounded-2xl text-sm font-medium transition-all duration-200 shadow-lg hover:shadow-xl ${
-            text.trim() 
-              ? 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white transform hover:scale-105' 
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }`}
-        >
-          Send
-        </button>
-      </form>
-    </div>
+      <input
+        type='text'
+        name='chat-input'
+        id='chat-input'
+        autoComplete='off'
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder='Write something...'
+        className='flex-1 px-5 py-3 rounded-full border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-base placeholder-blue-300 shadow-sm bg-blue-50 text-blue-900'
+      />
+      <button
+        type='submit'
+        className='w-12 h-12 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow transition text-xl cursor-pointer'
+        title='Send'
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 21l18-9-18-9v7l15 2-15 2v7z" />
+        </svg>
+      </button>
+    </form>
   );
 };
 

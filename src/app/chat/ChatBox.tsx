@@ -6,11 +6,15 @@ import { useGroupChatSocket } from '@/hooks/useGroupChatSocket';
 import { ChatMessage, ChatPayload } from '@/types/chat';
 import MessageList from '@/components/chat/MessageList';
 import MessageInput from '@/components/chat/MessageInput';
+import { Avatar } from 'antd';
+import { TeamOutlined } from '@ant-design/icons';
 
 interface ChatBoxProps {
   senderUserId: number;
   receiverUserId?: number;
   receiverGroupId?: number;
+  receiverUser?: any;
+  receiverGroup?: any;
 }
 interface RawMessage {
   id: number;
@@ -36,7 +40,7 @@ interface RawMessage {
   };
 }
 
-const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receiverGroupId }) => {
+const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receiverGroupId, receiverUser, receiverGroup }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   const groupSocketObj = useGroupChatSocket(senderUserId, receiverGroupId);
@@ -51,7 +55,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receive
     let handleMessagesLoaded: (loaded: RawMessage[]) => void;
 
     if (receiverGroupId) {
-      
+
 
       handleIncomingMessage = (msg: RawMessage) => {
         const group = msg.receiverGroupId ?? msg.group?.id;
@@ -100,12 +104,10 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receive
         }));
         setMessages(normalized);
       };
-      
+
       socket.on('groupMessagesLoaded', handleMessagesLoaded);
       socket.on('newGroupMessage', handleIncomingMessage);
       socket.on('groupMessageSent', handleIncomingMessage);
-
-      // Sau khi đã gắn listener, yêu cầu server gửi lịch sử
       socket.emit('loadGroupMessages', { groupId: receiverGroupId });
 
       return () => {
@@ -171,8 +173,43 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receive
     }
   };
 
+  if (!receiverGroupId && (!receiverUserId || !receiverUser)) {
+    return <div className='flex items-center justify-center h-full text-gray-400'>No user selected</div>;
+  }
+
   return (
-    <div className='flex flex-col h-full max-w-full mx-auto shadow-xl rounded-2xl border border-gray-200/50 bg-white/80 backdrop-blur-sm overflow-hidden'>
+    <div className='flex flex-col h-full w-full shadow-lg rounded-3xl border border-blue-100 bg-white p-2'>
+      {/* Header user hoặc group */}
+      {receiverUser ? (
+        <div className='flex items-center justify-between px-4 py-3 border-b bg-white rounded-t-3xl'>
+          <div className='flex items-center gap-2'>
+            <div className='relative'>
+              <img
+                src={receiverUser.avatarUrl || 'https://via.placeholder.com/50'}
+                alt={receiverUser.username}
+                className='w-9 h-9 rounded-full object-cover border'
+              />
+              {receiverUser.online && (
+                <span className='absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-white rounded-full'></span>
+              )}
+            </div>
+            <div className='flex flex-col'>
+              <span className='font-semibold text-gray-800'>{receiverUser.username}</span>
+              <span className='font-[50px] text-gray-500'>{receiverUser.email}</span>
+            </div>
+          </div>
+        </div>
+      ) : receiverGroup ? (
+        <div className='flex items-center gap-3 px-4 py-3 border-b bg-white rounded-t-3xl'>
+          <Avatar
+            src={receiverGroup.avatarUrl || undefined}
+            icon={!receiverGroup.avatarUrl ? <TeamOutlined /> : undefined}
+            className='bg-gray-200 text-2xl text-gray-400 shadow-sm'
+            size={44}
+          />
+          <span className='font-semibold text-blue-700 text-lg'>{receiverGroup.name}</span>
+        </div>
+      ) : null}
       <MessageList messages={messages} currentUserId={senderUserId} />
       <MessageInput onSend={sendMessage} />
     </div>
