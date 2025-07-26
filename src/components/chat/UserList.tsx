@@ -141,9 +141,6 @@ const UserList: React.FC<UserListProps> = ({ currentUserId, onUserSelect, select
           </div>
         </div>
         <button className='p-2 rounded-full hover:bg-gray-100 transition' title='Edit profile'>
-          <svg xmlns="http://www.w3.org/2000/svg" className='w-5 h-5 text-gray-400' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
-            <path strokeLinecap='round' strokeLinejoin='round' d='M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-1.414.828l-4 1a1 1 0 01-1.213-1.213l1-4a4 4 0 01.828-1.414z' />
-          </svg>
         </button>
       </div>
       <div className='p-4 border-b border-blue-200 flex justify-between items-center bg-blue-50'>
@@ -158,42 +155,47 @@ const UserList: React.FC<UserListProps> = ({ currentUserId, onUserSelect, select
           <p className='font-medium'>No users found</p>
         </div>
       ) : (
-        <List
-          dataSource={users}
-          renderItem={(user) => (
-            <List.Item
-              className={`ml-2 px-4 py-3 rounded-lg my-1 cursor-pointer transition-colors flex items-center gap-2 border border-transparent hover:bg-blue-50 hover:border-blue-200 ${user.id === selectedUserIdState ? 'bg-blue-100 border-blue-400' : ''}`}
-              onClick={() => handleUserClick(user.id)}
-            >
-              <List.Item.Meta
-                className='ml-2'
-                avatar={
-                  <div className='relative'>
-                    <Avatar
-                      src={user.avatarUrl || undefined}
-                      icon={<UserOutlined />}
-                      className='bg-blue-500 border-2 border-white shadow'
-                      size={44}
-                    />
-                    <span className='absolute bottom-0 right-0 block w-3 h-3 bg-green-400 border-2 border-white rounded-full'></span>
-                  </div>
-                }
-                title={
-                  <span
-                    className={
-                      user.id === selectedUserIdState
-                        ? 'text-blue-700 font-bold'
-                        : 'text-gray-700 font-medium'
-                    }
-                  >
-                    {user.username}
-                  </span>
-                }
-                description={<span className='text-xs text-gray-400'>{user.email}</span>}
-              />
-            </List.Item>
-          )}
-        />
+        <div
+          className={users.length > 9 ? 'flex-1 overflow-y-auto' : ''}
+          style={users.length > 9 ? { maxHeight: 9 * 68 + 16, minHeight: 0 } : {}}
+        >
+          <List
+            dataSource={users}
+            renderItem={(user) => (
+              <List.Item
+                className={`ml-2 px-4 py-3 rounded-lg my-1 cursor-pointer transition-colors flex items-center gap-2 border border-transparent hover:bg-blue-50 hover:border-blue-200 ${user.id === selectedUserIdState ? 'bg-blue-100 border-blue-400' : ''}`}
+                onClick={() => handleUserClick(user.id)}
+              >
+                <List.Item.Meta
+                  className='ml-2'
+                  avatar={
+                    <div className='relative'>
+                      <Avatar
+                        src={user.avatarUrl || undefined}
+                        icon={<UserOutlined />}
+                        className='bg-blue-500 border-2 border-white shadow'
+                        size={44}
+                      />
+                      <span className='absolute bottom-0 right-0 block w-3 h-3 bg-green-400 border-2 border-white rounded-full'></span>
+                    </div>
+                  }
+                  title={
+                    <span
+                      className={
+                        user.id === selectedUserIdState
+                          ? 'text-blue-700 font-bold'
+                          : 'text-gray-700 font-medium'
+                      }
+                    >
+                      {user.username}
+                    </span>
+                  }
+                  description={<span className='text-xs text-gray-400'>{user.email}</span>}
+                />
+              </List.Item>
+            )}
+          />
+        </div>
       )}
     </div>
   );

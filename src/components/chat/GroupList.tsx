@@ -80,27 +80,32 @@ const GroupList: React.FC<GroupListProps> = ({ currentUserId, onGroupSelect }) =
           <p className='font-medium'>No groups found</p>
         </div>
       ) : (
-        <List
-          dataSource={groups}
-          renderItem={(group) => (
-            <List.Item
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 cursor-pointer border border-transparent transition-all duration-150
-                ${group.id === selectedGroupId ? 'bg-blue-100 border-blue-400 font-bold text-blue-700' : 'hover:bg-blue-50 hover:border-blue-300'}
-              `}
-              onClick={() => handleGroupClick(group)}
-            >
-              <Avatar
-                src={group.avatarUrl || undefined}
-                icon={!group.avatarUrl ? <TeamOutlined /> : undefined}
-                className='bg-gray-200 text-2xl text-gray-400 shadow-sm'
-                size={44}
-              />
-              <div className='flex-1'>
-                <div className='text-base'>{group.name}</div>
-              </div>
-            </List.Item>
-          )}
-        />
+        <div
+          className={groups.length > 9 ? 'flex-1 overflow-y-auto' : ''}
+          style={groups.length > 9 ? { maxHeight: 9 * 68 + 16, minHeight: 0 } : {}}
+        >
+          <List
+            dataSource={groups}
+            renderItem={(group) => (
+              <List.Item
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 cursor-pointer border border-transparent transition-all duration-150
+                  ${group.id === selectedGroupId ? 'bg-blue-100 border-blue-400 font-bold text-blue-700' : 'hover:bg-blue-50 hover:border-blue-300'}
+                `}
+                onClick={() => handleGroupClick(group)}
+              >
+                <Avatar
+                  src={group.avatarUrl || undefined}
+                  icon={!group.avatarUrl ? <TeamOutlined /> : undefined}
+                  className='bg-gray-200 text-2xl text-gray-400 shadow-sm'
+                  size={44}
+                />
+                <div className='flex-1'>
+                  <div className='text-base'>{group.name}</div>
+                </div>
+              </List.Item>
+            )}
+          />
+        </div>
       )}
     </div>
   );
