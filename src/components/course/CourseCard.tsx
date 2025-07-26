@@ -1,5 +1,5 @@
 import { CoursesResponse } from '@/types/courseType';
-import { Card, Tag, Space, Progress, Button, Avatar, Typography, Image, Tooltip } from 'antd';
+import { Card, Tag, Space, Button, Avatar, Typography, Image, Tooltip } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';

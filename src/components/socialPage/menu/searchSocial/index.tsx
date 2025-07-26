@@ -95,18 +95,6 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
     });
   };
 
-  if (usersLoading || followersLoading) {
-    return (
-      <div className='flex justify-center items-center h-full'>
-        <Spin size='large' />
-      </div>
-    );
-  }
-
-  if (usersError || followersError) {
-    return <div className='text-red-500'>Error loading data.</div>;
-  }
-
 
   // Create a set of follower IDs for quick lookup
   const followedUserIds = new Set(followers?.map((f) => f.followingUser.id));
@@ -122,6 +110,18 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
         u.email?.toLowerCase().includes(lower)
     );
   }, [users, searchValue]);
+
+  if (usersLoading || followersLoading) {
+    return (
+      <div className='flex justify-center items-center h-full'>
+        <Spin size='large' />
+      </div>
+    );
+  }
+
+  if (usersError || followersError) {
+    return <div className='text-red-500'>Error loading data.</div>;
+  }
 
   return (
     <motion.div

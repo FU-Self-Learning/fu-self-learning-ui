@@ -1,5 +1,5 @@
 import { Input, Button, Tag, Space, Dropdown } from 'antd';
-import { SearchOutlined, FilterOutlined, DownOutlined } from '@ant-design/icons';
+import { SearchOutlined, FilterOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useState } from 'react';
 
@@ -50,7 +50,7 @@ export default function CourseHeader({
             setSearchValue(e.target.value);
             if (onSearch) onSearch(e.target.value);
           }}
-          onPressEnter={e => {
+          onPressEnter={() => {
             if (onSearch) onSearch(searchValue.trim());
           }}
           onClear={() => {

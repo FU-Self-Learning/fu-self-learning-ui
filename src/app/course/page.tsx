@@ -23,9 +23,12 @@ export default function CoursePage() {
     new Set(courses.flatMap((course) => course.categories?.map((cat) => cat.name) || [])),
   );
 
+
+  const activeCourses = courses.filter((course) => course.isActive);
+
   const filteredByCategory = selectedCategory
-    ? courses.filter((course) => course.categories?.some((cat) => cat.name === selectedCategory))
-    : courses;
+    ? activeCourses.filter((course) => course.categories?.some((cat) => cat.name === selectedCategory))
+    : activeCourses;
 
   const filteredBySearch = searchValue.trim()
     ? filteredByCategory.filter((course) =>
