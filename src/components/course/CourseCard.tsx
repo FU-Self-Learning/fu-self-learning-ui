@@ -80,7 +80,6 @@ export default function CourseCard({ material }: { material: CoursesResponse }) 
         </div>
 
         <div className='mt-4'>
-          <Progress percent={30} size='small' />
           <Button block type='primary' className='mt-4' onClick={handleStartLearning}>
             Start Learning
           </Button>

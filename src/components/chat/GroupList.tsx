@@ -59,7 +59,7 @@ const GroupList: React.FC<GroupListProps> = () => {
   }
 
   return (
-    <div className='w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full overflow-y-auto shadow-lg'>
+    <div className='w-full bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full overflow-y-auto shadow-lg'>
       <div className='p-4 border-b border-gray-200/70 flex justify-between items-center bg-gradient-to-r from-white to-slate-50'>
         <h2 className='text-lg font-semibold text-gray-800'>Group Chats</h2>
         <Button

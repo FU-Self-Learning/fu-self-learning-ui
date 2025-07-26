@@ -19,6 +19,9 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
     isError: usersError,
     error: usersFetchError,
   } = useUsersSocial();
+
+  // State for search input
+  const [searchValue, setSearchValue] = React.useState('');
   const { mutate: follow } = useFollow();
   const {
     data: followers,
@@ -104,8 +107,21 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
     return <div className='text-red-500'>Error loading data.</div>;
   }
 
+
   // Create a set of follower IDs for quick lookup
   const followedUserIds = new Set(followers?.map((f) => f.followingUser.id));
+
+  // Filter users by search value
+  const filteredUsers = React.useMemo(() => {
+    if (!users) return [];
+    if (!searchValue.trim()) return users;
+    const lower = searchValue.toLowerCase();
+    return users.filter(
+      (u) =>
+        u.username?.toLowerCase().includes(lower) ||
+        u.email?.toLowerCase().includes(lower)
+    );
+  }, [users, searchValue]);
 
   return (
     <motion.div
@@ -126,62 +142,69 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
           placeholder='Search users...'
           prefix={<SearchOutlined className='text-gray-400' />}
           className='!rounded-xl !border-gray-200 hover:!border-blue-400 focus:!border-blue-400 !shadow-sm'
+          value={searchValue}
+          onChange={e => setSearchValue(e.target.value)}
+          allowClear
         />
       </div>
 
       <div className='space-y-4'>
-        {users?.map((item, index) => {
-          const isCurrentlyFollowing = followedUserIds.has(item.id);
-          const userLoadingState = loadingStates[Number(item.id)] || {
-            follow: false,
-            unfollow: false,
-          };
+        {filteredUsers.length === 0 ? (
+          <div className='text-center text-gray-400'>No users found.</div>
+        ) : (
+          filteredUsers.map((item, index) => {
+            const isCurrentlyFollowing = followedUserIds.has(item.id);
+            const userLoadingState = loadingStates[Number(item.id)] || {
+              follow: false,
+              unfollow: false,
+            };
 
-          return (
-            <Card
-              styles={{ body: { padding: 10 } }}
-              key={index}
-              className='!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] cursor-pointer !mb-2'
-            >
-              <div className='flex items-center gap-4'>
-                <Avatar
-                  size={48}
-                  src={isValidWebUrl(item.avatarUrl) ? item.avatarUrl : undefined}
-                  icon={<UserOutlined />}
-                  className='!flex !items-center !justify-center'
-                />
-                <div className='flex-1 min-w-0'>
-                  <Typography.Text strong className='block text-gray-800 text-lg truncate'>
-                    {item.username}
-                  </Typography.Text>
-                  <Typography.Text className='text-sm text-gray-500 block'>
-                    {item.email}
-                  </Typography.Text>
+            return (
+              <Card
+                styles={{ body: { padding: 10 } }}
+                key={index}
+                className='!rounded-xl hover:!shadow-md transition-all hover:scale-[1.02] cursor-pointer !mb-2'
+              >
+                <div className='flex items-center gap-4'>
+                  <Avatar
+                    size={48}
+                    src={isValidWebUrl(item.avatarUrl) ? item.avatarUrl : undefined}
+                    icon={<UserOutlined />}
+                    className='!flex !items-center !justify-center'
+                  />
+                  <div className='flex-1 min-w-0'>
+                    <Typography.Text strong className='block text-gray-800 text-lg truncate'>
+                      {item.username}
+                    </Typography.Text>
+                    <Typography.Text className='text-sm text-gray-500 block'>
+                      {item.email}
+                    </Typography.Text>
+                  </div>
+                  {isCurrentlyFollowing ? (
+                    <Button
+                      type='default'
+                      danger
+                      className='!rounded-full !px-4'
+                      onClick={() => handleUnfollow(Number(item.id))}
+                      loading={userLoadingState.unfollow}
+                    >
+                      UnFollow
+                    </Button>
+                  ) : (
+                    <Button
+                      type='primary'
+                      className='!bg-blue-500 hover:!bg-blue-600 !rounded-full !px-4'
+                      onClick={() => handleFollow(Number(item.id))}
+                      loading={userLoadingState.follow}
+                    >
+                      Follow
+                    </Button>
+                  )}
                 </div>
-                {isCurrentlyFollowing ? (
-                  <Button
-                    type='default'
-                    danger
-                    className='!rounded-full !px-4'
-                    onClick={() => handleUnfollow(Number(item.id))}
-                    loading={userLoadingState.unfollow}
-                  >
-                    UnFollow
-                  </Button>
-                ) : (
-                  <Button
-                    type='primary'
-                    className='!bg-blue-500 hover:!bg-blue-600 !rounded-full !px-4'
-                    onClick={() => handleFollow(Number(item.id))}
-                    loading={userLoadingState.follow}
-                  >
-                    Follow
-                  </Button>
-                )}
-              </div>
-            </Card>
-          );
-        })}
+              </Card>
+            );
+          })
+        )}
       </div>
     </motion.div>
   );

@@ -1,4 +1,7 @@
+
 'use client';
+
+import React from 'react';
 
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'next/navigation';
@@ -10,6 +13,7 @@ import { Suspense } from 'react';
 import { Spin } from 'antd';
 import { useHasMounted } from '@/hooks/useHasMounted';
 
+
 function ChatPageComponent() {
   const searchParams = useSearchParams();
   const userParam = searchParams.get('user');
@@ -18,6 +22,7 @@ function ChatPageComponent() {
   const receiverGroupId = groupParam ? parseInt(groupParam, 10) : null;
   const hasMounted = useHasMounted();
   const currentUser = useSelector((state: RootState) => state.auth.user);
+  const [listType, setListType] = React.useState<'user' | 'group'>('user');
 
   if (!hasMounted || !currentUser) {
     return (
@@ -39,8 +44,27 @@ function ChatPageComponent() {
   return (
     <div className='flex h-[calc(100vh-6rem)] bg-gradient-to-br from-slate-50 to-blue-50'>
       <div className='flex flex-col w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full shadow-lg'>
-        <UserList currentUserId={Number(currentUser.id)} />
-        <GroupList currentUserId={Number(currentUser.id)} />
+        <div className='flex'>
+          <button
+            className={`flex-1 py-2 font-semibold rounded-tl-2xl ${listType === 'user' ? 'bg-blue-100 text-blue-700' : 'bg-white text-gray-500'}`}
+            onClick={() => setListType('user')}
+          >
+            User List
+          </button>
+          <button
+            className={`flex-1 py-2 font-semibold rounded-tr-2xl ${listType === 'group' ? 'bg-blue-100 text-blue-700' : 'bg-white text-gray-500'}`}
+            onClick={() => setListType('group')}
+          >
+            Group List
+          </button>
+        </div>
+        <div className='flex-1 overflow-y-auto'>
+          {listType === 'user' ? (
+            <UserList currentUserId={Number(currentUser.id)} />
+          ) : (
+            <GroupList currentUserId={Number(currentUser.id)} />
+          )}
+        </div>
       </div>
       <div className='flex-1 p-4'>
         {receiverUserId ? (
