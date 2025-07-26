@@ -97,6 +97,22 @@ export interface TestResult {
   testTitle: string;
 }
 
+export interface TestAnswerDetail {
+  id: number;
+  questionId: number;
+  questionText: string;
+  choices: string[];
+  correctAnswer: string[];
+  selectedAnswers: string[];
+  isCorrect: boolean;
+  timeSpent: number;
+  answeredAt: string;
+}
+
+export interface TestResultDetail extends TestResult {
+  answers: TestAnswerDetail[];
+}
+
 export interface TestListFilter {
   courseId?: number;
   type?: TestType;

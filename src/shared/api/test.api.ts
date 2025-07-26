@@ -2,6 +2,7 @@ import {
   Test,
   TestAttempt,
   TestResult,
+  TestResultDetail,
   StartTestRequest,
   SubmitAnswerRequest,
   CompleteTestRequest,
@@ -77,6 +78,14 @@ export const getMyTestAttempts = async (courseId?: string): Promise<TestAttempt[
 // Get specific test result
 export const getTestResult = async (attemptId: number): Promise<TestResult> => {
   const response = await apiClient.get<TestResult>(APP_URL + `/tests/result/${attemptId}`);
+  return response.data;
+};
+
+// Get test result detail with answers
+export const getTestResultDetail = async (attemptId: number): Promise<TestResultDetail> => {
+  const response = await apiClient.get<TestResultDetail>(
+    APP_URL + `/tests/result/${attemptId}/detail`,
+  );
   return response.data;
 };
 
