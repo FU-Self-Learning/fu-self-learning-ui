@@ -27,19 +27,9 @@ const menuItems: MenuItem[] = [
     label: 'Home',
   },
   {
-    key: 'library',
-    icon: <FolderOpenOutlined style={{ fontSize: 20, color: '#1890ff' }} />,
-    label: 'Your library',
-  },
-  {
     key: 'search',
     icon: <SearchOutlined style={{ fontSize: 20, color: '#1890ff' }} />,
     label: 'Search',
-  },
-  {
-    key: 'notification',
-    icon: <BellOutlined style={{ fontSize: 20, color: '#1890ff' }} />,
-    label: 'Notification',
   },
 ];
 

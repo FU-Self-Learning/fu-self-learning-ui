@@ -7,8 +7,6 @@ import React from 'react';
 const navItems = [
   { label: 'Home', href: '/course' },
   { label: 'My Learning', href: '/course/my-learning' },
-  { label: 'Catalog', href: '/course/catalog' },
-  { label: 'Favorites', href: '/course/favorites' },
 ];
 
 export default function CourseNavbar() {
@@ -20,7 +18,10 @@ export default function CourseNavbar() {
         <div className='flex h-16 items-center justify-between'>
           <div className='flex space-x-8'>
             {navItems.map((item) => {
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+              const isActive =
+                item.href === '/course'
+                  ? pathname === '/course'
+                  : pathname === item.href || pathname.startsWith(item.href + '/');
 
               return (
                 <Link

@@ -9,9 +9,11 @@ import { useMyEnrolledCourses } from '@/hooks/enrollment/useEnrollment';
 
 const statusFilters = ['All Status', 'Not Started', 'In Progress', 'Completed'];
 
+
 export default function MyLearningPage() {
   const [selectedStatus, setSelectedStatus] = useState('All Status');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
   const { data: enrolledCourses, isLoading } = useMyEnrolledCourses();
 
   if (isLoading || !enrolledCourses) {
@@ -22,27 +24,32 @@ export default function MyLearningPage() {
     new Set(enrolledCourses.flatMap((enrollment) => enrollment.course.categories?.map((cat) => cat.name) || [])),
   );
 
-  const filteredByCategory = selectedCategory
-    ? enrolledCourses.filter((enrollment) => 
-        enrollment.course.categories?.some((cat) => cat.name === selectedCategory)
-      )
-    : enrolledCourses;
-
   const getEnrollmentStatus = (enrollment: any) => {
     if (enrollment.completedAt) return 'completed';
     if (enrollment.progress > 0) return 'in_progress';
     return 'not_started';
   };
 
-  const finalFilteredCourses = selectedStatus === 'All Status' 
-    ? filteredByCategory 
-    : filteredByCategory.filter((enrollment) => {
-        const status = getEnrollmentStatus(enrollment);
-        if (selectedStatus === 'Not Started') return status === 'not_started';
-        if (selectedStatus === 'In Progress') return status === 'in_progress';
-        if (selectedStatus === 'Completed') return status === 'completed';
-        return true;
-      });
+  const filtered = enrolledCourses.filter((enrollment) => {
+    // Filter by category
+    const matchCategory = selectedCategory
+      ? enrollment.course.categories?.some((cat) => cat.name === selectedCategory)
+      : true;
+    // Filter by search
+    const searchText = search.trim().toLowerCase();
+    const matchSearch = searchText
+      ? (enrollment.course.title?.toLowerCase().includes(searchText) ||
+         enrollment.course.description?.toLowerCase().includes(searchText))
+      : true;
+    // Filter by status
+    const status = getEnrollmentStatus(enrollment);
+    const matchStatus = selectedStatus === 'All Status'
+      ? true
+      : (selectedStatus === 'Not Started' && status === 'not_started')
+        || (selectedStatus === 'In Progress' && status === 'in_progress')
+        || (selectedStatus === 'Completed' && status === 'completed');
+    return matchCategory && matchSearch && matchStatus;
+  });
 
   return (
     <div>
@@ -52,10 +59,11 @@ export default function MyLearningPage() {
       </div>
       
       <CourseHeader
-        total={finalFilteredCourses.length}
+        total={filtered.length}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
         allCategories={allCategories}
+        onSearch={setSearch}
       />
       <StatusFilter
         statusFilters={statusFilters}
@@ -63,7 +71,7 @@ export default function MyLearningPage() {
         onChange={setSelectedStatus}
       />
       
-      {finalFilteredCourses.length === 0 ? (
+      {filtered.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-gray-500">
             <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -75,7 +83,7 @@ export default function MyLearningPage() {
         </div>
       ) : (
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
-          {finalFilteredCourses?.map((enrollment) => (
+          {filtered?.map((enrollment) => (
             <EnrolledCourseCard 
               key={`${enrollment.id}-${enrollment.course.id}`} 
               enrollment={enrollment} 

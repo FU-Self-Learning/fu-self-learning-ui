@@ -1,12 +1,15 @@
+
 import { Input, Button, Tag, Space, Dropdown } from 'antd';
 import { SearchOutlined, FilterOutlined, DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
+import { useState } from 'react';
 
 type Props = {
   total: number;
   selectedCategory: string | null;
   setSelectedCategory: (cat: string | null) => void;
   allCategories: string[];
+  onSearch?: (value: string) => void;
 };
 
 export default function CourseHeader({
@@ -14,7 +17,9 @@ export default function CourseHeader({
   selectedCategory,
   setSelectedCategory,
   allCategories,
+  onSearch,
 }: Props) {
+  const [searchValue, setSearchValue] = useState('');
   const categoryItems: MenuProps['items'] = [
     {
       key: 'all',
@@ -40,13 +45,24 @@ export default function CourseHeader({
           prefix={<SearchOutlined />}
           allowClear
           style={{ width: 200 }}
+          value={searchValue}
+          onChange={e => {
+            setSearchValue(e.target.value);
+            if (onSearch) onSearch(e.target.value);
+          }}
+          onPressEnter={e => {
+            if (onSearch) onSearch(searchValue.trim());
+          }}
+          onClear={() => {
+            setSearchValue('');
+            if (onSearch) onSearch('');
+          }}
         />
         <Dropdown menu={{ items: categoryItems }} placement='bottomRight'>
           <Button icon={<FilterOutlined />}>
             {selectedCategory ? `Category: ${selectedCategory}` : 'Filter by Category'}
           </Button>
         </Dropdown>
-        <Button icon={<DownOutlined />}>Sort by</Button>
       </Space>
     </div>
   );

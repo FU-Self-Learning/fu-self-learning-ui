@@ -3,15 +3,13 @@
 import { useState } from 'react';
 import { Spin } from 'antd';
 import CourseCard from '@/components/course/CourseCard';
-import StatusFilter from '@/components/course/StatusFilter';
 import { useCourses } from '@/hooks/course/useCourses';
 import CourseHeader from '@/components/course/CourseHeader';
 
-const statusFilters = ['All Status', 'Not Started', 'In Progress', 'Completed'];
 
 export default function CoursePage() {
-  const [selectedStatus, setSelectedStatus] = useState('All Status');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
   const { data: courses, isLoading } = useCourses();
 
   if (isLoading || !courses) {
@@ -22,9 +20,16 @@ export default function CoursePage() {
     new Set(courses.flatMap((course) => course.categories?.map((cat) => cat.name) || [])),
   );
 
-  const filteredCourses = selectedCategory
-    ? courses.filter((course) => course.categories?.some((cat) => cat.name === selectedCategory))
-    : courses;
+  const filteredCourses = courses.filter((course) => {
+    const matchCategory = selectedCategory
+      ? course.categories?.some((cat) => cat.name === selectedCategory)
+      : true;
+    const matchSearch = search.trim()
+      ? course.title?.toLowerCase().includes(search.trim().toLowerCase()) ||
+        course.description?.toLowerCase().includes(search.trim().toLowerCase())
+      : true;
+    return matchCategory && matchSearch;
+  });
 
   return (
     <div>
@@ -33,11 +38,7 @@ export default function CoursePage() {
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
         allCategories={allCategories}
-      />
-      <StatusFilter
-        statusFilters={statusFilters}
-        selectedStatus={selectedStatus}
-        onChange={setSelectedStatus}
+        onSearch={setSearch}
       />
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
         {filteredCourses?.map((item) => (
