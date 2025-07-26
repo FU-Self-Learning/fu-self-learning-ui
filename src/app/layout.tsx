@@ -7,6 +7,7 @@ import QueryClientProvider from '@/context/QueryClientProvider';
 import ReduxProvider from '@/context/ReduxProvider';
 import AuthHydration from '@/context/AuthHydration';
 import { ConfigProvider } from 'antd';
+import ChatBotStudent from '@/components/chat/ChatBotStudent';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -39,6 +40,7 @@ export default function RootLayout({
                 <Navbar />
                 <main className='flex-1'>{children}</main>
                 <Footer />
+                <ChatBotStudent />
               </div>
             </QueryClientProvider>
           </ReduxProvider>

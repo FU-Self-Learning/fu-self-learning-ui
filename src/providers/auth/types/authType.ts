@@ -5,6 +5,7 @@ export interface UserInfo {
   phoneNumber: string;
   avatarUrl: string;
   dob: string;
+  role: 'user' | 'instructor' | 'admin';
 }
 
 export interface AuthState {

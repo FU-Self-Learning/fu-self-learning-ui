@@ -26,14 +26,14 @@ const CourseDetail = () => {
   const [selectedTopicId, setSelectedTopicId] = useState<string>('');
   const [showContinueModal, setShowContinueModal] = useState(false);
   const [hasCheckedLastWatched, setHasCheckedLastWatched] = useState(false);
-  
+
   const user = useSelector(selectAuthUser);
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  
+
   const { data: courseDetail, isLoading } = useCourseDetail(id);
   const { data: topics, isLoading: isLoadingTopics } = useTopics(id);
   const { data: enrollmentCheck } = useCheckEnrollment(id);
-  const { lastWatchedVideo, saveLastWatchedVideo, getLastWatchedVideoForCourse } = 
+  const { lastWatchedVideo, saveLastWatchedVideo, getLastWatchedVideoForCourse } =
     useLastWatchedVideo(user?.id?.toString());
 
   const findFirstLesson = useCallback(() => {
@@ -43,42 +43,52 @@ const CourseDetail = () => {
     return topics[0].lessons[0];
   }, [topics]);
 
-  const handleLessonSelect = useCallback((lesson: LessonInTopic) => {
-    if (selectedLesson && selectedLesson.id === lesson.id) {
+  const handleLessonSelect = useCallback(
+    (lesson: LessonInTopic) => {
+      setSelectedLesson(lesson);
       setShowContinueModal(false);
-      return;
-    }
-    setSelectedLesson(lesson);
-    setShowContinueModal(false);
-    let lessonIndex = 0;
-    for (const topic of topics || []) {
-      for (const topicLesson of topic.lessons || []) {
-        if (topicLesson.id === lesson.id) {
-          setSelectedLessonIndex(lessonIndex);
-          setSelectedTopicId(topic.id.toString());
-          if (isAuthenticated && user?.id && enrollmentCheck?.isEnrolled && courseDetail) {
-            saveLastWatchedVideo({
-              courseId: id,
-              lessonId: lesson.id.toString(),
-              videoId: lesson.videoUrl || '',
-              topicId: topic.id.toString(),
-              courseTitle: courseDetail.title,
-              lessonTitle: lesson.title
-            });
+
+      let lessonIndex = 0;
+
+      for (const topic of topics || []) {
+        for (const topicLesson of topic.lessons || []) {
+          if (topicLesson.id === lesson.id) {
+            setSelectedLessonIndex(lessonIndex);
+            setSelectedTopicId(topic.id.toString());
+
+            if (isAuthenticated && user?.id && enrollmentCheck?.isEnrolled && courseDetail) {
+              saveLastWatchedVideo({
+                courseId: id,
+                lessonId: lesson.id.toString(),
+                videoId: lesson.videoUrl || '',
+                topicId: topic.id.toString(),
+                courseTitle: courseDetail.title,
+                lessonTitle: lesson.title,
+              });
+            }
+            return;
           }
-          return;
+          lessonIndex++;
         }
-        lessonIndex++;
       }
-    }
-  }, [topics, isAuthenticated, user?.id, enrollmentCheck?.isEnrolled, saveLastWatchedVideo, id, courseDetail, selectedLesson]);
+    },
+    [
+      topics,
+      isAuthenticated,
+      user?.id,
+      enrollmentCheck?.isEnrolled,
+      saveLastWatchedVideo,
+      id,
+      courseDetail,
+    ],
+  );
 
   useEffect(() => {
     if (!isLoading && !isLoadingTopics && courseDetail && topics) {
       const lessonId = searchParams.get('lessonId');
-      
+
       if (lessonId || hasCheckedLastWatched) return;
-      
+
       if (isAuthenticated && user?.id && enrollmentCheck?.isEnrolled) {
         const lastWatched = getLastWatchedVideoForCourse(id);
         if (lastWatched) {
@@ -97,23 +107,23 @@ const CourseDetail = () => {
           setSelectedTopicId(topics[0]?.id?.toString() || '');
         }
       }
-      
+
       setHasCheckedLastWatched(true);
     }
   }, [
-    isLoading, 
-    isLoadingTopics, 
-    courseDetail, 
-    topics, 
-    isAuthenticated, 
-    user?.id, 
+    isLoading,
+    isLoadingTopics,
+    courseDetail,
+    topics,
+    isAuthenticated,
+    user?.id,
     enrollmentCheck?.isEnrolled,
     searchParams,
     hasCheckedLastWatched,
     findFirstLesson,
     getLastWatchedVideoForCourse,
     id,
-    handleLessonSelect
+    handleLessonSelect,
   ]);
 
   if (isLoading || !courseDetail || isLoadingTopics)
@@ -130,7 +140,7 @@ const CourseDetail = () => {
     if (lastWatchedVideo) {
       for (const topic of topics || []) {
         const foundLesson = topic.lessons?.find(
-          lesson => lesson.id.toString() === lastWatchedVideo.lessonId
+          (lesson) => lesson.id.toString() === lastWatchedVideo.lessonId,
         );
         if (foundLesson) {
           handleLessonSelect(foundLesson);
@@ -152,7 +162,7 @@ const CourseDetail = () => {
   return (
     <div className='max-w-screen-xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-6'>
       {isAuthenticated && enrollmentCheck?.isEnrolled && <ProgressSyncer courseId={id} />}
-      
+
       {enrollmentCheck?.isEnrolled && (
         <ContinueWatchingModal
           lastWatchedVideo={lastWatchedVideo}
@@ -161,7 +171,7 @@ const CourseDetail = () => {
           onContinue={handleContinueWatching}
         />
       )}
-      
+
       <div className='lg:col-span-2'>
         <CourseDetailHeader
           videoIntroUrl={selectedLesson ? selectedLesson.videoUrl : courseDetail.videoIntroUrl}
@@ -183,6 +193,7 @@ const CourseDetail = () => {
           learningPoints={courseDetail.topics.map((topic) => topic.title)}
           author={courseDetail.instructor}
           reviews={[]}
+          courseId={id}
         />
       </div>
       <CourseDetailContent

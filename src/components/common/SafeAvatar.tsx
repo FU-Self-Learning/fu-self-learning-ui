@@ -16,13 +16,7 @@ const SafeAvatar: React.FC<SafeAvatarProps> = ({ src, icon, ...props }) => {
   const safeSrc = isValidWebUrl(src) ? src : undefined;
   const safeIcon = icon || <UserOutlined />;
 
-  return (
-    <AntdAvatar
-      {...props}
-      src={safeSrc}
-      icon={safeIcon}
-    />
-  );
+  return <AntdAvatar {...props} src={safeSrc} icon={safeIcon} />;
 };
 
 export default SafeAvatar;

@@ -173,10 +173,14 @@ const PostCommentModal = ({ visible, onClose, post }: PostCommentModalProps) => 
         </div>
 
         <div className='flex items-center gap-2 border-t pt-4'>
-          <Avatar 
-            icon={<UserOutlined />} 
-            src={isValidWebUrl(currentUserProfile?.avatarUrl) ? currentUserProfile?.avatarUrl : undefined} 
-            className='mr-2' 
+          <Avatar
+            icon={<UserOutlined />}
+            src={
+              isValidWebUrl(currentUserProfile?.avatarUrl)
+                ? currentUserProfile?.avatarUrl
+                : undefined
+            }
+            className='mr-2'
           />
           <Input
             placeholder={

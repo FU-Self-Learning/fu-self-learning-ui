@@ -8,7 +8,7 @@ export const useLastWatchedVideo = (userId?: number | string) => {
 
   useEffect(() => {
     if (!userId) return;
-    
+
     try {
       const storedData = localStorage.getItem(`${LOCAL_STORAGE_KEY}-${userId}`);
       if (storedData) {
@@ -22,7 +22,7 @@ export const useLastWatchedVideo = (userId?: number | string) => {
 
   const saveLastWatchedVideo = (videoData: LastWatchedVideo) => {
     if (!userId) return;
-    
+
     try {
       setLastWatchedVideo(videoData);
       localStorage.setItem(`${LOCAL_STORAGE_KEY}-${userId}`, JSON.stringify(videoData));
@@ -33,7 +33,7 @@ export const useLastWatchedVideo = (userId?: number | string) => {
 
   const clearLastWatchedVideo = () => {
     if (!userId) return;
-    
+
     try {
       setLastWatchedVideo(null);
       localStorage.removeItem(`${LOCAL_STORAGE_KEY}-${userId}`);
@@ -53,6 +53,6 @@ export const useLastWatchedVideo = (userId?: number | string) => {
     lastWatchedVideo,
     saveLastWatchedVideo,
     clearLastWatchedVideo,
-    getLastWatchedVideoForCourse
+    getLastWatchedVideoForCourse,
   };
 };

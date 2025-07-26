@@ -18,7 +18,7 @@ export const ProgressSyncer: React.FC<ProgressSyncerProps> = ({ courseId }) => {
   const { data: topics } = useTopics(courseId);
   const { updateProgressManually } = useProgressManager();
   const { data: enrollmentCheck } = useCheckEnrollment(courseId);
-  
+
   const lastSyncedLessonRef = useRef<string | null>(null);
   const syncTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -47,25 +47,35 @@ export const ProgressSyncer: React.FC<ProgressSyncerProps> = ({ courseId }) => {
 
     syncTimeoutRef.current = setTimeout(() => {
       const progressData = calculateCourseProgress(lastWatchedVideo.lessonId, topics);
-      
+
       if (progressData) {
         if (progressData.progressPercentage > currentProgress) {
           updateProgressManually(courseId, progressData.progressPercentage);
           lastSyncedLessonRef.current = lastWatchedVideo.lessonId;
-          
-          console.log(`Auto-synced progress for course ${courseId}: ${progressData.progressPercentage}%`);
+
+          console.log(
+            `Auto-synced progress for course ${courseId}: ${progressData.progressPercentage}%`,
+          );
         } else {
           console.log('Progress not increased, skipping sync');
         }
       }
-    }, 2000); 
+    }, 2000);
 
     return () => {
       if (syncTimeoutRef.current) {
         clearTimeout(syncTimeoutRef.current);
       }
     };
-  }, [lastWatchedVideo, topics, courseId, isAuthenticated, user?.id, updateProgressManually, enrollmentCheck]);
+  }, [
+    lastWatchedVideo,
+    topics,
+    courseId,
+    isAuthenticated,
+    user?.id,
+    updateProgressManually,
+    enrollmentCheck,
+  ]);
 
   return null;
 };

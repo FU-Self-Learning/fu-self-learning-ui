@@ -6,7 +6,7 @@ export const enrollmentApi = {
 
   checkEnrollment: (courseId: string) => api.get(`${APP_URL}/enrollments/course/${courseId}/check`),
 
-  updateProgress: (courseId: string, progress: number) => 
+  updateProgress: (courseId: string, progress: number) =>
     api.patch(`${APP_URL}/enrollments/course/${courseId}`, { progress }),
 
   getCourseStats: (courseId: string) => api.get(`${APP_URL}/enrollments/course/${courseId}/stats`),

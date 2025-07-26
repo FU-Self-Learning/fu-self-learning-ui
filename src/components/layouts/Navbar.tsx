@@ -97,7 +97,6 @@ export default function Navbar() {
     { href: '/', label: 'Home' },
     { href: '/course', label: 'My Learning' },
     { href: '/social', label: 'Social' },
-    { href: '/doExam', label: 'Do exam' },
     { href: '/flashcards', label: 'Flashcards' },
   ];
 

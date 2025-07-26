@@ -36,8 +36,18 @@ const MessageList: React.FC<Props> = ({ messages, currentUserId }) => {
         <div className='flex items-center justify-center h-full'>
           <div className='text-center'>
             <div className='w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg'>
-              <svg className='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' />
+              <svg
+                className='w-8 h-8 text-white'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'
+                />
               </svg>
             </div>
             <p className='text-gray-500'>No messages yet. Start the conversation!</p>
@@ -52,8 +62,8 @@ const MessageList: React.FC<Props> = ({ messages, currentUserId }) => {
             <div key={msg.id} className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}>
               <div
                 className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm shadow-lg transition-all duration-200 hover:shadow-xl ${
-                  isOwn 
-                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-md' 
+                  isOwn
+                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-md'
                     : 'bg-white text-gray-800 border border-gray-200/50 rounded-bl-md'
                 }`}
               >
