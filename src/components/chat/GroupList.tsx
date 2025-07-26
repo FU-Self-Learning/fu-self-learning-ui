@@ -82,7 +82,6 @@ const GroupList: React.FC<GroupListProps> = ({ currentUserId, onGroupSelect }) =
       ) : (
         <div
           className={groups.length > 9 ? 'flex-1 overflow-y-auto' : ''}
-          style={groups.length > 9 ? { maxHeight: 9 * 68 + 16, minHeight: 0 } : {}}
         >
           <List
             dataSource={groups}

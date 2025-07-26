@@ -128,21 +128,6 @@ const UserList: React.FC<UserListProps> = ({ currentUserId, onUserSelect, select
 
   return (
     <div className='w-72 bg-white border-r border-gray-200 h-full shadow-lg flex flex-col'>
-      <div className='flex items-center justify-between bg-white rounded-xl shadow p-4 m-4 mb-2'>
-        <div className='flex items-center gap-3'>
-          <img
-            src={data?.avatarUrl}
-            alt='User Avatar'
-            className='w-14 h-14 rounded-full object-cover border-2 border-blue-200'
-          />
-          <div>
-            <div className='font-bold text-base text-blue-700 leading-tight'>{data?.username}</div>
-            <div className='text-sm text-gray-500'>{data?.email}</div>
-          </div>
-        </div>
-        <button className='p-2 rounded-full hover:bg-gray-100 transition' title='Edit profile'>
-        </button>
-      </div>
       <div className='p-4 border-b border-blue-200 flex justify-between items-center bg-blue-50'>
         <h2 className='text-lg font-bold text-blue-700'>Chats</h2>
         <Button type='text' icon={<ReloadOutlined />} onClick={handleRetry} title='Refresh list' />
@@ -157,7 +142,6 @@ const UserList: React.FC<UserListProps> = ({ currentUserId, onUserSelect, select
       ) : (
         <div
           className={users.length > 9 ? 'flex-1 overflow-y-auto' : ''}
-          style={users.length > 9 ? { maxHeight: 9 * 68 + 16, minHeight: 0 } : {}}
         >
           <List
             dataSource={users}
