@@ -321,7 +321,7 @@ const TestAttemptPage = () => {
   }
 
   const currentQuestion = getCurrentQuestion();
-  const progress = ((currentQuestionIndex + 1) / test.questions.length) * 100;
+  const progress = test.questions ? ((currentQuestionIndex + 1) / test.questions.length) * 100 : 0;
   const answeredCount = getAnsweredQuestionsCount();
 
   return (
@@ -333,7 +333,7 @@ const TestAttemptPage = () => {
       <TestHeader
         testTitle={test.title}
         currentQuestionIndex={currentQuestionIndex}
-        totalQuestions={test.questions.length}
+        totalQuestions={test.questions?.length || 0}
         timeLeft={timeLeft}
         answeredCount={answeredCount}
         progress={progress}
@@ -344,7 +344,7 @@ const TestAttemptPage = () => {
           {/* Question Navigation Sidebar */}
           <Col span={6}>
             <QuestionNavigator
-              questions={test.questions}
+              questions={test.questions || []}
               currentQuestionIndex={currentQuestionIndex}
               answeredCount={answeredCount}
               isTestActive={isTestActive}
@@ -360,7 +360,7 @@ const TestAttemptPage = () => {
               <QuestionCard
                 question={currentQuestion}
                 questionIndex={currentQuestionIndex}
-                totalQuestions={test.questions.length}
+                totalQuestions={test.questions?.length || 0}
                 answers={answers}
                 isTestActive={isTestActive}
                 onAnswerChange={handleAnswerChange}
@@ -368,7 +368,7 @@ const TestAttemptPage = () => {
                 onNext={() => navigateToQuestion(currentQuestionIndex + 1)}
                 onSubmit={() => setShowSubmitModal(true)}
                 canGoPrevious={currentQuestionIndex > 0}
-                canGoNext={currentQuestionIndex < test.questions.length - 1}
+                canGoNext={currentQuestionIndex < (test.questions?.length || 0) - 1}
               />
             )}
           </Col>
@@ -379,9 +379,9 @@ const TestAttemptPage = () => {
       <TestSubmitModal
         isVisible={showSubmitModal}
         isLoading={completeTestMutation.isPending}
-        totalQuestions={test.questions.length}
+        totalQuestions={test.questions?.length || 0}
         answeredCount={answeredCount}
-        passingScore={test.passingScore}
+        passingScore={test.passingScore?.toString() || '0'}
         onConfirm={handleCompleteTest}
         onCancel={() => setShowSubmitModal(false)}
       />

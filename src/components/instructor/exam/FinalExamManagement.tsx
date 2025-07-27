@@ -127,7 +127,7 @@ const FinalExamManagement: React.FC<FinalExamManagementProps> = ({
                   <Col span={6}>
                     <Statistic
                       title='Questions'
-                      value={finalExam.totalQuestions}
+                      value={finalExam.questionCount}
                       prefix={<CheckCircleOutlined />}
                     />
                   </Col>

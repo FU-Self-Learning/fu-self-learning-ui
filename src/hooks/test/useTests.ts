@@ -5,7 +5,7 @@ import { TestListFilter } from '@/types/testType';
 export const useTests = (courseId: string, filters?: TestListFilter) => {
   return useQuery({
     queryKey: ['tests', courseId, filters],
-    queryFn: () => getTestsByCourse(courseId, filters),
+    queryFn: () => getTestsByCourse(Number(courseId)),
     enabled: !!courseId,
   });
 };

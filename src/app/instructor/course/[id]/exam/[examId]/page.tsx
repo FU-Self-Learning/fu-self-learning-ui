@@ -49,7 +49,7 @@ export default function ExamDetailPage() {
             <Text strong>Duration:</Text> {exam.duration} min
           </div>
           <div>
-            <Text strong>Questions:</Text> {exam.totalQuestions || exam.questions?.length || 0}
+            <Text strong>Questions:</Text> {exam.questionCount || exam.questions?.length || 0}
           </div>
           <div>
             <Text strong>Pass Score:</Text> {exam.passingScore}%
