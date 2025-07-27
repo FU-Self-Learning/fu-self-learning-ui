@@ -45,9 +45,6 @@ const ListFollowingPage = () => {
         <Typography.Title level={4} className='!mb-0 !text-gray-800'>
           Followers
         </Typography.Title>
-        <Button type='link' className='!text-blue-500 hover:!text-blue-600 !p-0 !h-auto'>
-          View all
-        </Button>
       </div>
 
       <div className='space-y-4'>

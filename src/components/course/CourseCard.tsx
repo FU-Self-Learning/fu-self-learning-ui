@@ -1,5 +1,5 @@
 import { CoursesResponse } from '@/types/courseType';
-import { Card, Tag, Space, Progress, Button, Avatar, Typography, Image, Tooltip } from 'antd';
+import { Card, Tag, Space, Button, Avatar, Typography, Image, Tooltip } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
@@ -84,7 +84,6 @@ export default function CourseCard({ material }: { material: CoursesResponse }) 
         </div>
 
         <div className='mt-4'>
-          <Progress percent={30} size='small' />
           <Button block type='primary' className='mt-4' onClick={handleStartLearning}>
             Start Learning
           </Button>

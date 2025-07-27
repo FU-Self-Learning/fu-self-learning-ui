@@ -12,6 +12,7 @@ const statusFilters = ['All Status', 'Not Started', 'In Progress', 'Completed'];
 export default function MyLearningPage() {
   const [selectedStatus, setSelectedStatus] = useState('All Status');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchValue, setSearchValue] = useState('');
   const { data: enrolledCourses, isLoading } = useMyEnrolledCourses();
 
   if (isLoading || !enrolledCourses) {
@@ -19,18 +20,21 @@ export default function MyLearningPage() {
   }
 
   const allCategories = Array.from(
-    new Set(
-      enrolledCourses.flatMap(
-        (enrollment) => enrollment.course.categories?.map((cat) => cat.name) || [],
-      ),
-    ),
+    new Set(enrolledCourses.flatMap((enrollment) => enrollment.course.categories?.map((cat) => cat.name) || [])),
   );
 
   const filteredByCategory = selectedCategory
-    ? enrolledCourses.filter((enrollment) =>
-        enrollment.course.categories?.some((cat) => cat.name === selectedCategory),
+     ? enrolledCourses.filter((enrollment) => 
+        enrollment.course.categories?.some((cat) => cat.name === selectedCategory)
       )
     : enrolledCourses;
+
+  const filteredBySearch = searchValue.trim()
+    ? filteredByCategory.filter((enrollment) =>
+        enrollment.course.title.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
+        enrollment.course.description?.toLowerCase().includes(searchValue.trim().toLowerCase())
+      )
+    : filteredByCategory;
 
   const getEnrollmentStatus = (enrollment: any) => {
     if (enrollment.completedAt) return 'completed';
@@ -38,16 +42,15 @@ export default function MyLearningPage() {
     return 'not_started';
   };
 
-  const finalFilteredCourses =
-    selectedStatus === 'All Status'
-      ? filteredByCategory
-      : filteredByCategory.filter((enrollment) => {
-          const status = getEnrollmentStatus(enrollment);
-          if (selectedStatus === 'Not Started') return status === 'not_started';
-          if (selectedStatus === 'In Progress') return status === 'in_progress';
-          if (selectedStatus === 'Completed') return status === 'completed';
-          return true;
-        });
+  const finalFilteredCourses = selectedStatus === 'All Status' 
+    ? filteredBySearch 
+    : filteredBySearch.filter((enrollment) => {
+        const status = getEnrollmentStatus(enrollment);
+        if (selectedStatus === 'Not Started') return status === 'not_started';
+        if (selectedStatus === 'In Progress') return status === 'in_progress';
+        if (selectedStatus === 'Completed') return status === 'completed';
+        return true;
+      });
 
   return (
     <div>
@@ -61,6 +64,7 @@ export default function MyLearningPage() {
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
         allCategories={allCategories}
+        onSearch={setSearchValue}
       />
       <StatusFilter
         statusFilters={statusFilters}

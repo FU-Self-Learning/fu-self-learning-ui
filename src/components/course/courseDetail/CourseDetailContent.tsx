@@ -1,5 +1,8 @@
 import { Button, Collapse, Divider, Empty, Space } from 'antd';
-import { LockOutlined, PlayCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+import GroupChatCourseModal from './GroupChatCourseModal';
+import { groupChatApi } from '@/shared/api/group-chat.api';
+import { LockOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import { LessonInTopic, TopicResponse } from '@/types/topicType';
 import { formatDuration } from '@/utils/convertTime';
 import { useRouter } from 'next/navigation';
@@ -28,6 +31,22 @@ const CourseDetailContent = ({ sections, onLessonSelect, courseId }: CourseDetai
   };
 
   const isEnrolled = enrollmentCheck?.isEnrolled || false;
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState(false);
+
+  const handleOpenGroupChatModal = async () => {
+    setModalVisible(true);
+    setLoadingCourses(true);
+    try {
+      const res = await groupChatApi.getMyEnrolledCourses();
+      setCourses(res?.data || []);
+    } catch {
+      setCourses([]);
+    }
+    setLoadingCourses(false);
+  };
 
   const collapseItems = sections
     .sort((a, b) => a.id - b.id)
@@ -78,14 +97,20 @@ const CourseDetailContent = ({ sections, onLessonSelect, courseId }: CourseDetai
           </Button>
         )}
         {isEnrolled && (
-          <Button
-            type='default'
-            icon={<CheckCircleOutlined />}
-            disabled
-            className='!text-green-600 !border-green-600'
-          >
-            Enrolled
-          </Button>
+          <>
+            <Button 
+              type='default'
+              onClick={handleOpenGroupChatModal}
+            >
+              + Group-chat
+            </Button>
+            <GroupChatCourseModal
+              visible={modalVisible}
+              onClose={() => setModalVisible(false)}
+              loading={loadingCourses}
+              courses={courses}
+            />
+          </>
         )}
       </div>
       <Divider size='small' />

@@ -12,6 +12,7 @@ const statusFilters = ['All Status', 'Not Started', 'In Progress', 'Completed'];
 export default function CoursePage() {
   const [selectedStatus, setSelectedStatus] = useState('All Status');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchValue, setSearchValue] = useState('');
   const { data: courses, isLoading } = useCourses();
 
   if (isLoading || !courses) {
@@ -22,17 +23,28 @@ export default function CoursePage() {
     new Set(courses.flatMap((course) => course.categories?.map((cat) => cat.name) || [])),
   );
 
-  const filteredCourses = selectedCategory
-    ? courses.filter((course) => course.categories?.some((cat) => cat.name === selectedCategory))
-    : courses;
+
+  const activeCourses = courses.filter((course) => course.isActive);
+
+  const filteredByCategory = selectedCategory
+    ? activeCourses.filter((course) => course.categories?.some((cat) => cat.name === selectedCategory))
+    : activeCourses;
+
+  const filteredBySearch = searchValue.trim()
+    ? filteredByCategory.filter((course) =>
+        course.title.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
+        course.description?.toLowerCase().includes(searchValue.trim().toLowerCase())
+      )
+    : filteredByCategory;
 
   return (
     <div>
       <CourseHeader
-        total={filteredCourses.length}
+        total={filteredBySearch.length}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
         allCategories={allCategories}
+        onSearch={setSearchValue}
       />
       <StatusFilter
         statusFilters={statusFilters}
@@ -40,7 +52,7 @@ export default function CoursePage() {
         onChange={setSelectedStatus}
       />
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
-        {filteredCourses?.map((item) => (
+        {filteredBySearch?.map((item) => (
           <CourseCard key={item.id} material={item} />
         ))}
       </div>
