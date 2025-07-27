@@ -22,7 +22,7 @@ const TestAnswersSection = ({ resultDetail }: TestAnswersSectionProps) => {
               Wrong Answers ({wrongAnswers.length})
             </div>
           }
-          className='shadow-lg border-red-200 mb-6'
+          className='shadow-lg border-red-200 !mb-6'
         >
           <List
             dataSource={wrongAnswers}

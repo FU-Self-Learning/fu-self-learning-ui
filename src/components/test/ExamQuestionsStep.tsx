@@ -42,12 +42,12 @@ const ExamQuestionsStep: React.FC<ExamQuestionsStepProps> = ({
     {autoGenerate && isGeneratingQuestions ? (
       <Card className='shadow-lg border-0 rounded-xl text-center'>
         <BulbOutlined className='text-4xl text-blue-500 mb-2' />
-        <Title level={4}>Generating questions with AI...</Title>
+        <Title level={4}>Generating exam questions with AI...</Title>
       </Card>
     ) : autoGenerate && Object.keys(generateErrors).length > 0 ? (
       <>
         <Card className='shadow-lg border-0 rounded-xl text-center mb-6'>
-          <Title level={4}>Some topics failed to generate questions</Title>
+          <Title level={4}>Some topics failed to generate exam questions</Title>
           {formData.topicIds?.map((topicId: number) =>
             generateErrors[topicId] ? (
               <div key={topicId} className='mb-4'>

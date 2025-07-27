@@ -9,6 +9,7 @@ import {
   ReloadOutlined,
 } from '@ant-design/icons';
 import { Test, TestResult } from '@/types/testType';
+import { getExamTypeLabel } from '@/utils/examTypeMapper';
 
 const { Title, Text } = Typography;
 
@@ -54,22 +55,26 @@ const TestCard = ({ test, onStartTest, onContinueTest, userResults }: TestCardPr
         return '📋';
       case 'final':
         return '🎓';
+      case 'topic_exam':
+        return '📝';
+      case 'final_exam':
+        return '🏆';
       default:
         return '📄';
     }
   };
 
   return (
-    <Card className='mb-4 hover:shadow-lg transition-shadow' style={{ borderRadius: '12px' }}>
+    <Card className='!mb-4 hover:shadow-lg transition-shadow' style={{ borderRadius: '12px' }}>
       <div className='flex justify-between items-start'>
         <div className='flex-1'>
           <div className='flex items-center gap-2 mb-2'>
             <span className='text-xl'>{getTypeIcon(test.type)}</span>
-            <Title level={4} className='mb-0'>
+            <Title level={4} className='!mb-0'>
               {test.title}
             </Title>
             <Tag color={getTypeColor(test.type)} className='capitalize'>
-              {test.type}
+              {getExamTypeLabel(test.type)}
             </Tag>
           </div>
 

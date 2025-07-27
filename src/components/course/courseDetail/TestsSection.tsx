@@ -16,9 +16,9 @@ interface TestsSectionProps {
 const TestsSection = ({ courseId }: TestsSectionProps) => {
   const router = useRouter();
   const { data: tests, isLoading: testsLoading } = useTests(courseId);
-  const { data: myResults, isLoading: resultsLoading } = useMyTestResults({
-    courseId: parseInt(courseId),
-  });
+  const { data: myResults, isLoading: resultsLoading } = useMyTestResults(
+    courseId ? parseInt(courseId) : undefined,
+  );
 
   const startTestMutation = useStartTest();
 

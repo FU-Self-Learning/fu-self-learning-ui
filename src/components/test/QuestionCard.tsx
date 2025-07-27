@@ -86,11 +86,7 @@ const QuestionCard = ({
                       value={choice}
                       className={`
                         w-full p-6 transition-all duration-200
-                        ${
-                          isSelected
-                            ? 'border-blue-500 bg-blue-50 shadow-lg'
-                            : 'border-gray-200 bg-white hover:border-blue-300 '
-                        }
+                        ${isSelected ? '' : 'border-gray-200 bg-white !hover:border-blue-300'}
                       `}
                     >
                       <div className='flex items-center gap-4'>

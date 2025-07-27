@@ -11,7 +11,7 @@ const TestAnswersSummary = ({ resultDetail }: TestAnswersSummaryProps) => {
   const correctAnswers = resultDetail.answers.filter((answer) => answer.isCorrect);
 
   return (
-    <Card className='shadow-xl border-0 mb-8'>
+    <Card className='shadow-xl border-0 !mb-8'>
       <Row gutter={16}>
         <Col span={6}>
           <Statistic

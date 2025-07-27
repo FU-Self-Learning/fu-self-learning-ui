@@ -1,16 +1,21 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { Steps, Form, Button, Card, Typography, Divider, message, Progress, Affix } from 'antd';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { Steps, Form, Button, Card, Typography, Divider, message, Progress, Alert } from 'antd';
 import {
   ArrowLeftOutlined,
   SaveOutlined,
   CheckCircleOutlined,
   EditOutlined,
   FileTextOutlined,
+  BookOutlined,
+  TrophyOutlined,
+  StarOutlined,
 } from '@ant-design/icons';
 import { useCreateExam } from '@/hooks/exam/useCreateExam';
+import { useCreateTopicExam } from '@/hooks/exam/useCreateTopicExam';
+import { useCreateFinalExam } from '@/hooks/exam/useCreateFinalExam';
 import { useTopics } from '@/hooks/topic/useTopics';
 import { useCourseInstructorDetail } from '@/hooks/course/instructor/useCourseInstructorDetail';
 import { useGenerateQuestionsAI } from '@/hooks/exam/useGenerateQuestionsAI';
@@ -24,7 +29,12 @@ const { Title, Text } = Typography;
 
 export default function CreateExamPage() {
   const router = useRouter();
-  const { id: courseId } = useParams();
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const courseId = params.id as string;
+  const examType = searchParams.get('type') || 'practice'; // practice, topic_exam, final_exam
+  const topicId = searchParams.get('topicId');
+
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<any>({});
@@ -34,10 +44,16 @@ export default function CreateExamPage() {
   const [hasGeneratedQuestions, setHasGeneratedQuestions] = useState(false);
 
   const createExamMutation = useCreateExam();
-  const { data: topics = [] } = useTopics(courseId as string);
+  const createTopicExamMutation = useCreateTopicExam();
+  const createFinalExamMutation = useCreateFinalExam();
+  const { data: topics = [] } = useTopics(courseId);
   const { generate: generateQuestionsAI, isLoading: isGeneratingQuestions } =
     useGenerateQuestionsAI();
-  const { data: course } = useCourseInstructorDetail(courseId as string);
+  const { data: course } = useCourseInstructorDetail(courseId);
+
+  // Get the specific topic for topic exam
+  const selectedTopic =
+    examType === 'topic_exam' ? topics.find((topic) => topic.id === Number(topicId)) : null;
 
   // Sử dụng custom hook quản lý state câu hỏi
   const {
@@ -52,91 +68,129 @@ export default function CreateExamPage() {
     toggleCorrectAnswer,
   } = useExamQuestions();
 
+  // Get exam type configuration
+  const getExamTypeConfig = () => {
+    switch (examType) {
+      case 'topic_exam':
+        return {
+          title: 'Create Topic Exam',
+          icon: <BookOutlined />,
+          description: 'Create an exam for a specific topic',
+          defaultDuration: 30,
+          defaultPassingScore: 70,
+          defaultQuestionCount: 5,
+          requireVideoCompletion: true,
+          requireAllTopicExamsCompleted: false,
+          apiType: 'topic_exam',
+        };
+      case 'final_exam':
+        return {
+          title: 'Create Final Exam',
+          icon: <TrophyOutlined />,
+          description: 'Create a final exam for the entire course',
+          defaultDuration: 120,
+          defaultPassingScore: 80,
+          defaultQuestionCount: 10,
+          requireVideoCompletion: false,
+          requireAllTopicExamsCompleted: true,
+          apiType: 'final_exam',
+        };
+      default: // practice
+        return {
+          title: 'Create Practice Test',
+          icon: <StarOutlined />,
+          description: 'Create a practice test for students',
+          defaultDuration: 60,
+          defaultPassingScore: 70,
+          defaultQuestionCount: 5,
+          requireVideoCompletion: false,
+          requireAllTopicExamsCompleted: false,
+          apiType: 'practice',
+        };
+    }
+  };
+
+  const examConfig = getExamTypeConfig();
+
   // Auto-save draft functionality
   const saveDraft = useCallback(() => {
     const draftData = {
       formData,
       questions,
+      examType,
+      topicId,
       timestamp: new Date().toISOString(),
     };
-    localStorage.setItem(`exam-draft-${courseId}`, JSON.stringify(draftData));
-  }, [formData, questions, courseId]);
+    localStorage.setItem(
+      `exam-draft-${courseId}-${examType}-${topicId || ''}`,
+      JSON.stringify(draftData),
+    );
+  }, [formData, questions, examType, topicId, courseId]);
 
-  // Load draft on component mount
+  // Load draft on mount
   useEffect(() => {
-    const savedDraft = localStorage.getItem(`exam-draft-${courseId}`);
+    const savedDraft = localStorage.getItem(`exam-draft-${courseId}-${examType}-${topicId || ''}`);
     if (savedDraft) {
       try {
-        const { formData: savedFormData, questions: savedQuestions } = JSON.parse(savedDraft);
-        if (savedFormData && Object.keys(savedFormData).length > 0) {
-          setFormData(savedFormData);
-          form.setFieldsValue(savedFormData);
+        const draftData = JSON.parse(savedDraft);
+        const draftAge = new Date().getTime() - new Date(draftData.timestamp).getTime();
+        const oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+        if (draftAge < oneDay) {
+          setFormData(draftData.formData || {});
+          setQuestions(draftData.questions || []);
+          form.setFieldsValue(draftData.formData);
+        } else {
+          localStorage.removeItem(`exam-draft-${courseId}-${examType}-${topicId || ''}`);
         }
-        if (savedQuestions && savedQuestions.length > 0) {
-          setQuestions(savedQuestions);
-        }
-        message.info('Draft loaded successfully');
       } catch (error) {
-        console.error('Failed to load draft:', error);
+        console.error('Error loading draft:', error);
       }
     }
-  }, [courseId, form]);
+  }, [courseId, examType, topicId, form, setQuestions]);
 
-  // Auto-save every 30 seconds
+  // Auto-save draft every 30 seconds
   useEffect(() => {
     const interval = setInterval(saveDraft, 30000);
     return () => clearInterval(interval);
   }, [saveDraft]);
 
-  // Khi đổi topic hoặc số lượng hoặc autoGenerate, reset flag
-  useEffect(() => {
-    setHasGeneratedQuestions(false);
-  }, [formData.topicIds, autoGenerateCount, autoGenerate]);
-
-  // Calculate form completion percentage
   const calculateProgress = () => {
-    let totalFields = 0;
-    let completedFields = 0;
+    const totalSteps = 3;
+    const currentProgress = currentStep + 1;
+    return Math.round((currentProgress / totalSteps) * 100);
+  };
 
-    // Basic info fields
-    const basicFields = ['title', 'description', 'type', 'duration', 'passingScore', 'topicIds'];
-    totalFields += basicFields.length;
-    basicFields.forEach((field) => {
-      if (formData[field] && (Array.isArray(formData[field]) ? formData[field].length > 0 : true)) {
-        completedFields++;
+  const handleRetryGenerate = async (topicId: number) => {
+    const topic = topics.find((t) => t.id === topicId);
+    if (topic) {
+      try {
+        const aiQuestions = await generateQuestionsAI(topicId, topic.title, autoGenerateCount);
+        setQuestions(aiQuestions);
+        setGenerateErrors((prev) => ({ ...prev, [topicId]: '' }));
+      } catch (err) {
+        setGenerateErrors((prev) => ({
+          ...prev,
+          [topicId]: extractErrorMessage(err) || 'Failed to generate questions',
+        }));
       }
-    });
-
-    // Questions validation
-    const validQuestions = questions.filter(
-      (q) =>
-        q.question_text.trim() &&
-        q.choices.length >= 2 &&
-        q.choices.every((choice) => choice.trim()) &&
-        q.correct_answer.length > 0 &&
-        q.topicId > 0,
-    );
-
-    totalFields += questions.length;
-    completedFields += validQuestions.length;
-
-    return Math.round((completedFields / totalFields) * 100);
+    }
   };
 
   const steps = [
     {
       title: 'Basic Information',
-      description: 'Test details and settings',
+      description: 'Exam details and settings',
       icon: <EditOutlined />,
     },
     {
       title: 'Questions',
-      description: 'Create test questions',
+      description: 'Create exam questions',
       icon: <FileTextOutlined />,
     },
     {
       title: 'Review & Publish',
-      description: 'Review and create test',
+      description: 'Review and create exam',
       icon: <CheckCircleOutlined />,
     },
   ];
@@ -148,14 +202,13 @@ export default function CreateExamPage() {
   const handleNext = async () => {
     if (currentStep === 0) {
       try {
-        await form.validateFields([
-          'title',
-          'description',
-          'type',
-          'duration',
-          'passingScore',
-          'topicIds',
-        ]);
+        const requiredFields = ['title', 'description', 'duration', 'passingScore'];
+        if (examType !== 'topic_exam') {
+          requiredFields.push('topicIds');
+        }
+
+        await form.validateFields(requiredFields);
+
         if (
           autoGenerate &&
           formData.topicIds &&
@@ -166,6 +219,7 @@ export default function CreateExamPage() {
           setGenerateErrors({});
           let allQuestions: any[] = [];
           const errors: Record<number, string> = {};
+
           for (const topicId of formData.topicIds) {
             const topic = topics.find((t) => t.id === topicId);
             if (topic) {
@@ -177,16 +231,15 @@ export default function CreateExamPage() {
                 );
                 allQuestions = [...allQuestions, ...aiQuestions];
               } catch (err) {
-                errors[topicId] =
-                  extractErrorMessage(err) ||
-                  'Failed to generate questions. Please try again later.';
+                errors[topicId] = extractErrorMessage(err) || 'Failed to generate questions';
               }
             }
           }
-          // Chỉ giữ đúng số lượng autoGenerateCount
+
           setQuestions(allQuestions.slice(0, autoGenerateCount));
           setGenerateErrors(errors);
           setHasGeneratedQuestions(true);
+
           if (Object.keys(errors).length > 0) {
             message.error('Some topics failed to generate questions. Please retry.');
             return;
@@ -230,24 +283,64 @@ export default function CreateExamPage() {
           q.topicId > 0,
       );
 
-      const examData = {
+      const baseExamData = {
         ...formData,
-        courseId: parseInt(courseId as string),
+        courseId: parseInt(courseId),
         questions: autoGenerate ? [] : validQuestions,
         autoGenerate,
         autoGenerateCount: autoGenerate ? autoGenerateCount : undefined,
       };
 
-      await createExamMutation.mutateAsync(examData);
-      localStorage.removeItem(`exam-draft-${courseId}`);
-      router.push(`/instructor/course/${courseId}`);
+      switch (examType) {
+        case 'topic_exam':
+          await createTopicExamMutation.mutateAsync({
+            title: formData.title,
+            description: formData.description,
+            courseId: parseInt(courseId),
+            topicId: parseInt(topicId!),
+            duration: formData.duration,
+            passingScore: formData.passingScore,
+            shuffleQuestions: formData.shuffleQuestions,
+            shuffleAnswers: formData.shuffleAnswers,
+            requireVideoCompletion: examConfig.requireVideoCompletion,
+            autoGenerate,
+            autoGenerateCount: autoGenerate ? autoGenerateCount : undefined,
+            questions: autoGenerate ? [] : validQuestions,
+          });
+          break;
+        case 'final_exam':
+          await createFinalExamMutation.mutateAsync({
+            title: formData.title,
+            description: formData.description,
+            courseId: parseInt(courseId),
+            topicIds: formData.topicIds,
+            duration: formData.duration,
+            passingScore: formData.passingScore,
+            shuffleQuestions: formData.shuffleQuestions,
+            shuffleAnswers: formData.shuffleAnswers,
+            requireAllTopicExamsCompleted: examConfig.requireAllTopicExamsCompleted,
+            autoGenerate,
+            autoGenerateCount: autoGenerate ? autoGenerateCount : undefined,
+            questions: autoGenerate ? [] : validQuestions,
+          });
+          break;
+        default: // practice
+          await createExamMutation.mutateAsync({
+            ...baseExamData,
+            type: 'practice',
+          });
+          break;
+      }
+
+      localStorage.removeItem(`exam-draft-${courseId}-${examType}-${topicId || ''}`);
+      router.push(`/instructor/course/${courseId}/exams`);
     } catch (error) {
-      console.error('Failed to create test:', error);
+      console.error('Failed to create exam:', error);
     }
   };
 
   const handleBackToCourse = () => {
-    router.push(`/instructor/course/${courseId}`);
+    router.push(`/instructor/course/${courseId}/exams`);
   };
 
   const handleSaveDraft = () => {
@@ -256,44 +349,35 @@ export default function CreateExamPage() {
   };
 
   const clearDraft = () => {
-    localStorage.removeItem(`exam-draft-${courseId}`);
+    localStorage.removeItem(`exam-draft-${courseId}-${examType}-${topicId || ''}`);
     setFormData({});
     setQuestions([
       {
         question_text: '',
         correct_answer: [],
         choices: ['', ''],
-        topicId: 0,
+        topicId: examType === 'topic_exam' ? Number(topicId) : 0,
       },
     ]);
     form.resetFields();
     message.success('Draft cleared!');
   };
 
-  // Retry generate cho từng topic
-  const handleRetryGenerate = async (topicId: number) => {
-    const topic = topics.find((t) => t.id === topicId);
-    if (!topic) return;
-    try {
-      const aiQuestions = await generateQuestionsAI(topicId, topic.title, autoGenerateCount);
-      setQuestions((prev) => [...prev, ...aiQuestions]);
-      setGenerateErrors((prev) => {
-        const newErr = { ...prev };
-        delete newErr[topicId];
-        return newErr;
-      });
-      message.success('Generated questions for topic successfully!');
-    } catch (err) {
-      setGenerateErrors((prev) => ({
-        ...prev,
-        [topicId]:
-          extractErrorMessage(err) || 'Failed to generate questions. Please try again later.',
-      }));
-    }
-  };
+  // Validate topic exam requirements
+  if (examType === 'topic_exam' && !selectedTopic) {
+    return (
+      <div className='p-6'>
+        <div className='text-center'>
+          <Title level={3}>Topic Not Found</Title>
+          <Text type='secondary'>The selected topic does not exist.</Text>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-gray-50 to-blue-50'>
+    <div className='min-h-screen bg-gray-50 pb-20'>
+      {/* Header */}
       <div
         className='bg-white shadow-lg border-b'
         style={{
@@ -310,14 +394,17 @@ export default function CreateExamPage() {
                 onClick={handleBackToCourse}
                 className='text-white hover:bg-white/10 border-white/30 rounded-lg'
               >
-                Back to Course
+                Back to Exams
               </Button>
               <Divider type='vertical' className='border-white/30' />
               <div>
                 <Title level={3} className='text-white mb-0'>
-                  ✨ Create New Test
+                  {examConfig.icon} {examConfig.title}
                 </Title>
-                <Text className='text-white/80'>{course?.title}</Text>
+                <Text className='text-white/80'>
+                  {course?.title}
+                  {examType === 'topic_exam' && selectedTopic && ` - ${selectedTopic.title}`}
+                </Text>
               </div>
             </div>
             <div className='flex items-center space-x-4'>
@@ -347,64 +434,91 @@ export default function CreateExamPage() {
       {/* Content */}
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
         <div className='grid grid-cols-1 lg:grid-cols-4 gap-8'>
-          {/* Sidebar with Steps */}
+          {/* Sidebar */}
           <div className='lg:col-span-1'>
-            <Affix offsetTop={120}>
+            <div className='sticky top-6' style={{ zIndex: 10 }}>
               <Card className='shadow-lg border-0 rounded-xl'>
-                <Steps direction='vertical' current={currentStep} items={steps} className='mb-6' />
-                <Divider />
-                <div className='space-y-3'>
-                  <Button
-                    block
-                    onClick={handleSaveDraft}
-                    className='rounded-lg bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 transition-colors'
-                  >
-                    💾 Save Draft
-                  </Button>
-                  <Button
-                    block
-                    danger
-                    type='text'
-                    onClick={clearDraft}
-                    className='rounded-lg hover:bg-red-50 transition-colors'
-                  >
-                    🗑️ Clear Draft
-                  </Button>
+                <div className='space-y-4'>
+                  <div className='text-center'>
+                    {examConfig.icon}
+                    <Title level={4} className='mb-1'>
+                      {examConfig.title}
+                    </Title>
+                    <Text type='secondary'>{examConfig.description}</Text>
+                  </div>
+                  <Steps
+                    direction='vertical'
+                    current={currentStep}
+                    items={steps}
+                    className='mt-6'
+                  />
+                  <div className='pt-4 border-t'>
+                    <Button
+                      type='text'
+                      size='small'
+                      onClick={clearDraft}
+                      className='text-gray-500 hover:text-red-500'
+                    >
+                      Clear Draft
+                    </Button>
+                  </div>
                 </div>
               </Card>
-            </Affix>
+            </div>
           </div>
 
-          {/* Main Content */}
+          {/* Main Form */}
           <div className='lg:col-span-3'>
+            {/* Exam Type Specific Alerts */}
+            {examType === 'topic_exam' && (
+              <Alert
+                message='Topic Exam Requirements'
+                description='Students must complete all video lessons in this topic before they can take this exam.'
+                type='info'
+                showIcon
+                className='!mb-6'
+              />
+            )}
+            {examType === 'final_exam' && (
+              <Alert
+                message='Final Exam Requirements'
+                description='Students must complete all topic exams before they can take the final exam. This exam is required to earn the course certificate.'
+                type='info'
+                showIcon
+                className='!mb-6'
+              />
+            )}
+
             <Form
               form={form}
               layout='vertical'
               onValuesChange={handleFormValuesChange}
               initialValues={{
-                duration: 60,
-                passingScore: 70,
-                type: 'practice',
+                duration: examConfig.defaultDuration,
+                passingScore: examConfig.defaultPassingScore,
+                type: examType,
                 shuffleQuestions: false,
                 shuffleAnswers: false,
-                topicIds: [],
+                topicIds:
+                  examType === 'topic_exam' ? [Number(topicId)] : topics.map((topic) => topic.id),
               }}
             >
               {currentStep === 0 && (
                 <ExamBasicInfoForm
                   form={form}
                   formData={formData}
-                  topics={topics}
+                  topics={examType === 'topic_exam' ? [selectedTopic!] : topics}
                   autoGenerate={autoGenerate}
                   autoGenerateCount={autoGenerateCount}
                   setAutoGenerate={setAutoGenerate}
                   setAutoGenerateCount={setAutoGenerateCount}
+                  examType={examType}
                 />
               )}
               {currentStep === 1 && (
                 <ExamQuestionsStep
                   questions={questions}
-                  topics={topics}
+                  topics={examType === 'topic_exam' ? [selectedTopic!] : topics}
                   addQuestion={addQuestion}
                   removeQuestion={removeQuestion}
                   updateQuestion={updateQuestion}
@@ -422,7 +536,7 @@ export default function CreateExamPage() {
               {currentStep === 2 && <ExamReviewStep formData={formData} questions={questions} />}
 
               {/* Navigation */}
-              <Card className='!mt-5 shadow-lg border-0 rounded-xl'>
+              <Card className='mt-6 shadow-lg border-0 rounded-xl'>
                 <div className='flex justify-between items-center'>
                   <div>
                     {currentStep > 0 && (
@@ -453,12 +567,16 @@ export default function CreateExamPage() {
                       <Button
                         type='primary'
                         size='large'
-                        loading={createExamMutation.isPending}
+                        loading={
+                          createExamMutation.isPending ||
+                          createTopicExamMutation.isPending ||
+                          createFinalExamMutation.isPending
+                        }
                         onClick={handleSubmit}
                         icon={<CheckCircleOutlined />}
                         className='rounded-lg bg-gradient-to-r from-green-500 to-blue-500 border-0 hover:shadow-lg transition-all'
                       >
-                        Create Test
+                        Create {examConfig.title}
                       </Button>
                     )}
                   </div>

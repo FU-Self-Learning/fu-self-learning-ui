@@ -76,11 +76,11 @@ const TestAnswersPage = () => {
         />
 
         {/* Header */}
-        <div className='mb-8'>
+        <div className='!mb-8'>
           <Button icon={<ArrowLeftOutlined />} onClick={handleBackToResult} className='mb-4'>
             Back to Results
           </Button>
-          <Title level={2} className='text-center mb-2'>
+          <Title level={2} className='text-center !mb-2'>
             Test Answers Review
           </Title>
           <Text className='text-center block text-gray-600'>{resultDetail.testTitle}</Text>
@@ -96,7 +96,7 @@ const TestAnswersPage = () => {
         <TestAnswersSection resultDetail={resultDetail} />
 
         {/* Action Buttons */}
-        <div className='flex justify-center gap-4 mt-8'>
+        <div className='flex justify-center gap-4 !mt-8'>
           <Button
             type='primary'
             size='large'

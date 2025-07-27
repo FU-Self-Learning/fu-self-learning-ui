@@ -30,57 +30,55 @@ const TestAIAnalysis = ({ resultDetail }: TestAIAnalysisProps) => {
     setIsLoading(true);
 
     try {
-      // Create comprehensive prompt for the entire test
       const wrongAnswers = resultDetail.answers.filter((answer) => !answer.isCorrect);
       const correctAnswers = resultDetail.answers.filter((answer) => answer.isCorrect);
 
       const prompt = `
-You are an AI teacher specializing in analyzing test results. Please analyze the following test and provide a comprehensive assessment:
+      You are an AI teacher specializing in analyzing test results. Please analyze the following test and provide a comprehensive assessment:
 
-**Test Information:**
-- Total Questions: ${resultDetail.totalQuestions}
-- Correct Answers: ${correctAnswers.length}
-- Wrong Answers: ${wrongAnswers.length}
-- Score: ${resultDetail.score}%
-- Result: ${resultDetail.isPassed ? 'PASSED' : 'FAILED'}
+      **Test Information:**
+      - Total Questions: ${resultDetail.totalQuestions}
+      - Correct Answers: ${correctAnswers.length}
+      - Wrong Answers: ${wrongAnswers.length}
+      - Score: ${resultDetail.score}%
+      - Result: ${resultDetail.isPassed ? 'PASSED' : 'FAILED'}
 
-**Wrong Questions:**
-${wrongAnswers
-  .map(
-    (answer, index) => `
-${index + 1}. ${answer.questionText}
-   - Correct Answer: ${answer.correctAnswer.join(', ')}
-   - Selected Answer: ${answer.selectedAnswers.join(', ')}
-`,
-  )
-  .join('\n')}
+      **Wrong Questions:**
+      ${wrongAnswers
+        .map(
+          (answer, index) => `
+      ${index + 1}. ${answer.questionText}
+        - Correct Answer: ${answer.correctAnswer.join(', ')}
+        - Selected Answer: ${answer.selectedAnswers.join(', ')}
+      `,
+        )
+        .join('\n')}
 
-**Correct Questions:**
-${correctAnswers
-  .map(
-    (answer, index) => `
-${index + 1}. ${answer.questionText}
-   - Correct Answer: ${answer.correctAnswer.join(', ')}
-   - Selected Answer: ${answer.selectedAnswers.join(', ')}
-`,
-  )
-  .join('\n')}
+      **Correct Questions:**
+      ${correctAnswers
+        .map(
+          (answer, index) => `
+      ${index + 1}. ${answer.questionText}
+        - Correct Answer: ${answer.correctAnswer.join(', ')}
+        - Selected Answer: ${answer.selectedAnswers.join(', ')}
+      `,
+        )
+        .join('\n')}
 
-Please return JSON with the following structure:
-{
-  "overallAssessment": "Overall assessment of the test result",
-  "strengths": ["Strength 1", "Strength 2", "Strength 3"],
-  "weaknesses": ["Weakness 1", "Weakness 2", "Weakness 3"],
-  "commonMistakes": "Analysis of common mistakes",
-  "improvementSuggestions": ["Improvement suggestion 1", "Improvement suggestion 2", "Improvement suggestion 3"],
-  "studyRecommendations": "Specific study recommendations",
-  "nextSteps": "Next steps to take"
-}
+      Please return JSON with the following structure:
+      {
+        "overallAssessment": "Overall assessment of the test result",
+        "strengths": ["Strength 1", "Strength 2", "Strength 3"],
+        "weaknesses": ["Weakness 1", "Weakness 2", "Weakness 3"],
+        "commonMistakes": "Analysis of common mistakes",
+        "improvementSuggestions": ["Improvement suggestion 1", "Improvement suggestion 2", "Improvement suggestion 3"],
+        "studyRecommendations": "Specific study recommendations",
+        "nextSteps": "Next steps to take"
+      }
 
-Return only JSON, no additional text.
-`;
+      Return only JSON, no additional text.
+      `;
 
-      // Use mutation to call API
       const result = await explanationMutation.mutateAsync({
         questionText: 'Comprehensive test analysis',
         choices: ['A', 'B', 'C', 'D'],
@@ -90,13 +88,11 @@ Return only JSON, no additional text.
         topicContext: prompt,
       });
 
-      // Parse result from response
       try {
         const analysisData = JSON.parse(result.explanation);
         setAnalysis(analysisData);
       } catch (parseError) {
         console.log(parseError);
-        // Fallback if JSON cannot be parsed
         setAnalysis({
           overallAssessment: result.explanation,
           strengths: ['Basic understanding of the topic'],
@@ -126,7 +122,7 @@ Return only JSON, no additional text.
     >
       {!hasRequested && (
         <div className='text-center py-8'>
-          <RobotOutlined className='text-4xl text-blue-500 mb-4' />
+          <RobotOutlined className='text-4xl text-blue-500 !mb-4' />
           <Title level={4}>Would you like AI to analyze the entire test?</Title>
           <Text type='secondary' className='block mb-4'>
             AI will analyze the results, provide strengths/weaknesses assessment and improvement

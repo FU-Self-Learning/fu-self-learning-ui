@@ -67,3 +67,15 @@ export const generateQuestionsByTopic = async (topicId: number, count: number) =
   const response = await api.post(`${APP_URL}/ai/generate-questions-by-topic`, { topicId, count });
   return response.data;
 };
+
+// Create topic exam
+export const createTopicExam = async (examData: any): Promise<ExamResponse> => {
+  const response = await api.post(`${APP_URL}/tests/topic-exam`, examData);
+  return response.data;
+};
+
+// Create final exam
+export const createFinalExam = async (examData: any): Promise<ExamResponse> => {
+  const response = await api.post(`${APP_URL}/tests/final-exam`, examData);
+  return response.data;
+};

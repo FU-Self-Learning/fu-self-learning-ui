@@ -18,23 +18,31 @@ export interface Test {
   id: number;
   title: string;
   description: string;
-  courseId: number;
-  courseTitle?: string;
-  type: TestType;
+  type: 'practice' | 'topic_exam' | 'final_exam';
   duration: number;
   questionCount: number;
-  passingScore: string;
-  isActive?: boolean;
+  passingScore: number;
+  isActive: boolean;
   shuffleQuestions: boolean;
   shuffleAnswers: boolean;
-  questions: QuizQuestion[];
-  topics?: {
-    id: number;
-    title: string;
-  }[];
+  requireVideoCompletion: boolean;
+  order: number;
   createdAt: string;
-  updatedAt?: string;
-  currentAttempt?: TestAttempt;
+  updatedAt: string;
+}
+
+export interface TopicExam extends Test {
+  topicId: number;
+  topicTitle: string;
+  isVideoCompleted: boolean;
+  isAvailable: boolean;
+}
+
+export interface FinalExam extends Test {
+  isAllTopicExamsCompleted: boolean;
+  completedTopicExams: number;
+  totalTopicExams: number;
+  isAvailable: boolean;
 }
 
 export interface TestAttempt {
@@ -85,16 +93,19 @@ export interface CompleteTestRequest {
 
 export interface TestResult {
   id: number;
-  status: 'in_progress' | 'completed' | 'not_started';
-  startedAt: string;
-  completedAt: string | null;
-  score: number | null;
-  correctAnswers: number;
-  totalQuestions: number;
-  timeSpent: number | null;
-  isPassed: boolean;
   testId: number;
   testTitle: string;
+  userId: number;
+  status: string;
+  score: number;
+  correctAnswers: number;
+  totalQuestions: number;
+  timeSpent: number;
+  startedAt: string;
+  completedAt: string;
+  isPassed: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface TestAnswerDetail {
@@ -146,4 +157,58 @@ export interface TestAttemptProgressDto {
   answers: TestAnswerProgressDto[];
   timeRemaining: number;
   isExpired: boolean;
+}
+
+export interface CourseProgress {
+  courseId: number;
+  courseTitle: string;
+  totalTopics: number;
+  completedTopics: number;
+  totalLessons: number;
+  completedLessons: number;
+  totalTopicExams: number;
+  completedTopicExams: number;
+  finalExamCompleted: boolean;
+  finalExamScore?: number;
+  certificateEarned: boolean;
+  certificateUrl?: string;
+  progressPercentage: number;
+}
+
+export interface TopicProgress {
+  topicId: number;
+  topicTitle: string;
+  totalLessons: number;
+  completedLessons: number;
+  topicExamCompleted: boolean;
+  topicExamScore?: number;
+  progressPercentage: number;
+  isAvailable: boolean;
+}
+
+export interface VideoProgress {
+  id: number;
+  userId: number;
+  lessonId: number;
+  watchedDuration: number;
+  totalDuration: number;
+  progressPercentage: number;
+  isCompleted: boolean;
+  completedAt?: string;
+  lastWatchedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CourseCertificate {
+  id: number;
+  userId: number;
+  courseId: number;
+  certificateNumber: string;
+  finalScore: number;
+  issuedAt: string;
+  certificateUrl: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -50,7 +50,7 @@ const QuestionNavigator = ({
                   h-12 relative transition-all duration-200 border-2 font-semibold
                   ${
                     isCurrent
-                      ? 'border-blue-500 bg-blue-500 text-white shadow-lg scale-105'
+                      ? '!border-blue-500 !bg-blue-500 !text-white shadow-lg scale-105'
                       : isAnswered
                         ? 'border-green-400 text-green-700'
                         : 'border-gray-200 bg-white hover:border-blue-300'
