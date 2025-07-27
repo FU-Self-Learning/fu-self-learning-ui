@@ -29,6 +29,9 @@ export interface Test {
   order: number;
   createdAt: string;
   updatedAt: string;
+  // Add properties from TestDetailDto
+  questions?: QuizQuestion[];
+  currentAttempt?: any; // Use any to allow different implementations
 }
 
 export interface TopicExam extends Test {
@@ -36,6 +39,24 @@ export interface TopicExam extends Test {
   topicTitle: string;
   isVideoCompleted: boolean;
   isAvailable: boolean;
+  // Add attempt information for progress tracking
+  lastAttempt?: {
+    id: number;
+    status: string;
+    completedAt: string;
+    score: number;
+    isPassed: boolean;
+  };
+  canRetry: boolean;
+  attemptCount: number;
+  // Override the currentAttempt from Test interface to be compatible
+  currentAttempt?: {
+    id: number;
+    status: string;
+    startedAt: string;
+    score?: number;
+    isPassed?: boolean;
+  };
 }
 
 export interface FinalExam extends Test {

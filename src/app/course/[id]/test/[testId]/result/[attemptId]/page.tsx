@@ -13,6 +13,7 @@ import {
   Alert,
   Divider,
   Spin,
+  Space,
 } from 'antd';
 import {
   ArrowLeftOutlined,
@@ -22,9 +23,12 @@ import {
   ReloadOutlined,
   FileTextOutlined,
   RobotOutlined,
+  BookOutlined,
+  PlayCircleOutlined,
 } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { getTestResult } from '@/shared/api/test.api';
+import { getTestDetail } from '@/shared/api/test.api';
 import { TestResultSummary } from '@/components/test';
 
 const { Title, Text } = Typography;
@@ -44,6 +48,12 @@ const TestResultPage = () => {
     enabled: !!attemptId,
   });
 
+  const { data: testDetail, isLoading: isTestDetailLoading } = useQuery({
+    queryKey: ['test-detail', testId],
+    queryFn: () => getTestDetail(Number(testId)),
+    enabled: !!testId,
+  });
+
   const handleBackToCourse = () => {
     router.push(`/course/${courseId}`);
   };
@@ -52,7 +62,15 @@ const TestResultPage = () => {
     router.push(`/course/${courseId}`);
   };
 
-  if (isLoading) {
+  const handleContinueToNextTopic = () => {
+    router.push(`/course/${courseId}`);
+  };
+
+  const handleViewCourseProgress = () => {
+    router.push(`/course/${courseId}`);
+  };
+
+  if (isLoading || isTestDetailLoading) {
     return (
       <div className='min-h-screen flex items-center justify-center'>
         <Spin size='large' />
@@ -80,6 +98,9 @@ const TestResultPage = () => {
   const { id, status, score, correctAnswers, totalQuestions, timeSpent, isPassed, testTitle } =
     result;
 
+  const isTopicExam = testDetail?.type === 'topic_exam';
+  const isFinalExam = testDetail?.type === 'final_exam';
+
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-6'>
       <div className='max-w-6xl mx-auto'>
@@ -92,6 +113,20 @@ const TestResultPage = () => {
             Test Results
           </Title>
           <Text className='text-center block text-gray-600'>{testTitle}</Text>
+          {isTopicExam && (
+            <div className='text-center mt-2'>
+              <Tag color='green' icon={<BookOutlined />}>
+                Topic Exam
+              </Tag>
+            </div>
+          )}
+          {isFinalExam && (
+            <div className='text-center mt-2'>
+              <Tag color='red' icon={<TrophyOutlined />}>
+                Final Exam
+              </Tag>
+            </div>
+          )}
         </div>
 
         {/* Main Result Card */}
@@ -161,6 +196,90 @@ const TestResultPage = () => {
           </Row>
         </Card>
 
+        {/* Topic Exam Specific Actions */}
+        {isTopicExam && (
+          <Card className='shadow-lg border-0 !mb-6 bg-gradient-to-r from-green-50 to-blue-50'>
+            <div className='text-center'>
+              <Title level={4} className='mb-4'>
+                {isPassed ? '🎉 Topic Completed!' : '📚 Keep Learning!'}
+              </Title>
+              <Text className='text-lg block mb-4'>
+                {isPassed
+                  ? 'You have successfully completed this topic exam. You can now proceed to the next topic or review your course progress.'
+                  : "Don't worry! You can retry this topic exam to improve your score. Review the material and try again."}
+              </Text>
+              <Space size='large'>
+                {isPassed ? (
+                  <Button
+                    type='primary'
+                    size='large'
+                    icon={<PlayCircleOutlined />}
+                    onClick={handleContinueToNextTopic}
+                    className='bg-green-600 border-green-600'
+                  >
+                    Continue to Next Topic
+                  </Button>
+                ) : (
+                  <Button
+                    type='primary'
+                    size='large'
+                    icon={<ReloadOutlined />}
+                    onClick={handleRetakeTest}
+                    className='bg-orange-600 border-orange-600'
+                  >
+                    Retry Topic Exam
+                  </Button>
+                )}
+                <Button size='large' icon={<BookOutlined />} onClick={handleViewCourseProgress}>
+                  View Course Progress
+                </Button>
+              </Space>
+            </div>
+          </Card>
+        )}
+
+        {/* Final Exam Specific Actions */}
+        {isFinalExam && (
+          <Card className='shadow-lg border-0 !mb-6 bg-gradient-to-r from-red-50 to-purple-50'>
+            <div className='text-center'>
+              <Title level={4} className='mb-4'>
+                {isPassed ? '🏆 Course Completed!' : '📖 Review and Retry!'}
+              </Title>
+              <Text className='text-lg block mb-4'>
+                {isPassed
+                  ? 'Congratulations! You have successfully completed the entire course. You can now download your certificate.'
+                  : 'You need to pass the final exam to complete the course. Review the course material and try again.'}
+              </Text>
+              <Space size='large'>
+                {isPassed ? (
+                  <Button
+                    type='primary'
+                    size='large'
+                    icon={<TrophyOutlined />}
+                    onClick={handleViewCourseProgress}
+                    className='bg-red-600 border-red-600'
+                  >
+                    Download Certificate
+                  </Button>
+                ) : (
+                  <Button
+                    type='primary'
+                    size='large'
+                    icon={<ReloadOutlined />}
+                    onClick={handleRetakeTest}
+                    className='bg-red-600 border-red-600'
+                  >
+                    Retry Final Exam
+                  </Button>
+                )}
+                <Button size='large' icon={<BookOutlined />} onClick={handleViewCourseProgress}>
+                  Review Course
+                </Button>
+              </Space>
+            </div>
+          </Card>
+        )}
+
         {/* Action Buttons */}
         <div className='flex justify-center gap-4 !mb-6'>
           <Button
@@ -182,9 +301,11 @@ const TestResultPage = () => {
           >
             AI Analysis
           </Button>
-          <Button size='large' icon={<ReloadOutlined />} onClick={handleRetakeTest}>
-            Retake Test
-          </Button>
+          {!isPassed && (
+            <Button size='large' icon={<ReloadOutlined />} onClick={handleRetakeTest}>
+              Retake Test
+            </Button>
+          )}
         </div>
 
         {/* Summary Cards */}

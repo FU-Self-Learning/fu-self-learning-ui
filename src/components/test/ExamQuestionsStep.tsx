@@ -20,6 +20,7 @@ export interface ExamQuestionsStepProps {
   autoGenerate: boolean;
   isGeneratingQuestions: boolean;
   formData: any;
+  questionsModified?: boolean;
 }
 
 const ExamQuestionsStep: React.FC<ExamQuestionsStepProps> = ({
@@ -37,8 +38,20 @@ const ExamQuestionsStep: React.FC<ExamQuestionsStepProps> = ({
   autoGenerate,
   isGeneratingQuestions,
   formData,
+  questionsModified = false,
 }) => (
   <div>
+    {questionsModified && autoGenerate && (
+      <Card className='shadow-lg border-0 rounded-xl mb-6 border-blue-200 bg-blue-50'>
+        <div className='flex items-center space-x-2'>
+          <BulbOutlined className='text-blue-500' />
+          <Text className='text-blue-700'>
+            <strong>Note:</strong> You have modified the AI-generated questions. These changes will
+            be saved as manual questions.
+          </Text>
+        </div>
+      </Card>
+    )}
     {autoGenerate && isGeneratingQuestions ? (
       <Card className='shadow-lg border-0 rounded-xl text-center'>
         <BulbOutlined className='text-4xl text-blue-500 mb-2' />

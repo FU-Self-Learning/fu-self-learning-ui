@@ -253,7 +253,7 @@ const TestAttemptPage = () => {
   };
 
   const navigateToQuestion = (index: number) => {
-    if (index < 0 || !test || index >= test.questions.length) return;
+    if (index < 0 || !test || !test.questions || index >= test.questions.length) return;
 
     setCurrentQuestionIndex(index);
     setQuestionStartTime(Date.now());
@@ -269,6 +269,15 @@ const TestAttemptPage = () => {
       if (isLocalStorageAvailable()) {
         clearCurrentAttemptId();
       }
+
+      // Set completion flag for the course page to detect
+      sessionStorage.setItem(
+        'test-completed',
+        JSON.stringify({
+          testId: Number(testId),
+          isCompleted: true,
+        }),
+      );
 
       // Navigate to results page
       router.push(`/course/${courseId}/test/${testId}/result/${attemptId}`);

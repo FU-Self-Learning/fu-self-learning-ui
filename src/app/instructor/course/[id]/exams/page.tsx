@@ -68,7 +68,7 @@ const InstructorExamsPage: React.FC = () => {
     );
   }
 
-  const topicExams = exams.filter((exam: ExamResponse) => exam.type === 'quiz');
+  const topicExams = exams.filter((exam: ExamResponse) => exam.type === 'topic_exam');
   const finalExam = exams.find((exam: ExamResponse) => exam.type === 'final');
   const practiceExams = exams.filter((exam: ExamResponse) => exam.type === 'practice');
 
@@ -138,7 +138,7 @@ const InstructorExamsPage: React.FC = () => {
                       <Col span={6}>
                         <Statistic
                           title='Questions'
-                          value={exam.totalQuestions}
+                          value={exam.questionCount}
                           prefix={<CheckCircleOutlined />}
                         />
                       </Col>

@@ -66,6 +66,8 @@ const TopicExamManagement: React.FC<TopicExamManagementProps> = ({
   };
 
   const getTopicTitle = (exam: ExamResponse) => {
+    console.log(exam);
+
     const topicId = exam.topicIds?.[0];
     const topic = topics.find((t) => t.id === topicId);
     return topic?.title || 'Unknown Topic';
@@ -107,7 +109,6 @@ const TopicExamManagement: React.FC<TopicExamManagementProps> = ({
         </div>
       )}
 
-      {/* Existing topic exams */}
       {topicExams.length > 0 && (
         <div>
           <Title level={4} className='mb-4'>
@@ -145,7 +146,7 @@ const TopicExamManagement: React.FC<TopicExamManagementProps> = ({
                       <Col span={6}>
                         <Statistic
                           title='Questions'
-                          value={exam.totalQuestions}
+                          value={exam.questionCount}
                           prefix={<CheckCircleOutlined />}
                         />
                       </Col>

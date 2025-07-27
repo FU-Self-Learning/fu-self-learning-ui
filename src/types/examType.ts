@@ -3,12 +3,12 @@ export interface ExamResponse {
   title: string;
   description: string;
   duration: number; // in minutes
-  totalQuestions: number;
+  questionCount: number;
   passingScore: number; // percentage
   isActive: boolean;
   courseId: number;
   topicIds: number[];
-  type: 'practice' | 'midterm' | 'final' | 'quiz' | 'topic_exam' | 'final_exam';
+  type: 'practice' | 'midterm' | 'final' | 'topic_exam' | 'final_exam';
   shuffleQuestions: boolean;
   shuffleAnswers: boolean;
   createdAt: string;

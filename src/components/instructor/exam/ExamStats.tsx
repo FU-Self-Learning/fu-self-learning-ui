@@ -20,20 +20,21 @@ interface ExamStatsProps {
 
 const ExamStats: React.FC<ExamStatsProps> = ({ courseId, exams }) => {
   console.log(courseId);
-  const topicExams = exams.filter((exam) => exam.type === 'quiz');
-  const finalExam = exams.find((exam) => exam.type === 'final');
+
+  const topicExams = exams.filter((exam) => exam.type === 'topic_exam');
+  const finalExam = exams.find((exam) => exam.type === 'final_exam');
   const practiceExams = exams.filter((exam) => exam.type === 'practice');
 
   const totalExams = exams.length;
   const activeExams = exams.filter((exam) => exam.isActive).length;
-  const totalQuestions = exams.reduce((sum, exam) => sum + exam.totalQuestions, 0);
+  const totalQuestions = exams.reduce((sum, exam) => sum + exam.questionCount, 0);
   const averageDuration =
     totalExams > 0
       ? Math.round(exams.reduce((sum, exam) => sum + exam.duration, 0) / totalExams)
       : 0;
   const averagePassingScore =
     totalExams > 0
-      ? Math.round(exams.reduce((sum, exam) => sum + exam.passingScore, 0) / totalExams)
+      ? Math.round(exams.reduce((sum, exam) => sum + Number(exam.passingScore), 0) / totalExams)
       : 0;
 
   const examTypeDistribution = {
@@ -158,7 +159,7 @@ const ExamStats: React.FC<ExamStatsProps> = ({ courseId, exams }) => {
                     <div>
                       <Text strong>{exam.title}</Text>
                       <div className='text-xs text-gray-500'>
-                        {exam.totalQuestions} questions • {exam.duration} min
+                        {exam.questionCount} questions • {exam.duration} min
                       </div>
                     </div>
                     <div className='text-right'>
@@ -185,7 +186,7 @@ const ExamStats: React.FC<ExamStatsProps> = ({ courseId, exams }) => {
                     <div>
                       <Text strong>{exam.title}</Text>
                       <div className='text-xs text-gray-500'>
-                        {exam.totalQuestions} questions • {exam.duration} min
+                        {exam.questionCount} questions • {exam.duration} min
                       </div>
                     </div>
                     <div className='text-right'>
@@ -213,7 +214,7 @@ const ExamStats: React.FC<ExamStatsProps> = ({ courseId, exams }) => {
               <Text type='secondary'>{finalExam.description}</Text>
             </div>
             <div className='text-right'>
-              <div className='text-2xl font-bold text-blue-600'>{finalExam.totalQuestions}</div>
+              <div className='text-2xl font-bold text-blue-600'>{finalExam.questionCount}</div>
               <div className='text-sm text-gray-500'>Questions</div>
               <div className='text-lg font-semibold text-green-600 mt-1'>
                 {finalExam.passingScore}%

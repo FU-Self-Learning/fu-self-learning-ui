@@ -9,6 +9,7 @@ import {
   CourseProgress,
   TopicProgress,
 } from '@/types/testType';
+import { TestAttemptProgressDto } from '@/types/testType';
 
 export const getTestsByCourse = async (courseId: number): Promise<Test[]> => {
   const response = await apiClient.get<Test[]>(APP_URL + `/tests/course/${courseId}`);
@@ -114,14 +115,7 @@ export const getAnswerExplanation = async (data: {
   return response.data;
 };
 
-export const getAttemptProgress = async (
-  attemptId: number,
-): Promise<{
-  currentQuestion: number;
-  totalQuestions: number;
-  timeRemaining: number;
-  isCompleted: boolean;
-}> => {
+export const getAttemptProgress = async (attemptId: number): Promise<TestAttemptProgressDto> => {
   const response = await apiClient.get(APP_URL + `/tests/attempt/${attemptId}/progress`);
   return response.data;
 };

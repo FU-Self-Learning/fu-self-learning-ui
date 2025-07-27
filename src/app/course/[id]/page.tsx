@@ -100,6 +100,30 @@ const CourseDetail = () => {
     [queryClient, id],
   );
 
+  const handleTestProgressUpdate = useCallback(
+    (testId: number, isCompleted: boolean) => {
+      if (isCompleted) {
+        console.log(`🎉 Test ${testId} completed! Refreshing test and course data...`);
+
+        // Invalidate topic exams data to refresh attempt information
+        queryClient.invalidateQueries({ queryKey: ['topic-exams'] });
+
+        // Invalidate final exam data
+        queryClient.invalidateQueries({ queryKey: ['final-exam'] });
+
+        // Invalidate course progress
+        queryClient.invalidateQueries({ queryKey: ['course-progress'] });
+
+        // Invalidate enrollment data to update course progress
+        queryClient.invalidateQueries({ queryKey: ['enrollment', id] });
+
+        // Invalidate test results
+        queryClient.invalidateQueries({ queryKey: ['test-results'] });
+      }
+    },
+    [queryClient, id],
+  );
+
   useEffect(() => {
     if (!isLoading && !isLoadingTopics && courseDetail && topics) {
       const lessonId = searchParams.get('lessonId');
@@ -219,6 +243,7 @@ const CourseDetail = () => {
         onLessonSelect={handleLessonSelect}
         courseId={id}
         currentLessonId={selectedLesson?.id}
+        onTestProgressUpdate={handleTestProgressUpdate}
       />
     </div>
   );

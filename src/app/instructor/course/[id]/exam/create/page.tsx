@@ -42,6 +42,7 @@ export default function CreateExamPage() {
   const [autoGenerateCount, setAutoGenerateCount] = useState(5);
   const [generateErrors, setGenerateErrors] = useState<Record<number, string>>({});
   const [hasGeneratedQuestions, setHasGeneratedQuestions] = useState(false);
+  const [questionsModified, setQuestionsModified] = useState(false);
 
   const createExamMutation = useCreateExam();
   const createTopicExamMutation = useCreateTopicExam();
@@ -67,6 +68,64 @@ export default function CreateExamPage() {
     updateChoice,
     toggleCorrectAnswer,
   } = useExamQuestions();
+
+  // Track when questions are modified after auto-generation
+  const handleQuestionsChange = (newQuestions: any[]) => {
+    if (hasGeneratedQuestions && !questionsModified) {
+      setQuestionsModified(true);
+    }
+    setQuestions(newQuestions);
+  };
+
+  // Wrapper functions to track modifications
+  const handleAddQuestion = () => {
+    if (hasGeneratedQuestions && !questionsModified) {
+      setQuestionsModified(true);
+    }
+    addQuestion();
+  };
+
+  const handleRemoveQuestion = (index: number) => {
+    if (hasGeneratedQuestions && !questionsModified) {
+      setQuestionsModified(true);
+    }
+    removeQuestion(index);
+  };
+
+  const handleUpdateQuestion = (index: number, field: string | null, value: any) => {
+    if (hasGeneratedQuestions && !questionsModified) {
+      setQuestionsModified(true);
+    }
+    updateQuestion(index, field, value);
+  };
+
+  const handleAddChoice = (questionIndex: number) => {
+    if (hasGeneratedQuestions && !questionsModified) {
+      setQuestionsModified(true);
+    }
+    addChoice(questionIndex);
+  };
+
+  const handleRemoveChoice = (questionIndex: number, choiceIndex: number) => {
+    if (hasGeneratedQuestions && !questionsModified) {
+      setQuestionsModified(true);
+    }
+    removeChoice(questionIndex, choiceIndex);
+  };
+
+  const handleUpdateChoice = (questionIndex: number, choiceIndex: number, value: string) => {
+    if (hasGeneratedQuestions && !questionsModified) {
+      setQuestionsModified(true);
+    }
+    updateChoice(questionIndex, choiceIndex, value);
+  };
+
+  const handleToggleCorrectAnswer = (questionIndex: number, choice: string, checked: boolean) => {
+    if (hasGeneratedQuestions && !questionsModified) {
+      setQuestionsModified(true);
+    }
+    toggleCorrectAnswer(questionIndex, choice, checked);
+  };
 
   // Get exam type configuration
   const getExamTypeConfig = () => {
@@ -119,13 +178,14 @@ export default function CreateExamPage() {
       questions,
       examType,
       topicId,
+      questionsModified,
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem(
       `exam-draft-${courseId}-${examType}-${topicId || ''}`,
       JSON.stringify(draftData),
     );
-  }, [formData, questions, examType, topicId, courseId]);
+  }, [formData, questions, examType, topicId, courseId, questionsModified]);
 
   // Load draft on mount
   useEffect(() => {
@@ -138,7 +198,8 @@ export default function CreateExamPage() {
 
         if (draftAge < oneDay) {
           setFormData(draftData.formData || {});
-          setQuestions(draftData.questions || []);
+          handleQuestionsChange(draftData.questions || []);
+          setQuestionsModified(draftData.questionsModified || false);
           form.setFieldsValue(draftData.formData);
         } else {
           localStorage.removeItem(`exam-draft-${courseId}-${examType}-${topicId || ''}`);
@@ -166,7 +227,7 @@ export default function CreateExamPage() {
     if (topic) {
       try {
         const aiQuestions = await generateQuestionsAI(topicId, topic.title, autoGenerateCount);
-        setQuestions(aiQuestions);
+        handleQuestionsChange(aiQuestions);
         setGenerateErrors((prev) => ({ ...prev, [topicId]: '' }));
       } catch (err) {
         setGenerateErrors((prev) => ({
@@ -215,7 +276,7 @@ export default function CreateExamPage() {
           formData.topicIds.length > 0 &&
           !hasGeneratedQuestions
         ) {
-          setQuestions([]);
+          handleQuestionsChange([]);
           setGenerateErrors({});
           let allQuestions: any[] = [];
           const errors: Record<number, string> = {};
@@ -236,7 +297,7 @@ export default function CreateExamPage() {
             }
           }
 
-          setQuestions(allQuestions.slice(0, autoGenerateCount));
+          handleQuestionsChange(allQuestions.slice(0, autoGenerateCount));
           setGenerateErrors(errors);
           setHasGeneratedQuestions(true);
 
@@ -286,9 +347,9 @@ export default function CreateExamPage() {
       const baseExamData = {
         ...formData,
         courseId: parseInt(courseId),
-        questions: autoGenerate ? [] : validQuestions,
-        autoGenerate,
-        autoGenerateCount: autoGenerate ? autoGenerateCount : undefined,
+        questions: validQuestions,
+        autoGenerate: autoGenerate && !questionsModified, // Only auto-generate if not modified
+        autoGenerateCount: autoGenerate && !questionsModified ? autoGenerateCount : undefined,
       };
 
       switch (examType) {
@@ -303,9 +364,9 @@ export default function CreateExamPage() {
             shuffleQuestions: formData.shuffleQuestions,
             shuffleAnswers: formData.shuffleAnswers,
             requireVideoCompletion: examConfig.requireVideoCompletion,
-            autoGenerate,
-            autoGenerateCount: autoGenerate ? autoGenerateCount : undefined,
-            questions: autoGenerate ? [] : validQuestions,
+            autoGenerate: autoGenerate && !questionsModified, // Only auto-generate if not modified
+            autoGenerateCount: autoGenerate && !questionsModified ? autoGenerateCount : undefined,
+            questions: validQuestions,
           });
           break;
         case 'final_exam':
@@ -319,9 +380,9 @@ export default function CreateExamPage() {
             shuffleQuestions: formData.shuffleQuestions,
             shuffleAnswers: formData.shuffleAnswers,
             requireAllTopicExamsCompleted: examConfig.requireAllTopicExamsCompleted,
-            autoGenerate,
-            autoGenerateCount: autoGenerate ? autoGenerateCount : undefined,
-            questions: autoGenerate ? [] : validQuestions,
+            autoGenerate: autoGenerate && !questionsModified, // Only auto-generate if not modified
+            autoGenerateCount: autoGenerate && !questionsModified ? autoGenerateCount : undefined,
+            questions: validQuestions,
           });
           break;
         default: // practice
@@ -351,7 +412,7 @@ export default function CreateExamPage() {
   const clearDraft = () => {
     localStorage.removeItem(`exam-draft-${courseId}-${examType}-${topicId || ''}`);
     setFormData({});
-    setQuestions([
+    handleQuestionsChange([
       {
         question_text: '',
         correct_answer: [],
@@ -359,6 +420,7 @@ export default function CreateExamPage() {
         topicId: examType === 'topic_exam' ? Number(topicId) : 0,
       },
     ]);
+    setQuestionsModified(false);
     form.resetFields();
     message.success('Draft cleared!');
   };
@@ -519,18 +581,19 @@ export default function CreateExamPage() {
                 <ExamQuestionsStep
                   questions={questions}
                   topics={examType === 'topic_exam' ? [selectedTopic!] : topics}
-                  addQuestion={addQuestion}
-                  removeQuestion={removeQuestion}
-                  updateQuestion={updateQuestion}
-                  addChoice={addChoice}
-                  removeChoice={removeChoice}
-                  updateChoice={updateChoice}
-                  toggleCorrectAnswer={toggleCorrectAnswer}
+                  addQuestion={handleAddQuestion}
+                  removeQuestion={handleRemoveQuestion}
+                  updateQuestion={handleUpdateQuestion}
+                  addChoice={handleAddChoice}
+                  removeChoice={handleRemoveChoice}
+                  updateChoice={handleUpdateChoice}
+                  toggleCorrectAnswer={handleToggleCorrectAnswer}
                   generateErrors={generateErrors}
                   handleRetryGenerate={handleRetryGenerate}
                   autoGenerate={autoGenerate}
                   isGeneratingQuestions={isGeneratingQuestions}
                   formData={formData}
+                  questionsModified={questionsModified}
                 />
               )}
               {currentStep === 2 && <ExamReviewStep formData={formData} questions={questions} />}
@@ -576,7 +639,7 @@ export default function CreateExamPage() {
                         icon={<CheckCircleOutlined />}
                         className='rounded-lg bg-gradient-to-r from-green-500 to-blue-500 border-0 hover:shadow-lg transition-all'
                       >
-                        Create {examConfig.title}
+                        {examConfig.title}
                       </Button>
                     )}
                   </div>
