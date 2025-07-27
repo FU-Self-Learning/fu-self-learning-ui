@@ -1,5 +1,7 @@
 import { UploadFile } from 'antd';
 
+export type CourseStatus = 'active' | 'inactive' | 'rejected';
+
 export interface CoursesResponse {
   id: string;
   title: string;
@@ -7,7 +9,7 @@ export interface CoursesResponse {
   imageUrl: string;
   instructor: InstructorCourse;
   categories: CategoryCourse[];
-  isActive: boolean;
+  status: CourseStatus;
   createdAt?: string;
   updatedAt?: string;
 }

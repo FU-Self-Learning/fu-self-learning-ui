@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Avatar, Button, Dropdown, Modal, message, Image } from 'antd';
 import {
   UserOutlined,
@@ -13,6 +13,7 @@ import { PostResponse } from '@/types/postType';
 import TimeAgoText from './TimeAgoText';
 import PostCommentModal from './PostCommentModal';
 import { useDeletePost } from '@/hooks/posts/usePosts';
+import { useLikePost } from '@/hooks/posts/useLikePost';
 import { isValidWebUrl } from '@/utils/urlValidation';
 
 interface PostListProps {
@@ -20,10 +21,14 @@ interface PostListProps {
 }
 
 const PostList = ({ posts }: PostListProps) => {
+  useEffect(() => {
+    console.log('PostList received posts:', posts);
+  }, [posts]);
   const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
   const [selectedPost, setSelectedPost] = useState<PostResponse | null>(null);
 
   const { mutate: deletePostMutation } = useDeletePost();
+  const { mutate: likePostMutation } = useLikePost();
 
   const handleCommentClick = (post: PostResponse) => {
     setSelectedPost(post);
@@ -129,9 +134,15 @@ const PostList = ({ posts }: PostListProps) => {
                   <LikeOutlined />
                 )
               }
+              onClick={(e) => {
+                e.preventDefault();
+                likePostMutation({
+                  postId: post.id,
+                  isLiked: post.isLikedByCurrentUser,
+                });
+              }}
             >
               {post.likesCount > 0 && <span className='mr-1'>{post.likesCount}</span>}
-              {post.isLikedByCurrentUser ? 'Unlike' : 'Like'}
             </Button>
             <Button type='text' icon={<MessageOutlined />} onClick={() => handleCommentClick(post)}>
               Comment
