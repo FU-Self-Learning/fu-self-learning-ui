@@ -35,7 +35,7 @@ export const CourseExamsTab: React.FC<CourseExamsTabProps> = ({ courseId }) => {
   };
 
   const handleCreateExam = () => {
-    router.push(`/instructor/course/${courseId}/exam/create`);
+    router.push(`/instructor/course/${courseId}/exams`);
   };
 
   if (error) {

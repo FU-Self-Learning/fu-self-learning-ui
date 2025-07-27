@@ -55,9 +55,10 @@ const MessageList: React.FC<Props> = ({ messages, currentUserId }) => {
         </div>
       ) : (
         messages.map((msg) => {
-          const isOwn = msg.sender?.id !== undefined
-            ? msg.sender.id === currentUserId
-            : msg.senderId === currentUserId;
+          const isOwn =
+            msg.sender?.id !== undefined
+              ? msg.sender.id === currentUserId
+              : msg.senderId === currentUserId;
           return (
             <div key={msg.id} className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}>
               <div

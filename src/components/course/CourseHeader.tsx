@@ -18,7 +18,6 @@ export default function CourseHeader({
   allCategories,
   onSearch,
 }: Props) {
-
   const [searchValue, setSearchValue] = useState('');
   const categoryItems: MenuProps['items'] = [
     {
@@ -46,7 +45,7 @@ export default function CourseHeader({
           allowClear
           style={{ width: 200 }}
           value={searchValue}
-          onChange={e => {
+          onChange={(e) => {
             setSearchValue(e.target.value);
             if (onSearch) onSearch(e.target.value);
           }}

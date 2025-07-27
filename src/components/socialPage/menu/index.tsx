@@ -34,7 +34,7 @@ const menuItems: MenuItem[] = [
     key: 'chat',
     icon: <WechatOutlined style={{ fontSize: 20, color: '#1890ff' }} />,
     label: 'Chat',
-  }
+  },
 ];
 
 const MenuPage = () => {

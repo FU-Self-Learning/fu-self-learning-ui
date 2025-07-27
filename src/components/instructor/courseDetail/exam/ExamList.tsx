@@ -12,7 +12,8 @@ import { ExamResponse } from '@/types/examType';
 import { useDeleteExam } from '@/hooks/exam/useDeleteExam';
 import { useToggleExamStatus } from '@/hooks/exam/useToggleExamStatus';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+import { getExamTypeLabel, getExamTypeColor } from '@/utils/examTypeMapper';
 // Simple date formatter utility
 const formatCreatedAt = (dateString: string) => {
   const date = new Date(dateString);
@@ -143,7 +144,8 @@ export const ExamList: React.FC<ExamListProps> = ({ exams, courseId }) => {
                   <Text strong>Pass Score:</Text> {exam.passingScore}%
                 </div>
                 <div>
-                  <Text strong>Type:</Text> <span className='capitalize'>{exam.type}</span>
+                  <Text strong>Type:</Text>{' '}
+                  <Tag color={getExamTypeColor(exam.type)}>{getExamTypeLabel(exam.type)}</Tag>
                 </div>
                 <div>
                   <Text strong>Shuffle Q:</Text> {exam.shuffleQuestions ? 'Yes' : 'No'}

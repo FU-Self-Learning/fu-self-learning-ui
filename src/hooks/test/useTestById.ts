@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { getTestById } from '@/shared/api/test.api';
+import { getTestDetail } from '@/shared/api/test.api';
 
 export const useTestById = (testId: number) => {
   return useQuery({
     queryKey: ['test', testId],
-    queryFn: () => getTestById(testId),
+    queryFn: () => getTestDetail(testId),
     enabled: !!testId,
   });
 };

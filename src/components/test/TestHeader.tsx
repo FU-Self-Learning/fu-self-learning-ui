@@ -1,4 +1,4 @@
-import { Card, Typography, Progress, Row, Col } from 'antd';
+import { Card, Typography, Row, Col } from 'antd';
 import { ClockCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
@@ -18,7 +18,6 @@ const TestHeader = ({
   totalQuestions,
   timeLeft,
   answeredCount,
-  progress,
 }: TestHeaderProps) => {
   return (
     <div className='bg-white/95 backdrop-blur-sm shadow-xl border-b border-gray-200/50 sticky top-0 z-10'>
@@ -66,7 +65,6 @@ const TestHeader = ({
                 </div>
               </Card>
 
-              {/* Progress Card */}
               <Card
                 className='shadow-lg border-0 bg-green-50 border-green-200'
                 styles={{ body: { padding: '16px 20px' } }}
@@ -86,18 +84,6 @@ const TestHeader = ({
             </div>
           </Col>
         </Row>
-
-        <Progress
-          percent={progress}
-          strokeColor={{
-            '0%': '#3b82f6',
-            '50%': '#8b5cf6',
-            '100%': '#10b981',
-          }}
-          trailColor='#e5e7eb'
-          size={8}
-          className='mt-6'
-        />
       </div>
     </div>
   );

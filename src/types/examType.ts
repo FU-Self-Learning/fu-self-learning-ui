@@ -8,7 +8,7 @@ export interface ExamResponse {
   isActive: boolean;
   courseId: number;
   topicIds: number[];
-  type: 'practice' | 'midterm' | 'final' | 'quiz';
+  type: 'practice' | 'midterm' | 'final' | 'quiz' | 'topic_exam' | 'final_exam';
   shuffleQuestions: boolean;
   shuffleAnswers: boolean;
   createdAt: string;
@@ -32,7 +32,7 @@ export interface ExamRequest {
   passingScore: number;
   courseId: number;
   topicIds: number[];
-  type: 'practice' | 'midterm' | 'final' | 'quiz';
+  type: 'practice' | 'midterm' | 'final' | 'quiz' | 'topic_exam' | 'final_exam';
   shuffleQuestions: boolean;
   shuffleAnswers: boolean;
   questions: ExamQuestionRequest[];
@@ -49,7 +49,7 @@ export interface ExamFilter {
   courseId?: number;
   isActive?: boolean;
   search?: string;
-  type?: 'practice' | 'midterm' | 'final' | 'quiz';
+  type?: 'practice' | 'midterm' | 'final' | 'quiz' | 'topic_exam' | 'final_exam';
 }
 
 // For exam creation form
@@ -60,7 +60,7 @@ export interface ExamFormData {
   passingScore: number;
   courseId: number;
   topicIds: number[];
-  type: 'practice' | 'midterm' | 'final' | 'quiz';
+  type: 'practice' | 'midterm' | 'final' | 'quiz' | 'topic_exam' | 'final_exam';
   shuffleQuestions: boolean;
   shuffleAnswers: boolean;
   questions: ExamQuestionFormData[];

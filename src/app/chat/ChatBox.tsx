@@ -51,8 +51,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receive
     let handleMessagesLoaded: (loaded: RawMessage[]) => void;
 
     if (receiverGroupId) {
-      
-
       handleIncomingMessage = (msg: RawMessage) => {
         const group = msg.receiverGroupId ?? msg.group?.id;
         if (group !== receiverGroupId) return;
@@ -62,45 +60,51 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receive
           createdAt: msg.createdAt,
           senderId: msg.senderId ?? msg.senderUserId ?? 0,
           receiverId: msg.receiverId ?? msg.receiverUserId ?? 0,
-          sender: msg.sender ? {
-            id: msg.sender.id,
-            username: msg.sender.username,
-            email: msg.sender.email,
-            phoneNumber: msg.sender.phoneNumber,
-            dob: msg.sender.dob,
-            avatarUrl: msg.sender.avatarUrl,
-            role: msg.sender.role,
-            isActive: msg.sender.isActive,
-            createdAt: msg.sender.createdAt,
-            updatedAt: msg.sender.updatedAt,
-          } : undefined,
+          sender: msg.sender
+            ? {
+                id: msg.sender.id,
+                username: msg.sender.username,
+                email: msg.sender.email,
+                phoneNumber: msg.sender.phoneNumber,
+                dob: msg.sender.dob,
+                avatarUrl: msg.sender.avatarUrl,
+                role: msg.sender.role,
+                isActive: msg.sender.isActive,
+                createdAt: msg.sender.createdAt,
+                updatedAt: msg.sender.updatedAt,
+              }
+            : undefined,
         };
         setMessages((prev) => [...prev, normalized]);
       };
       handleMessagesLoaded = (loaded: RawMessage[]) => {
         console.log('[Socket][groupMessagesLoaded] data:', loaded);
-        const normalized = loaded.map((msg): ChatMessage => ({
-          id: msg.id,
-          message: msg.message,
-          createdAt: msg.createdAt,
-          senderId: msg.senderId ?? msg.senderUserId ?? 0,
-          receiverId: msg.receiverId ?? msg.receiverUserId ?? 0,
-          sender: msg.sender ? {
-            id: msg.sender.id,
-            username: msg.sender.username,
-            email: msg.sender.email,
-            phoneNumber: msg.sender.phoneNumber,
-            dob: msg.sender.dob,
-            avatarUrl: msg.sender.avatarUrl,
-            role: msg.sender.role,
-            isActive: msg.sender.isActive,
-            createdAt: msg.sender.createdAt,
-            updatedAt: msg.sender.updatedAt,
-          } : undefined,
-        }));
+        const normalized = loaded.map(
+          (msg): ChatMessage => ({
+            id: msg.id,
+            message: msg.message,
+            createdAt: msg.createdAt,
+            senderId: msg.senderId ?? msg.senderUserId ?? 0,
+            receiverId: msg.receiverId ?? msg.receiverUserId ?? 0,
+            sender: msg.sender
+              ? {
+                  id: msg.sender.id,
+                  username: msg.sender.username,
+                  email: msg.sender.email,
+                  phoneNumber: msg.sender.phoneNumber,
+                  dob: msg.sender.dob,
+                  avatarUrl: msg.sender.avatarUrl,
+                  role: msg.sender.role,
+                  isActive: msg.sender.isActive,
+                  createdAt: msg.sender.createdAt,
+                  updatedAt: msg.sender.updatedAt,
+                }
+              : undefined,
+          }),
+        );
         setMessages(normalized);
       };
-      
+
       socket.on('groupMessagesLoaded', handleMessagesLoaded);
       socket.on('newGroupMessage', handleIncomingMessage);
       socket.on('groupMessageSent', handleIncomingMessage);
@@ -136,8 +140,8 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receive
             id: msg.id,
             message: msg.message,
             createdAt: msg.createdAt,
-            senderId: (msg.senderId ?? msg.senderUserId ?? 0),
-            receiverId: (msg.receiverId ?? msg.receiverUserId ?? 0),
+            senderId: msg.senderId ?? msg.senderUserId ?? 0,
+            receiverId: msg.receiverId ?? msg.receiverUserId ?? 0,
           }),
         );
         setMessages(normalized);
@@ -160,7 +164,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({ senderUserId, receiverUserId, receive
       return;
     }
     if (receiverGroupId) {
-      socket.emit('sendGroupMessage', { groupId: Number(receiverGroupId), senderId: senderUserId, message: msg });
+      socket.emit('sendGroupMessage', {
+        groupId: Number(receiverGroupId),
+        senderId: senderUserId,
+        message: msg,
+      });
     } else {
       const payload: ChatPayload = {
         senderUserId,

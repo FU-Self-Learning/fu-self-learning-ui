@@ -49,7 +49,13 @@ const GroupList: React.FC<GroupListProps> = () => {
           showIcon
           className='rounded-lg shadow-sm'
           action={
-            <Button size='small' type='primary' icon={<ReloadOutlined />} onClick={handleRetry} className='rounded-lg'>
+            <Button
+              size='small'
+              type='primary'
+              icon={<ReloadOutlined />}
+              onClick={handleRetry}
+              className='rounded-lg'
+            >
               Retry
             </Button>
           }
@@ -99,7 +105,9 @@ const GroupList: React.FC<GroupListProps> = () => {
                 title={
                   <span
                     className={`font-medium transition-colors ${
-                      group.id === selectedGroupId ? 'text-blue-700' : 'text-gray-700 hover:text-gray-900'
+                      group.id === selectedGroupId
+                        ? 'text-blue-700'
+                        : 'text-gray-700 hover:text-gray-900'
                     }`}
                   >
                     {group.name}

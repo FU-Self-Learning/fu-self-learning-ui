@@ -24,10 +24,13 @@ export function useGroupChatSocket(
     if (!userId) return;
     if (socketRef.current) return; // Đã có socket, không tạo lại
     console.log('[Socket] Initializing group chat socket:', { userId });
-    const socket: Socket = io(`${process.env.NEXT_PUBLIC_SOCKET_URL_GROUP}${GROUP_CHAT_NAMESPACE}`, {
-      query: { userId },
-      transports: ['websocket'],
-    });
+    const socket: Socket = io(
+      `${process.env.NEXT_PUBLIC_SOCKET_URL_GROUP}${GROUP_CHAT_NAMESPACE}`,
+      {
+        query: { userId },
+        transports: ['websocket'],
+      },
+    );
     socketRef.current = socket;
     setIsConnected(false);
 

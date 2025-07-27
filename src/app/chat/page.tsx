@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -12,7 +11,6 @@ import GroupList from '@/components/chat/GroupList';
 import { Suspense } from 'react';
 import { Spin } from 'antd';
 import { useHasMounted } from '@/hooks/useHasMounted';
-
 
 function ChatPageComponent() {
   const searchParams = useSearchParams();

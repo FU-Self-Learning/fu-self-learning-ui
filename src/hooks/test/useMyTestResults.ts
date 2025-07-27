@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMyTestResults } from '@/shared/api/test.api';
-import { MyTestResultsFilter } from '@/types/testType';
+import { getTestResults } from '@/shared/api/test.api';
 
-export const useMyTestResults = (filters?: MyTestResultsFilter) => {
+export const useMyTestResults = (courseId?: number) => {
   return useQuery({
-    queryKey: ['test-results', 'me', filters],
-    queryFn: () => getMyTestResults(filters),
+    queryKey: ['test-results', 'me', courseId],
+    queryFn: () => getTestResults(courseId),
   });
 };

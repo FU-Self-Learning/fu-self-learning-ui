@@ -22,7 +22,7 @@ const ExamReviewStep: React.FC<ExamReviewStepProps> = ({ formData, questions }) 
   return (
     <div className='space-y-6'>
       <Card
-        className='shadow-lg border-0 rounded-xl overflow-hidden'
+        className='shadow-lg border-0 rounded-xl overflow-hidden !mb-6'
         style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}
       >
         <div className='text-white'>
@@ -34,14 +34,14 @@ const ExamReviewStep: React.FC<ExamReviewStepProps> = ({ formData, questions }) 
               <Title level={3} className='text-white mb-0'>
                 Review & Publish
               </Title>
-              <Text className='text-white/80'>Review your test before publishing</Text>
+              <Text className='text-white/80'>Review your exam before publishing</Text>
             </div>
           </div>
         </div>
       </Card>
-      <Card className='shadow-lg border-0 rounded-xl'>
+      <Card className='shadow-lg border-0 rounded-xl !mb-6'>
         <Title level={4} className='text-gray-800 mb-4'>
-          📋 Test Summary
+          📋 Exam Summary
         </Title>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-6'>
           <div className='p-3 bg-blue-50 rounded-lg'>
@@ -89,13 +89,13 @@ const ExamReviewStep: React.FC<ExamReviewStepProps> = ({ formData, questions }) 
           </Tag>
         </div>
       </Card>
-      <Card className='shadow-lg border-0 rounded-xl'>
+      <Card className='shadow-lg border-0 rounded-xl !mb-6'>
         <Title level={4} className='text-gray-800 mb-4'>
           ❓ Questions Preview
           <Badge count={validQuestions.length} className='!ml-2 !mb-1' />
         </Title>
         {validQuestions.map((question, index) => (
-          <Card key={index} size='small' className='mb-4 border border-gray-200 rounded-lg'>
+          <Card key={index} size='small' className='!mb-4 border border-gray-200 rounded-lg'>
             <div className='mb-3'>
               <Text strong className='text-blue-600'>
                 Q{index + 1}:

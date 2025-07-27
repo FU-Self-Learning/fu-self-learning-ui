@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 import { Card, Typography, Spin, Alert, List, Tag } from 'antd';
 import { useExamDetail } from '@/hooks/exam/useExamDetail';
+import { getExamTypeLabel, getExamTypeColor } from '@/utils/examTypeMapper';
 
 const { Title, Text } = Typography;
 
@@ -54,7 +55,8 @@ export default function ExamDetailPage() {
             <Text strong>Pass Score:</Text> {exam.passingScore}%
           </div>
           <div>
-            <Text strong>Type:</Text> <span className='capitalize'>{exam.type}</span>
+            <Text strong>Type:</Text>{' '}
+            <Tag color={getExamTypeColor(exam.type)}>{getExamTypeLabel(exam.type)}</Tag>
           </div>
           <div>
             <Text strong>Shuffle Q:</Text> {exam.shuffleQuestions ? 'Yes' : 'No'}

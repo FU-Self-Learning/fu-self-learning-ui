@@ -7,6 +7,7 @@ import {
   StarOutlined,
 } from '@ant-design/icons';
 import React from 'react';
+import { getExamTypeLabel } from '@/utils/examTypeMapper';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -19,6 +20,7 @@ export interface ExamBasicInfoFormProps {
   autoGenerateCount: number;
   setAutoGenerate: (v: boolean) => void;
   setAutoGenerateCount: (v: number) => void;
+  examType?: string; // practice, topic_exam, final_exam
 }
 
 const ExamBasicInfoForm: React.FC<ExamBasicInfoFormProps> = ({
@@ -27,6 +29,7 @@ const ExamBasicInfoForm: React.FC<ExamBasicInfoFormProps> = ({
   autoGenerateCount,
   setAutoGenerate,
   setAutoGenerateCount,
+  examType = 'practice',
 }) => (
   <div className='space-y-6'>
     <Card
@@ -40,9 +43,9 @@ const ExamBasicInfoForm: React.FC<ExamBasicInfoFormProps> = ({
           </div>
           <div>
             <Title level={3} className='text-white mb-0'>
-              Test Information
+              Exam Information
             </Title>
-            <Text className='text-white/80'>Configure your test settings and requirements</Text>
+            <Text className='text-white/80'>Configure your exam settings and requirements</Text>
           </div>
         </div>
       </div>
@@ -53,13 +56,13 @@ const ExamBasicInfoForm: React.FC<ExamBasicInfoFormProps> = ({
           name='title'
           label={
             <Text strong className='text-gray-700'>
-              Test Title
+              Exam Title
             </Text>
           }
-          rules={[{ required: true, message: 'Please enter test title' }]}
+          rules={[{ required: true, message: 'Please enter exam title' }]}
         >
           <Input
-            placeholder='Enter test title'
+            placeholder='Enter exam title'
             size='large'
             className='rounded-lg border-gray-300 hover:border-blue-400 focus:border-blue-500 transition-colors'
           />
@@ -68,20 +71,20 @@ const ExamBasicInfoForm: React.FC<ExamBasicInfoFormProps> = ({
           name='type'
           label={
             <Text strong className='text-gray-700'>
-              Test Type
+              Exam Type
             </Text>
           }
-          rules={[{ required: true, message: 'Please select test type' }]}
+          rules={[{ required: true, message: 'Please select exam type' }]}
         >
           <Select
             size='large'
-            placeholder='Select test type'
+            placeholder='Select exam type'
             className='rounded-lg'
+            disabled={examType !== 'practice'}
             options={[
-              { label: '🎯 Practice', value: 'practice' },
-              { label: '📝 Quiz', value: 'quiz' },
-              { label: '📋 Midterm', value: 'midterm' },
-              { label: '🎓 Final', value: 'final' },
+              { label: `🎯 ${getExamTypeLabel('practice')}`, value: 'practice' },
+              { label: `📝 ${getExamTypeLabel('topic_exam')}`, value: 'topic_exam' },
+              { label: `🏆 ${getExamTypeLabel('final_exam')}`, value: 'final_exam' },
             ]}
           />
         </Form.Item>
@@ -137,7 +140,7 @@ const ExamBasicInfoForm: React.FC<ExamBasicInfoFormProps> = ({
       >
         <TextArea
           rows={4}
-          placeholder='Enter test description...'
+          placeholder='Enter exam description...'
           size='large'
           className='rounded-lg border-gray-300 hover:border-blue-400 focus:border-blue-500 transition-colors'
         />

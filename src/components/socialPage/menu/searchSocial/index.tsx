@@ -95,7 +95,6 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
     });
   };
 
-
   // Create a set of follower IDs for quick lookup
   const followedUserIds = new Set(followers?.map((f) => f.followingUser.id));
 
@@ -105,9 +104,7 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
     if (!searchValue.trim()) return users;
     const lower = searchValue.toLowerCase();
     return users.filter(
-      (u) =>
-        u.username?.toLowerCase().includes(lower) ||
-        u.email?.toLowerCase().includes(lower)
+      (u) => u.username?.toLowerCase().includes(lower) || u.email?.toLowerCase().includes(lower),
     );
   }, [users, searchValue]);
 
@@ -143,7 +140,7 @@ const SearchSocialPage = ({ handleCloseSearch }: SearchSocialPageProps) => {
           prefix={<SearchOutlined className='text-gray-400' />}
           className='!rounded-xl !border-gray-200 hover:!border-blue-400 focus:!border-blue-400 !shadow-sm'
           value={searchValue}
-          onChange={e => setSearchValue(e.target.value)}
+          onChange={(e) => setSearchValue(e.target.value)}
           allowClear
         />
       </div>

@@ -23,17 +23,19 @@ export default function CoursePage() {
     new Set(courses.flatMap((course) => course.categories?.map((cat) => cat.name) || [])),
   );
 
-
   const activeCourses = courses.filter((course) => course.isActive);
 
   const filteredByCategory = selectedCategory
-    ? activeCourses.filter((course) => course.categories?.some((cat) => cat.name === selectedCategory))
+    ? activeCourses.filter((course) =>
+        course.categories?.some((cat) => cat.name === selectedCategory),
+      )
     : activeCourses;
 
   const filteredBySearch = searchValue.trim()
-    ? filteredByCategory.filter((course) =>
-        course.title.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
-        course.description?.toLowerCase().includes(searchValue.trim().toLowerCase())
+    ? filteredByCategory.filter(
+        (course) =>
+          course.title.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
+          course.description?.toLowerCase().includes(searchValue.trim().toLowerCase()),
       )
     : filteredByCategory;
 

@@ -13,7 +13,6 @@ interface User {
   avatarUrl: string | null;
 }
 
-
 interface UserListProps {
   currentUserId: number;
 }
@@ -35,12 +34,14 @@ const UserList: React.FC<UserListProps> = () => {
       setLoading(true);
       setError(null);
       const followerUsers = await fetchFollowerUsers();
-      setUsers(followerUsers.map(u => ({
-        id: typeof u.id === 'string' ? parseInt(u.id, 10) : u.id,
-        username: u.username,
-        email: u.email,
-        avatarUrl: u.avatarUrl,
-      })));
+      setUsers(
+        followerUsers.map((u) => ({
+          id: typeof u.id === 'string' ? parseInt(u.id, 10) : u.id,
+          username: u.username,
+          email: u.email,
+          avatarUrl: u.avatarUrl,
+        })),
+      );
     } catch (error) {
       console.error('Error fetching users:', error);
       setError(error instanceof Error ? error.message : 'Failed to load users');
