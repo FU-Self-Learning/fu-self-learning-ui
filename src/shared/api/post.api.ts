@@ -21,20 +21,32 @@ export const createPost = async (postData: FormData): Promise<PostResponse> => {
   return response.data;
 };
 
-export const likePost = async (postId: number): Promise<void> => {
-  await api.post(`${APP_URL}/posts/${postId}/like`, null, {
+export const likePost = async (postId: number): Promise<PostResponse> => {
+  const response = await api.post(`${APP_URL}/posts/${postId}/like`, {}, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     },
   });
+  return response.data;
 };
 
-export const unlikePost = async (postId: number): Promise<void> => {
-  await api.delete(`${APP_URL}/posts/${postId}/like`, {
+export const unlikePost = async (postId: number): Promise<PostResponse> => {
+  const response = await api.delete(`${APP_URL}/posts/${postId}/like`, {
+    data: {},
     headers: {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     },
   });
+  return response.data;
+};
+
+export const getPostLikeStatus = async (postId: number): Promise<{ count: number; liked: boolean }> => {
+  const response = await api.get(`${APP_URL}/posts/${postId}/like`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  return response.data;
 };
 
 export const deletePost = async (postId: number): Promise<void> => {

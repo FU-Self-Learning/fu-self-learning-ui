@@ -3,14 +3,11 @@
 import { useState } from 'react';
 import { Spin } from 'antd';
 import CourseCard from '@/components/course/CourseCard';
-import StatusFilter from '@/components/course/StatusFilter';
 import { useCourses } from '@/hooks/course/useCourses';
 import CourseHeader from '@/components/course/CourseHeader';
 
-const statusFilters = ['All Status', 'Not Started', 'In Progress', 'Completed'];
 
 export default function CoursePage() {
-  const [selectedStatus, setSelectedStatus] = useState('All Status');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchValue, setSearchValue] = useState('');
   const { data: courses, isLoading } = useCourses();
@@ -23,7 +20,7 @@ export default function CoursePage() {
     new Set(courses.flatMap((course) => course.categories?.map((cat) => cat.name) || [])),
   );
 
-  const activeCourses = courses.filter((course) => course.isActive);
+  const activeCourses = courses.filter((course) => course.status === 'active');
 
   const filteredByCategory = selectedCategory
     ? activeCourses.filter((course) =>
@@ -47,11 +44,6 @@ export default function CoursePage() {
         setSelectedCategory={setSelectedCategory}
         allCategories={allCategories}
         onSearch={setSearchValue}
-      />
-      <StatusFilter
-        statusFilters={statusFilters}
-        selectedStatus={selectedStatus}
-        onChange={setSelectedStatus}
       />
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
         {filteredBySearch?.map((item) => (
