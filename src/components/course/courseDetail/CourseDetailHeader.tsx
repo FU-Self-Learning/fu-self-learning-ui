@@ -28,6 +28,7 @@ interface CourseDetailHeaderProps {
   courseTitle?: string;
   currentTopicId?: string;
   currentProgress?: number;
+  onVideoProgressUpdate?: (lessonId: number, isCompleted: boolean) => void;
 }
 
 const CourseDetailHeader = ({
@@ -44,6 +45,7 @@ const CourseDetailHeader = ({
   courseTitle,
   currentTopicId,
   currentProgress = 0,
+  onVideoProgressUpdate,
 }: CourseDetailHeaderProps) => {
   const router = useRouter();
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -110,6 +112,7 @@ const CourseDetailHeader = ({
           topics={topics}
           autoUpdateProgress={!isThumbnail && isEnrolled}
           currentProgress={currentProgress}
+          onVideoProgressUpdate={onVideoProgressUpdate}
         />
       ) : (
         <div className='relative w-full h-[400px] bg-gray-100 rounded-lg overflow-hidden mb-4 flex items-center justify-center'>

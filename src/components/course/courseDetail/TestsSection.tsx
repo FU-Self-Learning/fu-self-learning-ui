@@ -22,6 +22,9 @@ const TestsSection = ({ courseId }: TestsSectionProps) => {
 
   const startTestMutation = useStartTest();
 
+  // Filter to only show practice tests
+  const practiceTests = tests?.filter((test) => test.type === 'practice') || [];
+
   const handleStartTest = async (testId: number) => {
     // Check if there's any test in progress
     const testInProgress = myResults?.find((result) => !result.completedAt);
@@ -81,8 +84,8 @@ const TestsSection = ({ courseId }: TestsSectionProps) => {
     {
       key: 'available',
       label: (
-        <Badge count={tests?.length || 0} showZero size='small'>
-          <span>Available Tests</span>
+        <Badge count={practiceTests.length || 0} showZero size='small'>
+          <span>Practice Tests</span>
         </Badge>
       ),
       children: (
@@ -91,8 +94,8 @@ const TestsSection = ({ courseId }: TestsSectionProps) => {
             <div className='text-center py-8'>
               <Spin size='large' />
             </div>
-          ) : tests && tests.length > 0 ? (
-            tests.map((test) => (
+          ) : practiceTests.length > 0 ? (
+            practiceTests.map((test) => (
               <TestCard
                 key={test.id}
                 test={test}
@@ -103,7 +106,7 @@ const TestsSection = ({ courseId }: TestsSectionProps) => {
             ))
           ) : (
             <Empty
-              description='No tests available for this course'
+              description='No practice tests available for this course'
               image={Empty.PRESENTED_IMAGE_SIMPLE}
             />
           )}
@@ -143,10 +146,10 @@ const TestsSection = ({ courseId }: TestsSectionProps) => {
       <div className='mb-6'>
         <Title level={4} className='flex items-center gap-2'>
           <FileTextOutlined className='text-blue-500' />
-          Course Tests
+          Practice Tests
         </Title>
         <Text type='secondary'>
-          Take tests to evaluate your understanding of the course material
+          Take practice tests to evaluate your understanding of the course material
         </Text>
       </div>
 

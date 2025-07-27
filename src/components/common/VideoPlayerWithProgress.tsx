@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { selectAuthUser, selectIsAuthenticated } from '@/providers/auth/selector/authSelector';
 import { useProgressFromStorage } from '@/hooks/useProgressFromStorage';
 import { useCheckEnrollment } from '@/hooks/enrollment';
+import { useUpdateVideoProgress } from '@/hooks/video-progress/useUpdateVideoProgress';
 
 interface VideoPlayerWithProgressProps {
   src?: string;
@@ -25,6 +26,7 @@ interface VideoPlayerWithProgressProps {
   topics?: TopicResponse[];
   onVideoPlay?: () => void;
   onLessonComplete?: () => void;
+  onVideoProgressUpdate?: (lessonId: number, isCompleted: boolean) => void;
   autoUpdateProgress?: boolean;
   currentProgress?: number;
 }
@@ -45,6 +47,7 @@ export const VideoPlayerWithProgress: React.FC<VideoPlayerWithProgressProps> = (
   topics,
   onVideoPlay,
   onLessonComplete,
+  onVideoProgressUpdate,
   autoUpdateProgress = true,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -59,6 +62,14 @@ export const VideoPlayerWithProgress: React.FC<VideoPlayerWithProgressProps> = (
   const { data: enrollmentCheck } = useCheckEnrollment(courseId || '');
   const { updateProgressOnLessonStart, updateProgressOnLessonComplete, isUpdating } =
     useProgressManager();
+  const { mutate: updateVideoProgress } = useUpdateVideoProgress({
+    onSuccess: (data) => {
+      // Notify parent component about video progress update
+      if (lessonId && onVideoProgressUpdate) {
+        onVideoProgressUpdate(Number(lessonId), data.isCompleted);
+      }
+    },
+  });
 
   const actualProgress = useProgressFromStorage({
     courseId: courseId || '',
@@ -175,19 +186,66 @@ export const VideoPlayerWithProgress: React.FC<VideoPlayerWithProgressProps> = (
     const handleEnded = () => {
       setShowOverlay(true);
       handleLessonComplete();
+
+      // Ensure video progress is saved when video ends naturally
+      if (isAuthenticated && user?.id && lessonId && video.duration > 0) {
+        updateVideoProgress({
+          lessonId: Number(lessonId),
+          watchedDuration: video.duration,
+          totalDuration: video.duration,
+        });
+      }
     };
 
     const handleTimeUpdate = () => {
-      if (video.currentTime > 0 && Math.floor(video.currentTime) % 10 === 0) {
-        saveCurrentLessonToStorage();
+      // Only save progress when video is near completion or when user pauses
+      if (video.currentTime > 0 && video.duration > 0) {
+        const remainingTime = video.duration - video.currentTime;
+        const totalDuration = video.duration;
+        const completionThreshold = Math.min(5, totalDuration * 0.08);
+
+        // Save progress when near completion
+        if (remainingTime <= completionThreshold) {
+          saveCurrentLessonToStorage();
+
+          // Save video progress to server
+          if (isAuthenticated && user?.id && lessonId && video.duration > 0) {
+            updateVideoProgress({
+              lessonId: Number(lessonId),
+              watchedDuration: video.currentTime,
+              totalDuration: video.duration,
+            });
+          }
+        }
       }
     };
 
     const handleProgress = () => {
       if (video.duration > 0) {
-        const progressPercent = (video.currentTime / video.duration) * 100;
-        if (progressPercent >= 90 && !isCompleted) {
+        const remainingTime = video.duration - video.currentTime;
+        const totalDuration = video.duration;
+
+        // Mark as completed when remaining time is less than 5 seconds or 8% of total duration
+        const completionThreshold = Math.min(5, totalDuration * 0.08);
+
+        if (remainingTime <= completionThreshold && !isCompleted) {
           handleLessonComplete();
+        }
+      }
+    };
+
+    const handlePause = () => {
+      // Save progress when user pauses the video
+      if (video.currentTime > 0 && video.duration > 0) {
+        saveCurrentLessonToStorage();
+
+        // Save video progress to server
+        if (isAuthenticated && user?.id && lessonId && video.duration > 0) {
+          updateVideoProgress({
+            lessonId: Number(lessonId),
+            watchedDuration: video.currentTime,
+            totalDuration: video.duration,
+          });
         }
       }
     };
@@ -219,6 +277,7 @@ export const VideoPlayerWithProgress: React.FC<VideoPlayerWithProgressProps> = (
     video.addEventListener('ended', handleEnded);
     video.addEventListener('timeupdate', handleTimeUpdate);
     video.addEventListener('progress', handleProgress);
+    video.addEventListener('pause', handlePause);
     video.addEventListener('error', handleError);
     video.addEventListener('canplay', handleCanPlay);
 
@@ -227,6 +286,7 @@ export const VideoPlayerWithProgress: React.FC<VideoPlayerWithProgressProps> = (
       video.removeEventListener('ended', handleEnded);
       video.removeEventListener('timeupdate', handleTimeUpdate);
       video.removeEventListener('progress', handleProgress);
+      video.removeEventListener('pause', handlePause);
       video.removeEventListener('error', handleError);
       video.removeEventListener('canplay', handleCanPlay);
     };
@@ -238,6 +298,10 @@ export const VideoPlayerWithProgress: React.FC<VideoPlayerWithProgressProps> = (
     handleLessonComplete,
     saveCurrentLessonToStorage,
     isCompleted,
+    isAuthenticated,
+    user?.id,
+    lessonId,
+    updateVideoProgress,
   ]);
 
   const handleOverlayClick = () => {

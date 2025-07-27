@@ -17,6 +17,7 @@ import ProgressSyncer from '@/components/common/ProgressSyncer';
 import { useSelector } from 'react-redux';
 import { selectAuthUser, selectIsAuthenticated } from '@/providers/auth/selector/authSelector';
 import { useCheckEnrollment } from '@/hooks/enrollment';
+import { useQueryClient } from '@tanstack/react-query';
 
 const CourseDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,6 +30,7 @@ const CourseDetail = () => {
 
   const user = useSelector(selectAuthUser);
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const queryClient = useQueryClient();
 
   const { data: courseDetail, isLoading } = useCourseDetail(id);
   const { data: topics, isLoading: isLoadingTopics } = useTopics(id);
@@ -83,6 +85,21 @@ const CourseDetail = () => {
     ],
   );
 
+  const handleVideoProgressUpdate = useCallback(
+    (lessonId: number, isCompleted: boolean) => {
+      if (isCompleted) {
+        console.log(`🎉 Video ${lessonId} completed! Refreshing video progress data...`);
+
+        // Invalidate all video progress queries to refetch the data
+        queryClient.invalidateQueries({ queryKey: ['video-progress'] });
+
+        // Also invalidate enrollment data to update course progress
+        queryClient.invalidateQueries({ queryKey: ['enrollment', id] });
+      }
+    },
+    [queryClient, id],
+  );
+
   useEffect(() => {
     if (!isLoading && !isLoadingTopics && courseDetail && topics) {
       const lessonId = searchParams.get('lessonId');
@@ -126,16 +143,6 @@ const CourseDetail = () => {
     handleLessonSelect,
   ]);
 
-  if (isLoading || !courseDetail || isLoadingTopics)
-    return <Spin className='flex justify-center items-center h-screen' />;
-
-  const stats = {
-    totalLessons: courseDetail.totalLessons,
-    totalDuration: courseDetail.totalDuration,
-    rating: 0,
-    reviewCount: 0,
-  };
-
   const handleContinueWatching = () => {
     if (lastWatchedVideo) {
       for (const topic of topics || []) {
@@ -157,6 +164,16 @@ const CourseDetail = () => {
       handleLessonSelect(firstLesson);
     }
     setShowContinueModal(false);
+  };
+
+  if (isLoading || !courseDetail || isLoadingTopics)
+    return <Spin className='flex justify-center items-center h-screen' />;
+
+  const stats = {
+    totalLessons: courseDetail.totalLessons,
+    totalDuration: courseDetail.totalDuration,
+    rating: 0,
+    reviewCount: 0,
   };
 
   return (
@@ -187,6 +204,7 @@ const CourseDetail = () => {
           courseTitle={courseDetail.title}
           currentTopicId={selectedTopicId}
           currentProgress={enrollmentCheck?.progress || 0}
+          onVideoProgressUpdate={handleVideoProgressUpdate}
         />
         <CourseDetailTabs
           description={courseDetail.description}
@@ -200,6 +218,7 @@ const CourseDetail = () => {
         sections={topics || []}
         onLessonSelect={handleLessonSelect}
         courseId={id}
+        currentLessonId={selectedLesson?.id}
       />
     </div>
   );
