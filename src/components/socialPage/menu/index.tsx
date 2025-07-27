@@ -4,11 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { Menu, Button, Avatar } from 'antd';
 import {
   HomeOutlined,
-  BellOutlined,
-  FolderOpenOutlined,
   SearchOutlined,
   PlusOutlined,
   UserOutlined,
+  WechatOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/navigation';
@@ -27,19 +26,14 @@ const menuItems: MenuItem[] = [
     label: 'Home',
   },
   {
-    key: 'library',
-    icon: <FolderOpenOutlined style={{ fontSize: 20, color: '#1890ff' }} />,
-    label: 'Your library',
-  },
-  {
     key: 'search',
     icon: <SearchOutlined style={{ fontSize: 20, color: '#1890ff' }} />,
     label: 'Search',
   },
   {
-    key: 'notification',
-    icon: <BellOutlined style={{ fontSize: 20, color: '#1890ff' }} />,
-    label: 'Notification',
+    key: 'chat',
+    icon: <WechatOutlined style={{ fontSize: 20, color: '#1890ff' }} />,
+    label: 'Chat',
   },
 ];
 

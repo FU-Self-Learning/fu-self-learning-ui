@@ -7,6 +7,10 @@ import {
   TrophyOutlined,
   EyeOutlined,
 } from '@ant-design/icons';
+import { useState } from 'react';
+import GroupChatCourseModal from './GroupChatCourseModal';
+import { groupChatApi } from '@/shared/api/group-chat.api';
+
 import { LessonInTopic, TopicResponse } from '@/types/topicType';
 import { formatDuration } from '@/utils/convertTime';
 import { useRouter } from 'next/navigation';
@@ -118,6 +122,22 @@ const CourseDetailContent = ({
     [sections],
   );
   const { videoProgressMap } = useLessonsVideoProgress(allLessons);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState(false);
+
+  const handleOpenGroupChatModal = async () => {
+    setModalVisible(true);
+    setLoadingCourses(true);
+    try {
+      const res = await groupChatApi.getMyEnrolledCourses();
+      setCourses(res?.data || []);
+    } catch {
+      setCourses([]);
+    }
+    setLoadingCourses(false);
+  };
 
   const collapseItems = sections
     .sort((a, b) => a.id - b.id)
@@ -258,14 +278,17 @@ const CourseDetailContent = ({
           </Button>
         )}
         {isEnrolled && (
-          <Button
-            type='default'
-            icon={<CheckCircleOutlined />}
-            disabled
-            className='!text-green-600 !border-green-600'
-          >
-            Enrolled
-          </Button>
+          <>
+            <Button type='default' onClick={handleOpenGroupChatModal}>
+              + Group-chat
+            </Button>
+            <GroupChatCourseModal
+              visible={modalVisible}
+              onClose={() => setModalVisible(false)}
+              loading={loadingCourses}
+              courses={courses}
+            />
+          </>
         )}
       </div>
       <Divider size='small' />

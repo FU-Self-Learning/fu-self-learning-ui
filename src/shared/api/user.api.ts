@@ -1,6 +1,17 @@
 import { UserInfo } from '@/providers/auth/types/authType';
+import { FollowRelationship } from '@/types/followType';
 import api from '.';
 import { APP_URL } from '../constants/apiConstants';
+// ...existing code...
+export const fetchFollowerUsers = async (): Promise<UserInfo[]> => {
+  try {
+    const response = await api.get<FollowRelationship[]>(`${APP_URL}/follow/followers`);
+    return response.data.map((item) => item.followingUser);
+  } catch (error) {
+    console.error('Error fetching follower users:', error);
+    throw error;
+  }
+};
 
 export const fetchUserProfile = async (): Promise<UserInfo> => {
   const response = await api.get(`${APP_URL}/users/me`, {

@@ -12,6 +12,7 @@ const statusFilters = ['All Status', 'Not Started', 'In Progress', 'Completed'];
 export default function MyLearningPage() {
   const [selectedStatus, setSelectedStatus] = useState('All Status');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchValue, setSearchValue] = useState('');
   const { data: enrolledCourses, isLoading } = useMyEnrolledCourses();
 
   if (isLoading || !enrolledCourses) {
@@ -32,6 +33,14 @@ export default function MyLearningPage() {
       )
     : enrolledCourses;
 
+  const filteredBySearch = searchValue.trim()
+    ? filteredByCategory.filter(
+        (enrollment) =>
+          enrollment.course.title.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
+          enrollment.course.description?.toLowerCase().includes(searchValue.trim().toLowerCase()),
+      )
+    : filteredByCategory;
+
   const getEnrollmentStatus = (enrollment: any) => {
     if (enrollment.completedAt) return 'completed';
     if (enrollment.progress > 0) return 'in_progress';
@@ -40,8 +49,8 @@ export default function MyLearningPage() {
 
   const finalFilteredCourses =
     selectedStatus === 'All Status'
-      ? filteredByCategory
-      : filteredByCategory.filter((enrollment) => {
+      ? filteredBySearch
+      : filteredBySearch.filter((enrollment) => {
           const status = getEnrollmentStatus(enrollment);
           if (selectedStatus === 'Not Started') return status === 'not_started';
           if (selectedStatus === 'In Progress') return status === 'in_progress';
@@ -61,6 +70,7 @@ export default function MyLearningPage() {
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
         allCategories={allCategories}
+        onSearch={setSearchValue}
       />
       <StatusFilter
         statusFilters={statusFilters}

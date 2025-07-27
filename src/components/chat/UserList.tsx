@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, List, Spin, Button, Alert } from 'antd';
 import { UserOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useRouter, useSearchParams } from 'next/navigation';
-import api from '@/shared/api';
-import { APP_URL } from '@/shared/constants/apiConstants';
+import { fetchFollowerUsers } from '@/shared/api/user.api';
 import { useHasMounted } from '@/hooks/useHasMounted';
 import { isValidWebUrl } from '@/utils/urlValidation';
 
@@ -12,13 +11,6 @@ interface User {
   username: string;
   email: string;
   avatarUrl: string | null;
-}
-
-interface FollowRelationship {
-  id: number;
-  createdAt: string;
-  updatedAt: string;
-  followingUser: User;
 }
 
 interface UserListProps {
@@ -41,11 +33,15 @@ const UserList: React.FC<UserListProps> = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await api.get<FollowRelationship[]>(`${APP_URL}/follow/followers`);
-      const followerUsers = response.data.map((item) => item.followingUser);
-      setUsers(followerUsers);
-      console.log('Fetched users data:', response.data);
-      console.log('Mapped users:', followerUsers);
+      const followerUsers = await fetchFollowerUsers();
+      setUsers(
+        followerUsers.map((u) => ({
+          id: typeof u.id === 'string' ? parseInt(u.id, 10) : u.id,
+          username: u.username,
+          email: u.email,
+          avatarUrl: u.avatarUrl,
+        })),
+      );
     } catch (error) {
       console.error('Error fetching users:', error);
       setError(error instanceof Error ? error.message : 'Failed to load users');
@@ -122,7 +118,7 @@ const UserList: React.FC<UserListProps> = () => {
   }
 
   return (
-    <div className='w-64 bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full overflow-y-auto shadow-lg'>
+    <div className='w-full bg-white/90 backdrop-blur-sm border-r border-gray-200 h-full overflow-y-auto shadow-lg'>
       <div className='p-4 border-b border-gray-200/70 flex justify-between items-center bg-gradient-to-r from-white to-slate-50'>
         <h2 className='text-lg font-semibold text-gray-800'>Chats</h2>
         <Button

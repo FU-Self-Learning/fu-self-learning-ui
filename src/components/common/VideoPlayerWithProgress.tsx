@@ -370,12 +370,6 @@ export const VideoPlayerWithProgress: React.FC<VideoPlayerWithProgressProps> = (
           Updating progress...
         </div>
       )}
-
-      {isCompleted && (
-        <div className='absolute bottom-4 right-4 bg-green-600 text-white px-3 py-1 rounded-md text-sm'>
-          ✓ Lesson completed
-        </div>
-      )}
     </div>
   );
 };

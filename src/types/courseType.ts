@@ -7,6 +7,7 @@ export interface CoursesResponse {
   imageUrl: string;
   instructor: InstructorCourse;
   categories: CategoryCourse[];
+  isActive: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
