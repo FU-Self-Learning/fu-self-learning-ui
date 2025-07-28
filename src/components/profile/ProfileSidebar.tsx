@@ -1,7 +1,7 @@
 'use client';
 
 import { Menu } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, TrophyOutlined } from '@ant-design/icons';
 
 interface ProfileSidebarProps {
   activeTab: string;
@@ -15,6 +15,12 @@ const ProfileSidebar = ({ activeTab, setActiveTab }: ProfileSidebarProps) => {
       icon: <UserOutlined />,
       label: 'Profile Information',
       onClick: () => setActiveTab('profile'),
+    },
+    {
+      key: 'certificates',
+      icon: <TrophyOutlined />,
+      label: 'My Certificates',
+      onClick: () => setActiveTab('certificates'),
     },
     {
       key: 'password',

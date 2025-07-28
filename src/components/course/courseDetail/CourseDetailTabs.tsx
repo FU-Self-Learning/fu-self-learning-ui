@@ -6,9 +6,12 @@ import {
   StarOutlined,
   BookOutlined,
   CheckCircleOutlined,
+  TrophyOutlined,
 } from '@ant-design/icons';
 import TestsSection from './TestsSection';
+import CertificateStatusCard from '@/components/certificate/CertificateStatusCard';
 import { isValidWebUrl } from '@/utils/urlValidation';
+import { useCourseProgress } from '@/hooks/test/useCourseProgress';
 
 interface CourseDetailTabsProps {
   description: string;
@@ -114,6 +117,8 @@ const CourseDetailTabs = ({
   reviews,
   courseId,
 }: CourseDetailTabsProps) => {
+  const { data: courseProgress } = useCourseProgress(Number(courseId));
+
   const items = [
     {
       key: 'overview',
@@ -124,6 +129,30 @@ const CourseDetailTabs = ({
       key: 'tests',
       label: 'Tests',
       children: <TestsSection courseId={courseId} />,
+    },
+    {
+      key: 'certificate',
+      label: (
+        <span>
+          <TrophyOutlined className='mr-2' />
+          Certificate
+        </span>
+      ),
+      children: (
+        <div>
+          {courseProgress ? (
+            <CertificateStatusCard
+              courseId={Number(courseId)}
+              courseTitle={courseProgress.courseTitle}
+              progress={courseProgress}
+            />
+          ) : (
+            <div className='text-center py-8'>
+              <p className='text-gray-500'>Loading certificate information...</p>
+            </div>
+          )}
+        </div>
+      ),
     },
     {
       key: 'author',

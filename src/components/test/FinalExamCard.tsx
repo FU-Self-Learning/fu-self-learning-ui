@@ -1,11 +1,12 @@
 import React from 'react';
-import { Card, Button, Tag, Typography, Progress, Row, Col, Statistic, Alert } from 'antd';
+import { Card, Button, Tag, Typography, Progress, Row, Col, Statistic, Alert, Badge } from 'antd';
 import {
   TrophyOutlined,
   LockOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
   StarOutlined,
+  ReloadOutlined,
 } from '@ant-design/icons';
 import { FinalExam } from '@/types/testType';
 import { useRouter } from 'next/navigation';
@@ -25,13 +26,27 @@ const FinalExamCard: React.FC<FinalExamCardProps> = ({ finalExam, courseId }) =>
     router.push(`/course/${courseId}/test/${finalExam.id}`);
   };
 
+  const handleContinueExam = () => {
+    if (finalExam.currentAttempt) {
+      router.push(
+        `/course/${courseId}/test/${finalExam.id}/attempt/${finalExam.currentAttempt.id}`,
+      );
+    }
+  };
+
   const getStatusColor = () => {
     if (!finalExam.isAvailable) return 'red';
+    if (finalExam.currentAttempt) return 'blue';
+    if (finalExam.lastAttempt?.isPassed) return 'green';
+    if (finalExam.lastAttempt && !finalExam.lastAttempt.isPassed) return 'orange';
     return 'green';
   };
 
   const getStatusText = () => {
     if (!finalExam.isAvailable) return 'Locked';
+    if (finalExam.currentAttempt) return 'In Progress';
+    if (finalExam.lastAttempt?.isPassed) return 'Passed';
+    if (finalExam.lastAttempt && !finalExam.lastAttempt.isPassed) return 'Failed';
     return 'Ready';
   };
 
@@ -56,6 +71,18 @@ const FinalExamCard: React.FC<FinalExamCardProps> = ({ finalExam, courseId }) =>
             <Tag color={getStatusColor()}>{getStatusText()}</Tag>
             <Tag color={getExamTypeColor('final_exam')}>{getExamTypeLabel('final_exam')}</Tag>
             <Tag color='purple'>Certificate Required</Tag>
+
+            {/* Status badges for attempt information */}
+            {finalExam.currentAttempt && <Badge color='blue' text='In Progress' />}
+            {!finalExam.currentAttempt && finalExam.lastAttempt?.isPassed && (
+              <Badge color='green' text='Passed' />
+            )}
+            {!finalExam.currentAttempt &&
+              finalExam.lastAttempt &&
+              !finalExam.lastAttempt.isPassed && <Badge color='red' text='Failed' />}
+            {!finalExam.currentAttempt && !finalExam.lastAttempt && finalExam.isAvailable && (
+              <Badge color='green' text='Ready to Start' />
+            )}
           </div>
 
           <Text type='secondary' className='block mb-3'>
@@ -113,7 +140,7 @@ const FinalExamCard: React.FC<FinalExamCardProps> = ({ finalExam, courseId }) =>
             />
           )}
 
-          {finalExam.isAvailable && (
+          {finalExam.isAvailable && !finalExam.currentAttempt && !finalExam.lastAttempt && (
             <Alert
               message='Ready for Final Exam'
               description='Congratulations! You have completed all topic exams. You can now take the final exam to earn your certificate.'
@@ -122,22 +149,71 @@ const FinalExamCard: React.FC<FinalExamCardProps> = ({ finalExam, courseId }) =>
               className='mb-3'
             />
           )}
+
+          {finalExam.currentAttempt && (
+            <Alert
+              message='Exam In Progress'
+              description='You have an unfinished final exam. You can continue where you left off.'
+              type='info'
+              showIcon
+              className='mb-3'
+            />
+          )}
+
+          {finalExam.lastAttempt && (
+            <Alert
+              message={
+                finalExam.lastAttempt.isPassed ? 'Final Exam Completed!' : 'Final Exam Failed'
+              }
+              description={
+                finalExam.lastAttempt.isPassed
+                  ? `Congratulations! You passed the final exam with ${finalExam.lastAttempt.score}%. You can now download your certificate.`
+                  : `You scored ${finalExam.lastAttempt.score}% on your last attempt. You need ${finalExam.passingScore}% to pass. You can retry the exam.`
+              }
+              type={finalExam.lastAttempt.isPassed ? 'success' : 'warning'}
+              showIcon
+              className='mb-3'
+            />
+          )}
         </div>
 
         <div className='flex flex-col gap-2'>
-          {finalExam.isAvailable ? (
-            <Button
-              type='primary'
-              icon={<TrophyOutlined />}
-              onClick={handleStartExam}
-              size='large'
-              style={{ backgroundColor: '#52c41a', borderColor: '#52c41a' }}
-            >
-              Start Final Exam
-            </Button>
-          ) : (
+          {!finalExam.isAvailable ? (
             <Button disabled icon={<LockOutlined />} size='large'>
               Locked
+            </Button>
+          ) : finalExam.currentAttempt ? (
+            <Button
+              type='primary'
+              icon={<ClockCircleOutlined />}
+              onClick={handleContinueExam}
+              size='large'
+              style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
+            >
+              Continue Exam
+            </Button>
+          ) : finalExam.lastAttempt?.isPassed ? (
+            <Button
+              type='default'
+              disabled
+              className='bg-green-100 border-green-300 text-green-700'
+              icon={<CheckCircleOutlined />}
+              size='large'
+            >
+              ✓ Passed
+            </Button>
+          ) : (
+            <Button
+              type='primary'
+              icon={finalExam.lastAttempt ? <ReloadOutlined /> : <TrophyOutlined />}
+              onClick={handleStartExam}
+              size='large'
+              style={{
+                backgroundColor: finalExam.lastAttempt ? '#fa8c16' : '#52c41a',
+                borderColor: finalExam.lastAttempt ? '#fa8c16' : '#52c41a',
+              }}
+            >
+              {finalExam.lastAttempt ? 'Retry Final Exam' : 'Start Final Exam'}
             </Button>
           )}
         </div>

@@ -64,6 +64,23 @@ export interface FinalExam extends Test {
   completedTopicExams: number;
   totalTopicExams: number;
   isAvailable: boolean;
+  // Add attempt information for progress tracking
+  currentAttempt?: {
+    id: number;
+    status: string;
+    startedAt: string;
+    score?: number;
+    isPassed?: boolean;
+  };
+  lastAttempt?: {
+    id: number;
+    status: string;
+    completedAt: string;
+    score: number;
+    isPassed: boolean;
+  };
+  canRetry: boolean;
+  attemptCount: number;
 }
 
 export interface TestAttempt {

@@ -7,6 +7,8 @@ import {
   TrophyOutlined,
   EyeOutlined,
   ExclamationCircleOutlined,
+  ClockCircleOutlined,
+  ReloadOutlined,
 } from '@ant-design/icons';
 import { useState, useCallback, useEffect } from 'react';
 import GroupChatCourseModal from './GroupChatCourseModal';
@@ -48,10 +50,41 @@ const CourseDetailContent = ({
   const router = useRouter();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const { data: enrollmentCheck, isLoading: isCheckingEnrollment } = useCheckEnrollment(courseId);
-  const { data: topicExams } = useTopicExams(Number(courseId));
-  const { data: finalExam } = useFinalExam(Number(courseId));
+  const { data: topicExams, isLoading: isLoadingTopicExams } = useTopicExams(Number(courseId));
+  const { data: finalExam, isLoading: isLoadingFinalExam } = useFinalExam(Number(courseId));
   const { data: myResults } = useMyTestResults(Number(courseId));
   const startTestMutation = useStartTest();
+
+  // Calculate topic exam completion status
+  const topicExamStatus = useMemo(() => {
+    if (!topicExams) return { completed: 0, total: 0, allPassed: false };
+
+    const total = topicExams.length;
+    const completed = topicExams.filter((exam) => exam.lastAttempt?.isPassed === true).length;
+
+    return {
+      completed,
+      total,
+      allPassed: completed === total && total > 0,
+    };
+  }, [topicExams]);
+
+  // Enhanced final exam availability check
+  const finalExamAvailability = useMemo(() => {
+    if (!finalExam) return { isAvailable: false, reason: 'No final exam exists' };
+    if (!isAuthenticated) return { isAvailable: false, reason: 'Not authenticated' };
+    if (!enrollmentCheck?.isEnrolled) return { isAvailable: false, reason: 'Not enrolled' };
+
+    // Check if all topic exams are completed and passed
+    if (!topicExamStatus.allPassed) {
+      return {
+        isAvailable: false,
+        reason: `Need ${topicExamStatus.total - topicExamStatus.completed} more topic exam(s) to pass`,
+      };
+    }
+
+    return { isAvailable: true, reason: 'All prerequisites met' };
+  }, [finalExam, isAuthenticated, enrollmentCheck, topicExamStatus]);
 
   const handleEnroll = () => {
     if (!isAuthenticated) {
@@ -123,6 +156,12 @@ const CourseDetailContent = ({
       if (onTestProgressUpdate) {
         onTestProgressUpdate(testId, isCompleted);
       }
+
+      // If a topic exam was completed, refresh the data
+      if (isCompleted) {
+        // The parent component will handle invalidating queries
+        console.log(`Topic exam ${testId} completed, refreshing data...`);
+      }
     },
     [onTestProgressUpdate],
   );
@@ -142,6 +181,14 @@ const CourseDetailContent = ({
       }
     }
   }, [handleTestCompletion]);
+
+  // Monitor topic exam status changes and update final exam availability
+  useEffect(() => {
+    if (topicExamStatus.allPassed && finalExam && !finalExamAvailability.isAvailable) {
+      console.log('All topic exams passed! Final exam should now be available.');
+      // The parent component will handle invalidating the final exam query
+    }
+  }, [topicExamStatus.allPassed, finalExam, finalExamAvailability.isAvailable]);
 
   const isEnrolled = enrollmentCheck?.isEnrolled || false;
 
@@ -259,8 +306,14 @@ const CourseDetailContent = ({
                     <Space direction='horizontal'>
                       <div className='flex-1 min-w-0'>
                         <div className='flex items-center gap-2 !mb-0'>
-                          {/* Status badges - simplified */}
+                          {/* Status badges - enhanced */}
                           {topicExam.currentAttempt && <Badge color='blue' text='In Progress' />}
+                          {!topicExam.currentAttempt && topicExam.lastAttempt?.isPassed && (
+                            <Badge color='green' text='Passed' />
+                          )}
+                          {!topicExam.currentAttempt &&
+                            topicExam.lastAttempt &&
+                            !topicExam.lastAttempt.isPassed && <Badge color='red' text='Failed' />}
                           {!topicExam.currentAttempt && !topicExam.lastAttempt && (
                             <Badge
                               color={topicExam.isAvailable ? 'green' : 'orange'}
@@ -270,7 +323,7 @@ const CourseDetailContent = ({
                         </div>
                       </div>
                       <div className='ml-4 flex-shrink-0'>
-                        {/* Enhanced button logic */}
+                        {/* Enhanced button logic with better conditions */}
                         {!isEnrolled ? (
                           <Button
                             type='primary'
@@ -298,8 +351,9 @@ const CourseDetailContent = ({
                             type='default'
                             disabled
                             className='bg-green-100 border-green-300 text-green-700 whitespace-nowrap'
+                            icon={<CheckCircleOutlined />}
                           >
-                            ✓ Completed
+                            ✓ Passed
                           </Button>
                         ) : (
                           <Button
@@ -319,6 +373,7 @@ const CourseDetailContent = ({
                       </div>
                     </Space>
 
+                    {/* Enhanced result display */}
                     {topicExam.lastAttempt && (
                       <div
                         className={`inline-flex gap-2 text-sm font-medium ${
@@ -334,6 +389,18 @@ const CourseDetailContent = ({
                           {topicExam.lastAttempt.isPassed ? 'Passed' : 'Failed'} with{' '}
                           {formatScore(topicExam.lastAttempt.score)}%
                         </span>
+                        {topicExam.lastAttempt.isPassed && (
+                          <span className='text-green-600 font-bold'>
+                            ✓ Counts toward Final Exam
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Progress indicator for topic exam completion */}
+                    {topicExam.lastAttempt?.isPassed && (
+                      <div className='w-full bg-green-100 rounded-full h-1'>
+                        <div className='bg-green-500 h-1 rounded-full' style={{ width: '100%' }} />
                       </div>
                     )}
                   </Space>
@@ -382,53 +449,219 @@ const CourseDetailContent = ({
       {/* Topics with lessons and topic exams */}
       <Collapse items={collapseItems} defaultActiveKey={['0']} ghost />
 
+      {/* Topic Exams Overview */}
+      {topicExams && topicExams.length > 0 && (
+        <div className='mt-6 pt-6 border-t border-gray-200'>
+          <Title level={4} className='mb-4 flex items-center gap-2'>
+            <FileTextOutlined className='text-green-500' />
+            Topic Exams Overview
+          </Title>
+          <Card className='bg-green-50 border-green-200'>
+            <div className='mb-3'>
+              <div className='flex items-center justify-between mb-2'>
+                <Text strong>Overall Progress:</Text>
+                <Text className='text-sm text-gray-600'>
+                  {topicExamStatus.completed} / {topicExamStatus.total} topic exams passed
+                </Text>
+              </div>
+              <div className='w-full bg-gray-200 rounded-full h-3'>
+                <div
+                  className={`h-3 rounded-full transition-all duration-300 ${
+                    topicExamStatus.allPassed ? 'bg-green-500' : 'bg-orange-400'
+                  }`}
+                  style={{
+                    width: `${
+                      topicExamStatus.total > 0
+                        ? (topicExamStatus.completed / topicExamStatus.total) * 100
+                        : 0
+                    }%`,
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Topic Exam Status List */}
+            <div className='space-y-2'>
+              {topicExams.map((exam) => (
+                <div
+                  key={exam.id}
+                  className='flex items-center justify-between p-2 bg-white rounded border'
+                >
+                  <div className='flex items-center gap-2'>
+                    {exam.lastAttempt?.isPassed ? (
+                      <CheckCircleOutlined className='text-green-500' />
+                    ) : exam.lastAttempt ? (
+                      <ExclamationCircleOutlined className='text-red-500' />
+                    ) : (
+                      <PlayCircleOutlined className='text-gray-400' />
+                    )}
+                    <Text className='text-sm'>{exam.title}</Text>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    {exam.lastAttempt?.isPassed && <Badge color='green' text='Passed' />}
+                    {exam.lastAttempt && !exam.lastAttempt.isPassed && (
+                      <Badge color='red' text='Failed' />
+                    )}
+                    {!exam.lastAttempt && <Badge color='orange' text='Not Started' />}
+                    {exam.lastAttempt && (
+                      <Text className='text-xs text-gray-600'>
+                        {formatScore(exam.lastAttempt.score)}%
+                      </Text>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Final Exam Status */}
+            {finalExam && (
+              <div className='mt-4 p-3 bg-white rounded border'>
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center gap-2'>
+                    <TrophyOutlined className='text-red-500' />
+                    <Text strong>Final Exam Access</Text>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    {finalExamAvailability.isAvailable ? (
+                      <>
+                        <Badge color='green' text='Unlocked' />
+                        <Text className='text-sm text-green-600'>Ready to start</Text>
+                      </>
+                    ) : (
+                      <>
+                        <Badge color='orange' text='Locked' />
+                        <Text className='text-sm text-orange-600'>
+                          {topicExamStatus.total - topicExamStatus.completed} more to pass
+                        </Text>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </Card>
+        </div>
+      )}
+
       {/* Final Exam Section */}
       {finalExam && (
         <div className='mt-6 pt-6 border-t border-gray-200'>
           <Title level={4} className='mb-4 flex items-center gap-2'>
             <TrophyOutlined className='text-red-500' />
             Final Exam
+            {(isLoadingTopicExams || isLoadingFinalExam) && (
+              <span className='text-sm text-gray-500'>Loading...</span>
+            )}
           </Title>
-          <Card className='bg-red-50 border-red-200'>
-            <div className='flex justify-between items-start'>
-              <div className='flex-1 min-w-0'>
-                <div className='flex items-center gap-2 mb-2'>
-                  <Title level={5} className='!mb-0 truncate'>
-                    {finalExam.title}
-                  </Title>
-                  <Badge
-                    color={finalExam.isAvailable ? 'red' : 'orange'}
-                    text={finalExam.isAvailable ? 'Available' : 'Locked'}
-                  />
+          <Card
+            className={`p-4 rounded-xl ${
+              finalExamAvailability.isAvailable
+                ? 'bg-red-50 border-red-200'
+                : 'bg-gray-50 border-gray-200'
+            }`}
+          >
+            <div className='flex flex-col gap-3'>
+              {/* Header */}
+              <div className='flex items-center gap-2'>
+                <Title level={5} className='!mb-0 !text-lg font-semibold text-gray-800'>
+                  {finalExam.title}
+                </Title>
+                <Badge
+                  color={finalExamAvailability.isAvailable ? 'red' : 'orange'}
+                  text={finalExamAvailability.isAvailable ? 'Available' : 'Locked'}
+                />
+
+                {/* Status badges for attempt information */}
+                {finalExam.currentAttempt && <Badge color='blue' text='In Progress' />}
+                {!finalExam.currentAttempt && finalExam.lastAttempt?.isPassed && (
+                  <Badge color='green' text='Passed' />
+                )}
+                {!finalExam.currentAttempt &&
+                  finalExam.lastAttempt &&
+                  !finalExam.lastAttempt.isPassed && <Badge color='red' text='Failed' />}
+                {!finalExam.currentAttempt &&
+                  !finalExam.lastAttempt &&
+                  finalExamAvailability.isAvailable && (
+                    <Badge color='green' text='Ready to Start' />
+                  )}
+              </div>
+
+              {/* Info Section */}
+              <div className='text-sm text-gray-700 space-y-1'>
+                <div>
+                  <strong>Duration:</strong> {finalExam.duration} min
                 </div>
-                <Text className='text-gray-600 block mb-3'>{finalExam.description}</Text>
-                <div className='flex flex-wrap gap-4 text-sm text-gray-600'>
-                  <span>Duration: {finalExam.duration} min</span>
-                  <span>Questions: {finalExam.questionCount}</span>
-                  <span>Pass: {finalExam.passingScore}%</span>
+                <div>
+                  <strong>Questions:</strong> {finalExam.questionCount}
                 </div>
-                {!finalExam.isAvailable && (
-                  <div className='mt-3 p-2 bg-orange-50 rounded border border-orange-200'>
-                    <Text className='text-sm text-orange-700'>
-                      Complete {finalExam.totalTopicExams - finalExam.completedTopicExams} more
-                      topic exams to unlock
-                    </Text>
+                <div>
+                  <strong>Pass:</strong> {finalExam.passingScore}%
+                </div>
+                {finalExam.lastAttempt && (
+                  <div
+                    className={`font-medium ${
+                      finalExam.lastAttempt.isPassed ? 'text-green-700' : 'text-red-700'
+                    }`}
+                  >
+                    <strong>Last Attempt:</strong> {finalExam.lastAttempt.score}% -{' '}
+                    {finalExam.lastAttempt.isPassed ? 'Passed' : 'Failed'}
                   </div>
                 )}
               </div>
-              <div className='ml-4 flex-shrink-0'>
-                <Button
-                  type='primary'
-                  disabled={!finalExam.isAvailable || !isEnrolled}
-                  onClick={() => handleStartTest(finalExam.id)}
-                  className='bg-red-600 border-red-600 whitespace-nowrap'
-                >
-                  {!isEnrolled
-                    ? 'Enroll to Access'
-                    : finalExam.isAvailable
-                      ? 'Start Final Exam'
-                      : 'Complete Topic Exams First'}
-                </Button>
+
+              {/* Action Button */}
+              <div className='pt-2'>
+                {!isEnrolled ? (
+                  <Button
+                    type='primary'
+                    disabled
+                    block
+                    icon={<LockOutlined />}
+                    className='bg-gray-400 border-gray-400'
+                  >
+                    Enroll to Access
+                  </Button>
+                ) : !finalExamAvailability.isAvailable ? (
+                  <Button type='default' disabled block icon={<LockOutlined />}>
+                    Complete Topic Exams First
+                  </Button>
+                ) : finalExam.currentAttempt ? (
+                  <Button
+                    type='primary'
+                    block
+                    icon={<ClockCircleOutlined />}
+                    size='large'
+                    onClick={() => handleContinueTest(finalExam.id, finalExam.currentAttempt!.id)}
+                    className='bg-blue-600 border-blue-600 hover:bg-blue-700'
+                  >
+                    Continue Exam
+                  </Button>
+                ) : finalExam.lastAttempt?.isPassed ? (
+                  <Button
+                    type='default'
+                    disabled
+                    block
+                    icon={<CheckCircleOutlined />}
+                    className='bg-green-100 border-green-300 text-green-700'
+                  >
+                    ✓ Passed
+                  </Button>
+                ) : (
+                  <Button
+                    type='primary'
+                    block
+                    icon={finalExam.lastAttempt ? <ReloadOutlined /> : <TrophyOutlined />}
+                    size='large'
+                    onClick={() => handleStartTest(finalExam.id)}
+                    className={`${
+                      finalExam.lastAttempt
+                        ? 'bg-orange-600 border-orange-600 hover:bg-orange-700'
+                        : 'bg-red-600 border-red-600 hover:bg-red-700'
+                    }`}
+                  >
+                    {finalExam.lastAttempt ? 'Retry Final Exam' : 'Start Final Exam'}
+                  </Button>
+                )}
               </div>
             </div>
           </Card>

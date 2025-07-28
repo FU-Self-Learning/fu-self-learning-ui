@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Progress, Row, Col, Statistic, Button, Tag, Typography } from 'antd';
+import { Card, Progress, Row, Col, Statistic, Button, Tag, Typography, Alert } from 'antd';
 import {
   TrophyOutlined,
   BookOutlined,
@@ -8,6 +8,10 @@ import {
 } from '@ant-design/icons';
 import { CourseProgress } from '@/types/testType';
 import { useRouter } from 'next/navigation';
+import {
+  useHasCertificate,
+  useGenerateCertificate,
+} from '@/hooks/certificate/useCertificateManagement';
 
 const { Title, Text } = Typography;
 
@@ -18,9 +22,22 @@ interface CourseProgressCardProps {
 
 const CourseProgressCard: React.FC<CourseProgressCardProps> = ({ progress, courseId }) => {
   const router = useRouter();
+  const { data: hasCertificateData } = useHasCertificate(Number(courseId));
+  const { mutate: generateCertificate, isPending: isGenerating } = useGenerateCertificate();
+
+  const hasCertificate = hasCertificateData?.hasCertificate || false;
+  const canGenerateCertificate = progress.finalExamCompleted && !hasCertificate;
 
   const handleViewCertificate = () => {
-    router.push(`/certificates/${courseId}`);
+    // Try to get certificate data first
+    if (hasCertificate) {
+      // Use course-based URL as fallback since we don't have certificate ID here
+      router.push(`/certificates/course/${courseId}`);
+    }
+  };
+
+  const handleGenerateCertificate = () => {
+    generateCertificate(Number(courseId));
   };
 
   return (
@@ -82,17 +99,29 @@ const CourseProgressCard: React.FC<CourseProgressCardProps> = ({ progress, cours
                 valueStyle={{ color: '#52c41a' }}
               />
             </Col>
-            <Col span={12} className='flex items-center justify-end'>
-              {progress.certificateEarned && (
+            <Col span={12} className='flex items-center justify-end gap-2'>
+              {hasCertificate ? (
+                <>
+                  <Button
+                    type='primary'
+                    icon={<TrophyOutlined />}
+                    onClick={handleViewCertificate}
+                    size='large'
+                  >
+                    View Certificate
+                  </Button>
+                </>
+              ) : canGenerateCertificate ? (
                 <Button
                   type='primary'
                   icon={<TrophyOutlined />}
-                  onClick={handleViewCertificate}
+                  onClick={handleGenerateCertificate}
+                  loading={isGenerating}
                   size='large'
                 >
-                  View Certificate
+                  Generate Certificate
                 </Button>
-              )}
+              ) : null}
             </Col>
           </Row>
         </div>
@@ -100,14 +129,32 @@ const CourseProgressCard: React.FC<CourseProgressCardProps> = ({ progress, cours
 
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-2'>
-          <Tag color={progress.certificateEarned ? 'success' : 'processing'}>
-            {progress.certificateEarned ? 'Certificate Earned' : 'In Progress'}
+          <Tag
+            color={
+              hasCertificate ? 'success' : progress.finalExamCompleted ? 'processing' : 'default'
+            }
+          >
+            {hasCertificate
+              ? 'Certificate Earned'
+              : progress.finalExamCompleted
+                ? 'Ready for Certificate'
+                : 'In Progress'}
           </Tag>
           {progress.finalExamCompleted && <Tag color='green'>Course Completed</Tag>}
         </div>
 
         <Text type='secondary'>{Math.round(progress.progressPercentage)}% Complete</Text>
       </div>
+
+      {canGenerateCertificate && (
+        <Alert
+          message='Certificate Ready'
+          description='You have completed the final exam. Click "Generate Certificate" to create your certificate.'
+          type='info'
+          showIcon
+          className='mt-4'
+        />
+      )}
     </Card>
   );
 };

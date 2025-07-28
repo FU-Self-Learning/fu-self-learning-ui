@@ -2,36 +2,17 @@
 
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { Card, Typography, Button, Row, Col, Statistic, Divider, Spin, Alert } from 'antd';
-import {
-  TrophyOutlined,
-  DownloadOutlined,
-  CalendarOutlined,
-  StarOutlined,
-} from '@ant-design/icons';
-import { useQuery } from '@tanstack/react-query';
-import apiClient from '@/shared/api/index';
-import { APP_URL } from '@/shared/constants/apiConstants';
-import { CourseCertificate } from '@/types/testType';
+import { Card, Typography, Row, Col, Statistic, Divider, Spin, Alert } from 'antd';
+import { TrophyOutlined, CalendarOutlined, StarOutlined } from '@ant-design/icons';
+import { useCertificateById } from '@/hooks/certificate/useCertificateDetail';
 
 const { Title, Text } = Typography;
 
 const CertificatePage: React.FC = () => {
   const params = useParams();
-  const courseId = params.courseId as string;
+  const certificateId = params.certificateId as string;
 
-  const {
-    data: certificate,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ['certificate', courseId],
-    queryFn: async (): Promise<CourseCertificate> => {
-      const response = await apiClient.get(`${APP_URL}/certificates/course/${courseId}`);
-      return response.data;
-    },
-    enabled: !!courseId,
-  });
+  const { data: certificate, isLoading, error } = useCertificateById(Number(certificateId));
 
   if (isLoading) {
     return (
@@ -53,10 +34,6 @@ const CertificatePage: React.FC = () => {
       </div>
     );
   }
-
-  const handleDownload = () => {
-    window.open(certificate.certificateUrl, '_blank');
-  };
 
   return (
     <div className='p-6 max-w-4xl mx-auto'>
@@ -104,18 +81,6 @@ const CertificatePage: React.FC = () => {
             This certificate is awarded to acknowledge successful completion of the course
             requirements, including all topic exams and the final examination with a passing score.
           </Text>
-        </div>
-
-        <div className='text-center'>
-          <Button
-            type='primary'
-            size='large'
-            icon={<DownloadOutlined />}
-            onClick={handleDownload}
-            style={{ backgroundColor: '#52c41a', borderColor: '#52c41a' }}
-          >
-            Download Certificate
-          </Button>
         </div>
       </Card>
 

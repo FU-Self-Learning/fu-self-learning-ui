@@ -8,6 +8,7 @@ import ProfileForm from '@/components/profile/ProfileForm';
 import ProfileSidebar from '@/components/profile/ProfileSidebar';
 import ChangePassForm from '@/components/profile/ChangePassForm';
 import InstructorRequestForm from '@/components/profile/InstructorRequestForm';
+import CertificatesPage from '@/app/certificates/page';
 const Profile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const { data } = useProfile();
@@ -38,6 +39,8 @@ const Profile = () => {
     switch (activeTab) {
       case 'profile':
         return renderProfileInfo();
+      case 'certificates':
+        return <CertificatesPage />;
       case 'password':
         return <ChangePassForm />;
       case 'instructorRequest':

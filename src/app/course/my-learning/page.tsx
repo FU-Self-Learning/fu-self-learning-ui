@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Spin } from 'antd';
+import { Spin, Row, Col } from 'antd';
 import StatusFilter from '@/components/course/StatusFilter';
 import CourseHeader from '@/components/course/CourseHeader';
 import EnrolledCourseCard from '@/components/course/EnrolledCourseCard';
+import CertificateDashboard from '@/components/certificate/CertificateDashboard';
 import { useMyEnrolledCourses } from '@/hooks/enrollment/useEnrollment';
 
 const statusFilters = ['All Status', 'Not Started', 'In Progress', 'Completed'];
@@ -64,6 +65,13 @@ export default function MyLearningPage() {
         <h1 className='text-2xl font-bold text-gray-900 mb-2'>My Learning</h1>
         <p className='text-gray-600'>Continue your learning journey with your enrolled courses</p>
       </div>
+
+      {/* Certificate Dashboard */}
+      <Row gutter={16} className='mb-6'>
+        <Col span={24}>
+          <CertificateDashboard />
+        </Col>
+      </Row>
 
       <CourseHeader
         total={finalFilteredCourses.length}

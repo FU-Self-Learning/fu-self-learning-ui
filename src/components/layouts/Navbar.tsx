@@ -96,6 +96,7 @@ export default function Navbar() {
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/course', label: 'My Learning' },
+    { href: '/certificates', label: 'Certificates' },
     { href: '/social', label: 'Social' },
     { href: '/flashcards', label: 'Flashcards' },
   ];
