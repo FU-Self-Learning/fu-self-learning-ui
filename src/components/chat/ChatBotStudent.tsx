@@ -19,7 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from 'react-redux';
 import { selectAuthUser } from '@/providers/auth/selector/authSelector';
 import type { ChatbotCourse } from '@/shared/api/chatbot.api';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { formatChatbotResponse } from '@/utils/formatChatbotResponse';
 import ReactMarkdown from 'react-markdown';
 import type { HistoryChatResponse } from '@/shared/api/chatbot.api';
@@ -79,6 +79,9 @@ const ChatBotStudent = () => {
   const user = useSelector(selectAuthUser);
   const [historyLoaded, setHistoryLoaded] = useState(false);
   const { data: history } = useChatbotHistory(open && sessionId ? sessionId : undefined);
+  const pathname = usePathname();
+
+  const isOnChatPage = pathname?.startsWith('/chat');
 
   // Generate sessionId (uuid or userId)
   useEffect(() => {
@@ -139,6 +142,11 @@ const ChatBotStudent = () => {
     );
     setInput('');
   };
+
+  // Don't render if on chat page
+  if (isOnChatPage) {
+    return null;
+  }
 
   return (
     <div className='fixed z-[1000] bottom-8 right-8 flex flex-col items-end select-none'>
