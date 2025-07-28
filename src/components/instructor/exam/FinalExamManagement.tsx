@@ -103,7 +103,7 @@ const FinalExamManagement: React.FC<FinalExamManagementProps> = ({
             <div className='flex justify-between items-start'>
               <div className='flex-1'>
                 <div className='flex items-center gap-2 mb-2'>
-                  <Title level={4} className='mb-0'>
+                  <Title level={4} className='!mb-0'>
                     {finalExam.title}
                   </Title>
                   <Tag color={getExamTypeColor('final_exam')}>{getExamTypeLabel('final_exam')}</Tag>
@@ -147,7 +147,7 @@ const FinalExamManagement: React.FC<FinalExamManagementProps> = ({
                   description='Students must complete all topic exams before they can take the final exam. This exam is required to earn the course certificate.'
                   type='info'
                   showIcon
-                  className='mt-4'
+                  className='!mt-4'
                 />
               </div>
             </div>

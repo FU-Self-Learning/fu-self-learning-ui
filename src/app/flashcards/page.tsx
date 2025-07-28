@@ -1,12 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, Card, Typography } from 'antd';
+import { Button, Typography } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import StudySetList from '@/components/studySet/list/StudySetList';
 import StudySetDetail from '@/components/studySet/StudySetDetail';
 import StudySetLearn from '@/components/studySet/learn/StudySetLearn';
-import StudySetFilter from '@/components/studySet/StudySetFilter';
 import { useRouter } from 'next/navigation';
 
 const { Title } = Typography;
@@ -14,7 +13,7 @@ const { Title } = Typography;
 export default function FlashcardsPage() {
   const userId = 1;
   const router = useRouter();
-  const [filter, setFilter] = useState<any>({});
+  const [filter] = useState<any>({});
   const [selectedSetId, setSelectedSetId] = useState<number | null>(null);
   const [learnMode, setLearnMode] = useState(false);
   const [learnFlashcards, setLearnFlashcards] = useState<any[]>([]);
@@ -57,9 +56,6 @@ export default function FlashcardsPage() {
           Go to my Study Sets
         </Button>
       </div>
-      <Card className='!mb-6'>
-        <StudySetFilter filter={filter} setFilter={setFilter} />
-      </Card>
       {!selectedSetId && !learnMode && <StudySetList onSelect={handleSelectSet} filter={filter} />}
       {selectedSetId && !learnMode && (
         <StudySetDetail

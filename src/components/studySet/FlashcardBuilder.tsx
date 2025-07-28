@@ -25,7 +25,6 @@ import {
   SaveOutlined,
   UndoOutlined,
   RedoOutlined,
-  FileTextOutlined,
   ImportOutlined,
   ExportOutlined,
   EyeOutlined,
@@ -350,14 +349,6 @@ const FlashcardBuilder: React.FC<FlashcardBuilderProps> = ({
       label: 'Export',
       icon: <ExportOutlined />,
       onClick: exportToText,
-    },
-    {
-      key: 'templates',
-      label: 'Templates',
-      icon: <FileTextOutlined />,
-      onClick: () => {
-        // Show templates modal
-      },
     },
   ];
 

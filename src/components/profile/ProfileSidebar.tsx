@@ -2,6 +2,8 @@
 
 import { Menu } from 'antd';
 import { UserOutlined, LockOutlined, TrophyOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { selectAuthUser } from '@/providers/auth/selector/authSelector';
 
 interface ProfileSidebarProps {
   activeTab: string;
@@ -9,6 +11,10 @@ interface ProfileSidebarProps {
 }
 
 const ProfileSidebar = ({ activeTab, setActiveTab }: ProfileSidebarProps) => {
+  const user = useSelector(selectAuthUser);
+
+  const isInstructor = user?.role === 'instructor';
+
   const menuItems = [
     {
       key: 'profile',
@@ -28,13 +34,17 @@ const ProfileSidebar = ({ activeTab, setActiveTab }: ProfileSidebarProps) => {
       label: 'Change Password',
       onClick: () => setActiveTab('password'),
     },
-    {
+  ];
+
+  // Only show instructor request option if user is not already an instructor
+  if (!isInstructor) {
+    menuItems.push({
       key: 'instructorRequest',
       icon: <UserOutlined />,
       label: 'Become an Instructor',
       onClick: () => setActiveTab('instructorRequest'),
-    },
-  ];
+    });
+  }
 
   return (
     <div className='w-64 bg-white rounded-2xl shadow-md p-4'>

@@ -69,7 +69,7 @@ const InstructorExamsPage: React.FC = () => {
   }
 
   const topicExams = exams.filter((exam: ExamResponse) => exam.type === 'topic_exam');
-  const finalExam = exams.find((exam: ExamResponse) => exam.type === 'final');
+  const finalExam = exams.find((exam: ExamResponse) => exam.type === 'final_exam');
   const practiceExams = exams.filter((exam: ExamResponse) => exam.type === 'practice');
 
   const items = [
