@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import { Socket } from '@/types/socket.type';
+import { SOCKET_URL_BASE } from '@/shared/constants/apiConstants';
 
 const GROUP_CHAT_NAMESPACE = '/group-chat';
 
@@ -23,14 +24,12 @@ export function useGroupChatSocket(
   useEffect(() => {
     if (!userId) return;
     if (socketRef.current) return; // Đã có socket, không tạo lại
+    const SOCKET_URL_GROUP = SOCKET_URL_BASE;
     console.log('[Socket] Initializing group chat socket:', { userId });
-    const socket: Socket = io(
-      `${process.env.NEXT_PUBLIC_SOCKET_URL_GROUP}${GROUP_CHAT_NAMESPACE}`,
-      {
-        query: { userId },
-        transports: ['websocket'],
-      },
-    );
+    const socket: Socket = io(`${SOCKET_URL_GROUP}${GROUP_CHAT_NAMESPACE}`, {
+      query: { userId },
+      transports: ['websocket'],
+    });
     socketRef.current = socket;
     setIsConnected(false);
 
